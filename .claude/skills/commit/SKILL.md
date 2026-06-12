@@ -1,15 +1,19 @@
 ---
 name: commit
-description: Commit staged changes grouped by logical change. Use when committing multiple independent changes separately, when you need to create atomic commits per logical unit of work, or after making a mix of changes across the codebase. Analyzes git status and creates properly formatted commits following commitlint conventions.
+description: Commit staged changes grouped by logical change. Use when committing multiple independent changes separately, when you need to create atomic commits per logical unit of work, or after making a mix of changes across the codebase. Analyzes git status and creates properly formatted commits following the project's conventional-commit conventions.
 ---
 
 # Commit Per Change
 
-Create separate commits for each logical change, following the project's commitlint conventions. A "logical change" is a coherent unit of work — one feature, one fix, one refactor — regardless of how many files or modules it touches.
+Create separate commits for each logical change, following the project's conventional-commit conventions. A "logical change" is a coherent unit of work — one feature, one fix, one refactor — regardless of how many files or directories it touches.
 
 ## Core Principle
 
-**Group by intent, not by location.** A single feature that spans multiple modules is one commit. Two unrelated fixes in the same module are two commits.
+**Group by intent, not by location.** A single feature that spans multiple directories is one commit. Two unrelated fixes in the same file are two commits.
+
+## Committer
+
+Commit only as the project's git user. **Never** add a `Co-Authored-By: Claude` trailer, a "Generated with Claude Code" line, or any other AI attribution to the commit message.
 
 ## Workflow
 
@@ -20,8 +24,8 @@ Create separate commits for each logical change, following the project's commitl
 
 2. **Group files by logical change**
    - Identify coherent units: each feature, fix, refactor, or concern is its own group
-   - A single group may span multiple modules (e.g., a feature touching `ruby` + `shared`)
-   - A single module may contribute to multiple groups (split it across commits)
+   - A single group may span multiple directories (e.g., a component touching `components` + `hooks`)
+   - A single file may contribute to multiple groups (split it across commits)
    - Unrelated changes must go in separate commits, even if they sit in the same file — use `git add -p` for hunk-level staging when needed
 
 3. **For each logical change**
@@ -50,11 +54,15 @@ type(scope): Subject line
 - `revert`: Revert a previous commit
 
 ### Valid Scopes
-Scopes are defined by the project's commitlint config:
-- `common`: Root-level files (bun.lock, package.json, configs, tooling)
-- `app`: Backend module (`modules/app`)
-- `shared`: Shared UI components, migrations, seeds (`modules/shared`)
-- `ruby`: Frontend SPA (`modules/ruby`)
+Scopes follow the source layout under `src/` and the established git history:
+- `components`: UI components (`src/components`)
+- `layouts`: Application layouts (`src/layouts`)
+- `icons`: Icon library, fill and outline (`src/icons`)
+- `hooks`: Shared React hooks (`src/hooks`)
+- `utils`: Utility helpers (`src/utils`)
+- `fonts`: Font families and assets (`src/fonts`)
+- `styles`: Global stylesheets and design tokens (`src/styles`)
+- `config`: Root-level tooling, dependencies, and configs (`package.json`, `bun.lock`, `biome.jsonc`, `tsconfig.json`)
 
 When a logical change spans multiple scopes, pick the scope that best represents the **primary** intent of the change. If truly split, prefer separate commits.
 
@@ -89,81 +97,81 @@ If a change mixes types, pick the one that reflects the primary intent and menti
 
 Git status shows:
 ```
-M modules/ruby/src/components/MultiStepForm.tsx
-M modules/ruby/src/components/ui/tabs.tsx
-M modules/shared/src/migrations/001_init.sql
-M modules/app/src/routes/auth.ts
+M src/components/tabs/Tabs.tsx
+M src/components/dialog/Dialog.tsx
+M src/hooks/useMediaQuery.ts
+M src/styles/app.css
 M bun.lock
 ```
 
 After reading the diffs you discover:
-- `MultiStepForm.tsx` + `tabs.tsx` → new multi-step wizard feature
-- `auth.ts` → fixes a token-refresh race condition
-- `001_init.sql` → adds missing index (separate from both)
+- `Tabs.tsx` + `Dialog.tsx` → new keyboard-navigation feature shared across both
+- `useMediaQuery.ts` → fixes a stale-listener bug
+- `app.css` → adds a new design token (separate concern)
 - `bun.lock` → unrelated dependency bump
 
 Commands to execute:
 ```bash
-# Feature: wizard spans ruby only
-git add modules/ruby/src/components/MultiStepForm.tsx modules/ruby/src/components/ui/tabs.tsx
-git commit -m "feat(ruby): Add multi-step form wizard"
+# Feature: keyboard navigation spans two components
+git add src/components/tabs/Tabs.tsx src/components/dialog/Dialog.tsx
+git commit -m "feat(components): Add keyboard navigation to tabs and dialog"
 
-# Fix: auth race condition
-git add modules/app/src/routes/auth.ts
-git commit -m "fix(app): Prevent token refresh race condition"
+# Fix: stale listener in hook
+git add src/hooks/useMediaQuery.ts
+git commit -m "fix(hooks): Remove stale listener in useMediaQuery"
 
-# Perf/chore: index is its own concern
-git add modules/shared/src/migrations/001_init.sql
-git commit -m "perf(shared): Add index on users.email"
+# Styles: new design token
+git add src/styles/app.css
+git commit -m "feat(styles): Add accent color design token"
 
 # Dependency bump
 git add bun.lock
-git commit -m "chore(common): Update dependencies"
+git commit -m "chore(config): Update dependencies"
 ```
 
-### Example 2: Single Logical Change Spanning Modules
+### Example 2: Single Logical Change Spanning Directories
 
 Git status shows:
 ```
-M modules/ruby/src/api/videos.ts
-M modules/app/src/routes/videos.ts
-M modules/shared/src/types/video.ts
+M src/components/upload/Upload.tsx
+M src/hooks/useUpload.ts
+M src/utils/cn.ts
 ```
 
-All three files implement the same feature (video tagging). This is **one** commit — pick the scope that represents the primary intent:
+All three files implement the same feature (drag-and-drop upload). This is **one** commit — pick the scope that represents the primary intent:
 ```bash
-git add modules/ruby/src/api/videos.ts modules/app/src/routes/videos.ts modules/shared/src/types/video.ts
-git commit -m "feat(app): Add video tagging support"
+git add src/components/upload/Upload.tsx src/hooks/useUpload.ts src/utils/cn.ts
+git commit -m "feat(components): Add drag-and-drop upload support"
 ```
 
 ### Example 3: Multiple Changes in the Same File
 
-`git diff modules/ruby/src/components/MultiStepForm.tsx` reveals two unrelated edits:
-- A bug fix for validation on step 2
+`git diff src/components/form/Form.tsx` reveals two unrelated edits:
+- A bug fix for validation on submit
 - A refactor renaming internal state variables
 
 Stage per-hunk to keep them atomic:
 ```bash
-git add -p modules/ruby/src/components/MultiStepForm.tsx   # accept the fix hunks
-git commit -m "fix(ruby): Validate required fields on wizard step 2"
+git add -p src/components/form/Form.tsx   # accept the fix hunks
+git commit -m "fix(components): Validate required fields on form submit"
 
-git add modules/ruby/src/components/MultiStepForm.tsx      # stage the rest
-git commit -m "refactor(ruby): Rename wizard step state variables"
+git add src/components/form/Form.tsx      # stage the rest
+git commit -m "refactor(components): Rename form state variables"
 ```
 
 ### Example 4: Refactor with Renames/Deletions
 
 Git status shows:
 ```
-D modules/ruby/src/components/OldForm.tsx
-A modules/ruby/src/components/NewForm.tsx
-M modules/ruby/src/routes/signup.tsx
+D src/components/error/OldError.tsx
+A src/components/error/Error.tsx
+M src/layouts/AppLayout.tsx
 ```
 
 All part of the same rewrite:
 ```bash
-git add modules/ruby/src/components/OldForm.tsx modules/ruby/src/components/NewForm.tsx modules/ruby/src/routes/signup.tsx
-git commit -m "refactor(ruby): Replace OldForm with NewForm"
+git add src/components/error/OldError.tsx src/components/error/Error.tsx src/layouts/AppLayout.tsx
+git commit -m "refactor(components): Replace OldError with Error"
 ```
 
 ## Subject Line Guidelines
@@ -172,11 +180,11 @@ Write clear, descriptive subjects:
 
 | Good | Bad |
 |------|-----|
-| `Add multi-step form wizard` | `wizard` |
-| `Fix token refresh race condition` | `fix bug` |
-| `Replace OldForm with NewForm` | `rename` |
-| `Remove deprecated API methods` | `cleanup` |
-| `Add index on users.email` | `db change` |
+| `Add drag-and-drop upload support` | `upload` |
+| `Remove stale listener in useMediaQuery` | `fix bug` |
+| `Replace OldError with Error` | `rename` |
+| `Remove deprecated icon variants` | `cleanup` |
+| `Add accent color design token` | `css change` |
 
 ## Pre-commit Checklist
 
@@ -185,6 +193,7 @@ Before each commit, verify:
 2. No unrelated edits are sneaking in (run `git diff --staged` to confirm)
 3. No debug code, `console.log`, or temporary scaffolding left behind
 4. Subject line matches the format exactly and reflects the actual change
+5. No AI attribution or `Co-Authored-By: Claude` trailer in the message
 
 ## Handling Special Cases
 
