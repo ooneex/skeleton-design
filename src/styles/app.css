@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../fonts/space-grotesk/space-grotesk.css";
+@import "./typography.css";
+@import "./shape.css";
+@import "./brand.css";
+@import "./status.css";
+
+@source "../..";
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  * ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  body {
+    @apply font-sans tracking-normal overflow-hidden;
+  }
+
+  html {
+    @apply font-sans leading-relaxed;
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+@theme {
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+}
+
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
