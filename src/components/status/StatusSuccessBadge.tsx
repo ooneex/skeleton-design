@@ -1,0 +1,12 @@
+import { CircleCheckIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
+import { Badge } from "@/components/badge/Badge";
+import type { StatusBadgePropsType } from "./types";
+
+export const StatusSuccessBadge = ({ children, ...props }: StatusBadgePropsType) => {
+  return (
+    <Badge variant="success" {...props}>
+      <CircleCheckIcon data-icon="inline-start" />
+      {children ?? "Success"}
+    </Badge>
+  );
+};
