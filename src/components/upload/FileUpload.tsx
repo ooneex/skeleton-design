@@ -216,7 +216,7 @@ const FileUpload = ({
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<FileErrorType | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const uploadIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const uploadIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [uploadingFile, setUploadingFile] = useState<File | null>(null);
 
   const previewUrls = useMemo(() => {
