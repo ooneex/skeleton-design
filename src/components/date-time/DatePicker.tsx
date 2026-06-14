@@ -1,85 +1,59 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
-import { CalendarIcon } from "@/icons/outline/time/sm/CalendarIcon";
+import type { ReactNode } from "react";
 import { Calendar, type CalendarPropsType } from "@/components/calendar/Calendar";
-import { useDrawerContentRef } from "@/components/drawer/drawerContext";
-import { Popover } from "@/components/popover/Popover";
-import { PopoverContent } from "@/components/popover/PopoverContent";
-import { PopoverTrigger } from "@/components/popover/PopoverTrigger";
-import { cn } from "@/utils/cn";
+import { createDialog } from "@/components/dialog/Dialog";
+import { DialogHeader } from "@/components/dialog/DialogHeader";
+import { DialogTitle } from "@/components/dialog/DialogTitle";
 
-export const datePickerVariants = cva(
-  "w-full justify-between text-left font-normal flex items-center gap-2 rounded ring-ring-active ring bg-transparent transition-[color,box-shadow] cursor-pointer hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring-active disabled:cursor-not-allowed disabled:opacity-50",
-  {
-    variants: {
-      size: {
-        xs: "h-6 px-1.5 py-0.5 text-xs",
-        sm: "h-8 px-2 py-1 text-sm",
-        md: "h-9 px-2.5 py-1.5 text-base",
-        lg: "h-10 px-3 py-2 text-base",
-      },
-    },
-    defaultVariants: {
-      size: "sm",
-    },
-  },
-);
-
-type DatePickerPropsType = {
+export type DatePickerPropsType = {
+  /** Initially selected date. */
   value?: Date;
-  onChange?: (date: Date | undefined) => void;
-  formatDisplay?: (date: Date, locale: string) => string;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
+  /** Calendar configuration, minus the controlled selection props. */
   calendarProps?: Omit<CalendarPropsType, "mode" | "selected" | "onSelect">;
-  align?: "start" | "center" | "end";
-  trigger?: React.ReactElement;
-  locale?: string;
-} & VariantProps<typeof datePickerVariants>;
-
-const defaultFormatDisplay = (date: Date, locale: string): string => {
-  return date.toLocaleDateString(locale, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  /** Heading shown above the calendar. */
+  title?: ReactNode;
 };
 
-export const DatePicker = ({
-  value,
-  onChange,
-  formatDisplay = defaultFormatDisplay,
-  placeholder = "Select a date",
-  disabled,
-  size,
-  className,
-  calendarProps,
-  align = "start",
-  trigger,
-  locale,
-}: DatePickerPropsType) => {
-  const resolvedLocale = locale ?? (typeof navigator !== "undefined" ? navigator.language : "en");
-  const [open, setOpen] = React.useState(false);
-  const drawerContentRef = useDrawerContentRef();
+/**
+ * Imperative date picker dialog built on `react-call`.
+ *
+ * Mount the Root once near the top of your app:
+ *
+ * ```tsx
+ * <DatePicker />
+ * ```
+ *
+ * Then await a date from anywhere:
+ *
+ * ```tsx
+ * const date = await pickDate({ value: current })
+ * if (date) setDueDate(date)
+ * ```
+ *
+ * Resolves with the chosen date, or `null` when the dialog is dismissed
+ * (Escape / outside click).
+ */
+export const DatePicker = createDialog<DatePickerPropsType, Date | null>(
+  ({ call, value, calendarProps, title }) => {
+    return (
+      <>
+        {title ? (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        ) : null}
+        <Calendar
+          fullWidth
+          mode="single"
+          selected={value}
+          onSelect={(date) => call.end(date ?? null)}
+          {...calendarProps}
+        />
+      </>
+    );
+  },
+  { dismissValue: null, className: "max-w-fit" },
+);
+DatePicker.displayName = "DatePicker";
 
-  return (
-    <Popover open={open} onOpenChange={disabled ? undefined : setOpen}>
-      {trigger ? (
-        <PopoverTrigger render={trigger} />
-      ) : (
-        <PopoverTrigger
-          disabled={disabled}
-          className={cn(datePickerVariants({ size }), open && "ring-ring-active", className)}
-        >
-          {value ? formatDisplay(value, resolvedLocale) : <span className="text-muted-foreground">{placeholder}</span>}
-          <CalendarIcon className={cn("size-4", open ? "text-foreground" : "text-muted-foreground")} />
-        </PopoverTrigger>
-      )}
-      <PopoverContent className="w-auto p-2" align={align} container={drawerContentRef}>
-        <Calendar fullWidth mode="single" selected={value} onSelect={onChange} {...calendarProps} />
-      </PopoverContent>
-    </Popover>
-  );
-};
+/** Await a date choice. Resolves the chosen date, or `null` on dismiss. */
+export const pickDate = (props: DatePickerPropsType = {}) => DatePicker.call(props);
