@@ -1,50 +1,79 @@
-import { memo, useCallback, useMemo } from "react";
-import { useDrawerContentRef } from "@/components/drawer";
-import { Select } from "@/components/select/Select";
+import type { ReactNode } from "react";
+import { createDialog } from "@/components/dialog/Dialog";
+import { DialogHeader } from "@/components/dialog/DialogHeader";
+import { DialogTitle } from "@/components/dialog/DialogTitle";
 import { cn } from "@/utils/cn";
 import { statusBadgeMap } from "./statusBadgeMap";
 
 export type StatusType = (typeof statusBadgeMap)[number]["status"];
 
 export type StatusPickerPropsType = {
+  /** Currently selected status, highlighted in the list. */
   value?: StatusType;
-  onChange?: (value: StatusType) => void;
-  disabled?: boolean;
-  className?: string;
+  /** Statuses to offer. Defaults to the full `statusBadgeMap` set. */
+  statuses?: readonly StatusType[];
+  /** Heading shown above the status list. */
+  title?: ReactNode;
 };
 
-const statusBadgeComponents = Object.fromEntries(
-  statusBadgeMap.map(({ status, component }) => [status, component]),
-) as Record<StatusType, React.ComponentType>;
+/**
+ * Imperative status picker dialog built on `react-call`.
+ *
+ * Mount the Root once near the top of your app:
+ *
+ * ```tsx
+ * <StatusPicker />
+ * ```
+ *
+ * Then await a status from anywhere:
+ *
+ * ```tsx
+ * const status = await pickStatus({ value: current })
+ * if (status) await api.update({ status })
+ * ```
+ *
+ * Resolves with the chosen status, or `null` when the dialog is dismissed
+ * (Escape / outside click).
+ */
+export const StatusPicker = createDialog<StatusPickerPropsType, StatusType | null>(
+  ({ call, value, statuses, title }) => {
+    const items = statuses
+      ? statusBadgeMap.filter(({ status }) => statuses.includes(status))
+      : statusBadgeMap;
 
-export const StatusPicker = memo(({ value = "draft", onChange, disabled, className }: StatusPickerPropsType) => {
-  const drawerContentRef = useDrawerContentRef();
+    return (
+      <>
+        {title ? (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        ) : null}
+        <div className="flex max-h-72 flex-col gap-1 overflow-y-auto">
+          {items.map(({ status, component: BadgeComponent }) => {
+            const isSelected = status === value;
+            return (
+              <button
+                key={status}
+                type="button"
+                onClick={() => call.end(status)}
+                className={cn(
+                  "flex items-center rounded px-2 py-1.5 text-left cursor-pointer transition-colors",
+                  "hover:bg-accent hover:text-accent-foreground",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  isSelected && "bg-accent text-accent-foreground",
+                )}
+              >
+                <BadgeComponent />
+              </button>
+            );
+          })}
+        </div>
+      </>
+    );
+  },
+  { dismissValue: null, className: "max-w-xs" },
+);
+StatusPicker.displayName = "StatusPicker";
 
-  const handleChange = useCallback(
-    (newValue: string | null) => {
-      if (newValue) {
-        onChange?.(newValue as StatusType);
-      }
-    },
-    [onChange],
-  );
-
-  const SelectedBadge = useMemo(() => statusBadgeComponents[value], [value]);
-
-  return (
-    <Select disabled={disabled} onValueChange={handleChange} value={value}>
-      <Select.Trigger size="sm" className="w-full cursor-pointer items-center">
-        <Select.Value placeholder="Select status">
-          <SelectedBadge />
-        </Select.Value>
-      </Select.Trigger>
-      <Select.Content className={cn("max-h-52", className)} alignItemWithTrigger={false} container={drawerContentRef}>
-        {statusBadgeMap.map(({ status, component: BadgeComponent }) => (
-          <Select.Item key={status} value={status}>
-            <BadgeComponent />
-          </Select.Item>
-        ))}
-      </Select.Content>
-    </Select>
-  );
-});
+/** Await a status choice. Resolves the chosen status, or `null` on dismiss. */
+export const pickStatus = (props: StatusPickerPropsType = {}) => StatusPicker.call(props);
