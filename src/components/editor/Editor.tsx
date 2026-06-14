@@ -31,6 +31,7 @@ import "./editor.css";
 import type { Editor as EditorType } from "@tiptap/react";
 import { useImperativeHandle } from "react";
 import { Markdown } from "tiptap-markdown";
+import { SimpleColorPicker } from "@/components/color/SimpleColorPicker";
 import { cn } from "@/utils/cn";
 import { EnterHandler } from "./extensions/EnterHandler";
 import { FloatingToolbar } from "./FloatingToolbar";
@@ -270,6 +271,8 @@ export const Editor = ({
   return (
     <>
       {editor && editable && showToolbar ? <FloatingToolbar editor={editor} /> : null}
+      {/* react-call Root for the toolbar's imperative color picker (single mount per editor). */}
+      {editor && editable && showToolbar ? <SimpleColorPicker /> : null}
       <EditorContent editor={editor} className={cn("h-full w-full p-0 m-0", className)} />
       {showMedia ? <YouTubeDialog /> : null}
     </>

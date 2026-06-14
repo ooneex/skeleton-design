@@ -38,7 +38,7 @@ import { BulletListIcon } from "@/icons/outline/ui-layout/sm/BulletListIcon";
 import { CircleCheckIcon as CompletedIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
 import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
-import { setYouTubeDialogState } from "./YouTubeDialog";
+import { openYouTubeDialog } from "./YouTubeDialog";
 
 type SlashMenuItemType = {
   title: string;
@@ -248,7 +248,7 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     aliases: ["video", "embed"],
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
-      setYouTubeDialogState({ open: true, editor });
+      openYouTubeDialog(editor);
     },
   },
 

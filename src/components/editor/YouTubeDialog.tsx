@@ -1,83 +1,43 @@
 import type { Editor } from "@tiptap/core";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/button/Button";
-import { Dialog } from "@/components/dialog/Dialog";
-import { DialogContent } from "@/components/dialog/DialogContent";
+import { createDialog } from "@/components/dialog/Dialog";
 import { DialogDescription } from "@/components/dialog/DialogDescription";
 import { DialogFooter } from "@/components/dialog/DialogFooter";
 import { DialogHeader } from "@/components/dialog/DialogHeader";
 import { DialogTitle } from "@/components/dialog/DialogTitle";
 import { Input } from "@/components/input/Input";
 
-type YouTubeDialogStateType = {
-  open: boolean;
-  editor: Editor | null;
+type YouTubeDialogPropsType = {
+  editor: Editor;
 };
 
-let youtubeDialogState: YouTubeDialogStateType = {
-  open: false,
-  editor: null,
-};
+/**
+ * Imperative "embed YouTube video" dialog. Mount `<YouTubeDialog />` once inside
+ * the editor, then trigger it with {@link openYouTubeDialog}. Resolves when
+ * closed (the embed is applied to the editor as a side effect).
+ */
+export const YouTubeDialog = createDialog<YouTubeDialogPropsType, void>(
+  ({ call, editor }) => {
+    const [url, setUrl] = useState("");
+    const [error, setError] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
 
-const youtubeDialogListeners: Set<() => void> = new Set();
+    useEffect(() => {
+      requestAnimationFrame(() => inputRef.current?.focus());
+    }, []);
 
-export const setYouTubeDialogState = (state: Partial<YouTubeDialogStateType>) => {
-  youtubeDialogState = { ...youtubeDialogState, ...state };
-  for (const listener of youtubeDialogListeners) {
-    listener();
-  }
-};
-
-const useYouTubeDialogState = () => {
-  const [state, setState] = useState(youtubeDialogState);
-
-  useEffect(() => {
-    const listener = () => setState({ ...youtubeDialogState });
-    youtubeDialogListeners.add(listener);
-    return () => {
-      youtubeDialogListeners.delete(listener);
-    };
-  }, []);
-
-  return state;
-};
-
-export const YouTubeDialog = () => {
-  const { open, editor } = useYouTubeDialogState();
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (open) {
-      requestAnimationFrame(() => {
-        inputRef.current?.focus();
-      });
-    }
-  }, [open]);
-
-  const handleClose = () => {
-    setYouTubeDialogState({ open: false, editor: null });
-    setUrl("");
-    setError("");
-  };
-
-  const handleSubmit = () => {
-    if (!url.startsWith("https://www.youtube.com/") && !url.startsWith("https://youtu.be/")) {
-      setError("Please enter a valid YouTube URL");
-      return;
-    }
-
-    if (editor) {
+    const handleSubmit = () => {
+      if (!url.startsWith("https://www.youtube.com/") && !url.startsWith("https://youtu.be/")) {
+        setError("Please enter a valid YouTube URL");
+        return;
+      }
       editor.chain().focus().setYoutubeVideo({ src: url, width: 320, height: 180 }).run();
-    }
+      call.end();
+    };
 
-    handleClose();
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="ring ring-border p-4">
+    return (
+      <>
         <DialogHeader>
           <DialogTitle>Embed YouTube Video</DialogTitle>
           <DialogDescription>Enter the URL of the YouTube video you want to embed.</DialogDescription>
@@ -101,12 +61,17 @@ export const YouTubeDialog = () => {
           {error && <p className="text-sm text-destructive">{error}</p>}
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={() => call.end()}>
             Cancel
           </Button>
           <Button onClick={handleSubmit}>Embed</Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
+      </>
+    );
+  },
+  { className: "ring ring-border p-4", showCloseButton: false },
+);
+YouTubeDialog.displayName = "YouTubeDialog";
+
+/** Open the YouTube embed dialog for the given editor. */
+export const openYouTubeDialog = (editor: Editor) => YouTubeDialog.call({ editor });

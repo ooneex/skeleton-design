@@ -1,7 +1,7 @@
 import type { SimpleColorType } from "@ooneex/color";
 import type { Editor } from "@tiptap/react";
 import { PaletteIcon as ColorIcon } from "@/icons/outline/design-development/sm/PaletteIcon";
-import { SimpleColorPicker } from "@/components/color/SimpleColorPicker";
+import { pickColor } from "@/components/color/SimpleColorPicker";
 import { Toggle } from "@/components/toggle/Toggle";
 
 type TextStylePropsType = {
@@ -12,21 +12,18 @@ type TextStylePropsType = {
 export const TextStyle = ({ editor, state }: TextStylePropsType) => {
   const isTextStyleActive = editor?.isActive("textStyle");
 
+  const handlePick = async () => {
+    const color = await pickColor({ value: state?.color as SimpleColorType, title: "Text color" });
+    if (color) {
+      editor?.chain().setColor(color).run();
+    } else {
+      editor?.chain().unsetColor().run();
+    }
+  };
+
   return (
-    <SimpleColorPicker
-      value={state?.color as SimpleColorType}
-      onChange={(color) => {
-        editor?.chain().setColor(color).run();
-      }}
-      onReset={() => {
-        editor?.chain().unsetColor().run();
-      }}
-      contentClassName="w-72"
-      trigger={
-        <Toggle pressed={isTextStyleActive}>
-          <ColorIcon className="size-3.5" />
-        </Toggle>
-      }
-    />
+    <Toggle pressed={isTextStyleActive} onClick={handlePick}>
+      <ColorIcon className="size-3.5" />
+    </Toggle>
   );
 };
