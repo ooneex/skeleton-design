@@ -1,7 +1,6 @@
 import { Command as CommandPrimitive } from "cmdk";
 import type { ComponentProps } from "react";
 import { cn } from "@/utils/cn";
-import { CommandDialog } from "./CommandDialog";
 import { CommandEmpty } from "./CommandEmpty";
 import { CommandGroup } from "./CommandGroup";
 import { CommandInput } from "./CommandInput";
@@ -40,7 +39,6 @@ const CommandRoot = ({ className, ...props }: ComponentProps<typeof CommandPrimi
  * ```
  */
 export const Command = Object.assign(CommandRoot, {
-  Dialog: CommandDialog,
   Input: CommandInput,
   List: CommandList,
   Empty: CommandEmpty,

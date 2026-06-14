@@ -1,36 +1,93 @@
-import type { ComponentProps, ReactNode } from "react";
-import { Dialog } from "@/components/dialog/Dialog";
+import type { ReactNode } from "react";
+import { createDialog } from "@/components/dialog/Dialog";
 import { cn } from "@/utils/cn";
+import { Command } from "./Command";
+import { CommandEmpty } from "./CommandEmpty";
+import { CommandGroup } from "./CommandGroup";
+import { CommandInput } from "./CommandInput";
+import { CommandItem } from "./CommandItem";
+import { CommandList } from "./CommandList";
+import { CommandShortcut } from "./CommandShortcut";
 
-type CommandDialogPropsType = Omit<ComponentProps<typeof Dialog>, "children"> & {
+export type CommandPaletteItem = {
+  /** Value returned by `CommandPalette.call()` when this entry is chosen. */
+  value: string;
+  label: ReactNode;
+  /** Optional heading to bucket items under. */
+  group?: string;
+  shortcut?: string;
+  icon?: ReactNode;
+  /** Extra search terms beyond the visible label. */
+  keywords?: string[];
+  disabled?: boolean;
+};
+
+export type CommandPalettePropsType = {
+  items: CommandPaletteItem[];
+  placeholder?: string;
+  emptyMessage?: ReactNode;
+  className?: string;
+  /** Screen-reader-only dialog title/description. */
   title?: string;
   description?: string;
-  className?: string;
-  showCloseButton?: boolean;
-  children: ReactNode;
 };
 
-/** Command palette rendered inside a `Dialog` with a screen-reader-only header. */
-export const CommandDialog = ({
-  title = "Command Palette",
-  description = "Search for a command to run...",
-  children,
-  className,
-  showCloseButton = false,
-  ...props
-}: CommandDialogPropsType) => {
-  return (
-    <Dialog {...props}>
-      <Dialog.Header className="sr-only">
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>{description}</Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Content
-        className={cn("rounded-xl! top-12 translate-y-0 overflow-hidden p-0 shadow-2xl border-border/50", className)}
-        showCloseButton={showCloseButton}
-      >
-        {children}
-      </Dialog.Content>
-    </Dialog>
-  );
+const groupItems = (items: CommandPaletteItem[]) => {
+  const groups = new Map<string, CommandPaletteItem[]>();
+  for (const item of items) {
+    const key = item.group ?? "";
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(item);
+    else groups.set(key, [item]);
+  }
+  return [...groups.entries()];
 };
+
+/**
+ * Imperative command palette built on `react-call`. Mount `<CommandPalette />`
+ * once, then await the user's selection:
+ *
+ * ```tsx
+ * const action = await CommandPalette.call({
+ *   items: [
+ *     { value: "new", label: "New file", group: "Actions", shortcut: "⌘N" },
+ *     { value: "open", label: "Open…", group: "Actions" },
+ *   ],
+ * })
+ * if (action) run(action)
+ * ```
+ *
+ * Resolves the chosen item's `value`, or `null` when dismissed.
+ */
+export const CommandPalette = createDialog<CommandPalettePropsType, string | null>(
+  ({ call, items, placeholder = "Type a command or search…", emptyMessage = "No results found.", className }) => (
+    <Command className={cn("**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5", className)}>
+      <CommandInput placeholder={placeholder} autoFocus />
+      <CommandList>
+        <CommandEmpty>{emptyMessage}</CommandEmpty>
+        {groupItems(items).map(([group, groupEntries]) => (
+          <CommandGroup key={group || "_"} heading={group || undefined}>
+            {groupEntries.map((item) => (
+              <CommandItem
+                key={item.value}
+                value={`${item.value} ${item.label} ${(item.keywords ?? []).join(" ")}`}
+                disabled={item.disabled}
+                onSelect={() => call.end(item.value)}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+                {item.shortcut ? <CommandShortcut>{item.shortcut}</CommandShortcut> : null}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        ))}
+      </CommandList>
+    </Command>
+  ),
+  {
+    dismissValue: null,
+    showCloseButton: false,
+    className: "rounded-xl! top-12 translate-y-0 overflow-hidden p-0 shadow-2xl border-border/50",
+  },
+);
+CommandPalette.displayName = "CommandPalette";
