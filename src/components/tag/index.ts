@@ -1,1 +1,1 @@
-export { TagPicker, tagPickerVariants } from "./TagPicker";
+export { pickTags, TagPicker, type TagPickerPropsType } from "./TagPicker";
