@@ -1,29 +1,104 @@
-import { DrawerClose } from "./DrawerClose";
+import type { ReactNode } from "react";
+import { type Callable, createCallable, type PropsWithCall } from "react-call";
+import { Drawer as DrawerPrimitive } from "vaul";
 import { DrawerContent } from "./DrawerContent";
 import { DrawerDescription } from "./DrawerDescription";
-import { DrawerFooter } from "./DrawerFooter";
 import { DrawerHeader } from "./DrawerHeader";
-import { DrawerOverlay } from "./DrawerOverlay";
-import { DrawerPortal } from "./DrawerPortal";
-import { DrawerRoot } from "./DrawerRoot";
 import { DrawerTitle } from "./DrawerTitle";
-import { DrawerTrigger } from "./DrawerTrigger";
+
+/** Milliseconds to keep the popup mounted so the close animation can play. */
+const UNMOUNTING_DELAY = 300;
+
+export type CreateDrawerOptions<Response> = {
+  className?: string;
+  /** Edge the drawer slides in from. Defaults to `'bottom'`. */
+  side?: "top" | "right" | "bottom" | "left";
+  /** Disable swipe/outside-click/Escape dismissal. */
+  dismissible?: boolean;
+  /** `false` keeps the page interactive behind the drawer. Defaults to `true`. */
+  modal?: boolean;
+  /** Value the promise resolves with when the drawer is dismissed (swipe / outside click / Escape). */
+  dismissValue?: Response;
+  unmountingDelay?: number;
+};
 
 /**
- * Drawer compound component built on top of `vaul`.
+ * Build a typed, imperatively-callable drawer on top of `react-call` and `vaul`.
  *
- * Exposes the root drawer along with its sub-components as static members:
- * `Trigger`, `Portal`, `Close`, `Overlay`, `Content`, `Header`, `Footer`,
- * `Title` and `Description`.
+ * `render` receives the `call` context (`end`, `ended`, …) plus your props and
+ * returns the drawer body. Resolve a value with `call.end(value)`; dismissing
+ * the drawer resolves with `dismissValue`.
+ *
+ * ```tsx
+ * const FilterDrawer = createDrawer<{ initial: Filters }, Filters | null>(
+ *   ({ call, initial }) => {
+ *     const [filters, setFilters] = useState(initial)
+ *     return <Button onClick={() => call.end(filters)}>Apply</Button>
+ *   },
+ *   { side: "right", dismissValue: null },
+ * )
+ *
+ * // mount once: <FilterDrawer />
+ * const filters = await FilterDrawer.call({ initial })
+ * ```
  */
-export const Drawer = Object.assign(DrawerRoot, {
-  Trigger: DrawerTrigger,
-  Portal: DrawerPortal,
-  Close: DrawerClose,
-  Overlay: DrawerOverlay,
-  Content: DrawerContent,
-  Header: DrawerHeader,
-  Footer: DrawerFooter,
-  Title: DrawerTitle,
-  Description: DrawerDescription,
-});
+export function createDrawer<Props = void, Response = void>(
+  render: (props: PropsWithCall<Props, Response, Record<string, never>>) => ReactNode,
+  options: CreateDrawerOptions<Response> = {},
+): Callable<Props, Response, Record<string, never>> {
+  const {
+    className,
+    side = "bottom",
+    dismissible = true,
+    modal = true,
+    dismissValue,
+    unmountingDelay = UNMOUNTING_DELAY,
+  } = options;
+
+  return createCallable<Props, Response>((props) => {
+    const { call } = props;
+    return (
+      <DrawerPrimitive.Root
+        data-slot="drawer"
+        open={!call.ended}
+        direction={side}
+        dismissible={dismissible}
+        modal={modal}
+        onOpenChange={(open) => {
+          if (!open) call.end(dismissValue as Response);
+        }}
+      >
+        <DrawerContent className={className}>{render(props)}</DrawerContent>
+      </DrawerPrimitive.Root>
+    );
+  }, unmountingDelay);
+}
+
+export type DrawerPropsType = {
+  title?: ReactNode;
+  description?: ReactNode;
+  children?: ReactNode;
+};
+
+/**
+ * Basic content drawer. Mount `<Drawer />` once, then:
+ *
+ * ```tsx
+ * await Drawer.call({ title: "Details", children: <p>…</p> })
+ * ```
+ *
+ * Resolves when the drawer is closed. For drawers that return a value or hold
+ * internal form state, use {@link createDrawer} instead.
+ */
+export const Drawer = createDrawer<DrawerPropsType, void>(({ title, description, children }) => (
+  <>
+    {title || description ? (
+      <DrawerHeader>
+        {title ? <DrawerTitle>{title}</DrawerTitle> : null}
+        {description ? <DrawerDescription>{description}</DrawerDescription> : null}
+      </DrawerHeader>
+    ) : null}
+    {children}
+  </>
+));
+Drawer.displayName = "Drawer";
