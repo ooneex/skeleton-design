@@ -58,6 +58,7 @@
     "pdfjs-dist": "3.11.174",
     "prosemirror-state": "^1.4.4",
     "react": "^19.2.7",
+    "react-call": "^2.0.1",
     "react-day-picker": "^10.0.1",
     "react-dom": "^19.2.7",
     "react-medium-image-zoom": "^5.4.7",
