@@ -5,11 +5,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 type ParagraphPropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Paragraph = ({ editor, pressed }: ParagraphPropsType) => {
+export const Paragraph = ({ editor, pressed, className }: ParagraphPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("paragraph")}
       onPressedChange={() => {
         editor?.chain().focus().setParagraph().run();

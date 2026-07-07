@@ -3,6 +3,7 @@ import { MagnifierIcon as SearchIcon } from "@/icons/outline/filtering-sorting/s
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   groupClassName?: string;
@@ -10,12 +11,19 @@ type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"
   children?: ReactNode;
 };
 
-export const InputSearch = ({ placeholder = "Search...", size, groupClassName, ...props }: InputVariantPropsType) => {
+export const InputSearch = ({
+  placeholder = "Search...",
+  size,
+  className,
+  groupClassName,
+  iconClassName,
+  ...props
+}: InputVariantPropsType) => {
   return (
     <InputGroup size={size} className={groupClassName}>
-      <InputGroupInput placeholder={placeholder} size={size} className="placeholder:text-sm" {...props} />
+      <InputGroupInput placeholder={placeholder} size={size} className={cn("placeholder:text-sm", className)} {...props} />
       <InputGroupAddon align="inline-start">
-        <SearchIcon />
+        <SearchIcon className={iconClassName} />
       </InputGroupAddon>
     </InputGroup>
   );

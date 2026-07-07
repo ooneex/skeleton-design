@@ -5,11 +5,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 type StrikePropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Strike = ({ editor, pressed }: StrikePropsType) => {
+export const Strike = ({ editor, pressed, className }: StrikePropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("strike")}
       onPressedChange={() => {
         editor?.chain().focus().toggleStrike().run();

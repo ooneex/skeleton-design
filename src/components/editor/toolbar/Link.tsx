@@ -6,11 +6,13 @@ import { openLinkDialog } from "../LinkDialog";
 type LinkPropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Link = ({ editor, pressed }: LinkPropsType) => {
+export const Link = ({ editor, pressed, className }: LinkPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("link")}
       onPressedChange={() => {
         openLinkDialog(editor);

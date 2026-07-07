@@ -1,6 +1,13 @@
-export const PageLoader = () => {
+import type { ComponentProps } from "react";
+import { cn } from "@/utils/cn";
+
+export const PageLoader = ({ className, ...props }: ComponentProps<"div">) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-8">
+    <div
+      data-slot="page-loader"
+      className={cn("flex flex-col items-center justify-center min-h-screen gap-8", className)}
+      {...props}
+    >
       <img src="/logo-full.svg" alt="Ooneex" className="h-10 animate-pulse" />
     </div>
   );

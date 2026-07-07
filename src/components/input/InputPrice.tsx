@@ -12,12 +12,15 @@ import { InputGroupInput } from "@/components/input/InputGroupInput";
 type InputPricePropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   currency?: CurrencyCodeType;
   onCurrencyChange?: (currency: CurrencyCodeType) => void;
+  groupClassName?: string;
 };
 
 export const InputPrice = ({
   placeholder = "0.00",
   currency: currencyProp = "USD",
   onCurrencyChange,
+  className,
+  groupClassName,
   ...props
 }: InputPricePropsType) => {
   const [currency, setCurrency] = useState<CurrencyCodeType>(currencyProp);
@@ -37,8 +40,8 @@ export const InputPrice = ({
   };
 
   return (
-    <InputGroup>
-      <InputGroupInput type="number" placeholder={placeholder} {...props} />
+    <InputGroup className={groupClassName}>
+      <InputGroupInput type="number" placeholder={placeholder} className={className} {...props} />
       <InputGroupAddon align="inline-start">
         <Combobox
           value={currency}

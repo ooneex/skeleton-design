@@ -4,11 +4,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type TextAlignCenterPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const TextAlignCenter = ({ editor }: TextAlignCenterPropsType) => {
+export const TextAlignCenter = ({ editor, className }: TextAlignCenterPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={editor?.isActive({ textAlign: "center" })}
       onPressedChange={(isPressed) => {
         isPressed

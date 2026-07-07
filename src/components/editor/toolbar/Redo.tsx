@@ -4,15 +4,17 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type RedoPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const Redo = ({ editor }: RedoPropsType) => {
+export const Redo = ({ editor, className }: RedoPropsType) => {
   if (!editor?.can().redo()) {
     return null;
   }
 
   return (
     <Toggle
+      className={className}
       pressed={false}
       onPressedChange={() => {
         editor?.chain().focus().redo().run();

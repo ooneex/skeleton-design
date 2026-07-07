@@ -4,11 +4,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type BulletListPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const BulletList = ({ editor }: BulletListPropsType) => {
+export const BulletList = ({ editor, className }: BulletListPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={editor?.isActive("bulletList")}
       onPressedChange={() => {
         editor?.chain().focus().toggleBulletList().run();

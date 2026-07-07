@@ -3,6 +3,7 @@ import { UserIcon } from "@/icons/outline/users/sm/UserIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   groupClassName?: string;
@@ -10,12 +11,19 @@ type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"
   children?: ReactNode;
 };
 
-export const InputFirstName = ({ placeholder = "First name", size, ...props }: InputVariantPropsType) => {
+export const InputFirstName = ({
+  placeholder = "First name",
+  size,
+  className,
+  groupClassName,
+  iconClassName,
+  ...props
+}: InputVariantPropsType) => {
   return (
-    <InputGroup size={size}>
-      <InputGroupInput placeholder={placeholder} size={size} className="placeholder:text-sm" {...props} />
+    <InputGroup size={size} className={groupClassName}>
+      <InputGroupInput placeholder={placeholder} size={size} className={cn("placeholder:text-sm", className)} {...props} />
       <InputGroupAddon align="inline-start">
-        <UserIcon />
+        <UserIcon className={iconClassName} />
       </InputGroupAddon>
     </InputGroup>
   );

@@ -4,11 +4,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type TextAlignRightPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const TextAlignRight = ({ editor }: TextAlignRightPropsType) => {
+export const TextAlignRight = ({ editor, className }: TextAlignRightPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={editor?.isActive({ textAlign: "right" })}
       onPressedChange={(isPressed) => {
         isPressed

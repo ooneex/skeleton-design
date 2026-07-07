@@ -1,7 +1,8 @@
 import type { MotionValue, Transition } from "motion/react";
 import { motion, motionValue, useSpring, useTransform } from "motion/react";
-import { useEffect, useId } from "react";
+import { type ComponentProps, useEffect, useId } from "react";
 import useMeasure from "react-use-measure";
+import { cn } from "@/utils/cn";
 
 const TRANSITION: Transition = { type: "spring", stiffness: 280, damping: 18, mass: 0.3 };
 type DigitPropsType = { value: number; place: number };
@@ -58,16 +59,26 @@ const NumberDisplay = ({ mv, number }: NumberDisplayPropsType) => {
   );
 };
 
-type SlidingNumberPropsType = { value: number; padStart?: boolean; decimalSeparator?: string };
+type SlidingNumberPropsType = Omit<ComponentProps<"div">, "value"> & {
+  value: number;
+  padStart?: boolean;
+  decimalSeparator?: string;
+};
 
-export const SlidingNumber = ({ value, padStart = false, decimalSeparator = "." }: SlidingNumberPropsType) => {
+export const SlidingNumber = ({
+  value,
+  padStart = false,
+  decimalSeparator = ".",
+  className,
+  ...props
+}: SlidingNumberPropsType) => {
   const absValue = Math.abs(value);
   const [integerPart, decimalPart] = absValue.toString().split(".");
   const integerValue = Number.parseInt(integerPart, 10);
   const paddedInteger = padStart && integerValue < 10 ? `0${integerPart}` : integerPart;
   const integerPlaces = Array.from({ length: paddedInteger.length }, (_, i) => 10 ** (paddedInteger.length - i - 1));
   return (
-    <div className="flex items-center">
+    <div data-slot="sliding-number" className={cn("flex items-center", className)} {...props}>
       {value < 0 && "-"}
       {integerPlaces.map((place) => (
         <Digit key={`pos-${place}`} value={integerValue} place={place} />

@@ -5,11 +5,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 type SuperscriptPropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Superscript = ({ editor, pressed }: SuperscriptPropsType) => {
+export const Superscript = ({ editor, pressed, className }: SuperscriptPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("superscript")}
       onPressedChange={() => {
         editor?.chain().focus().toggleSuperscript().run();

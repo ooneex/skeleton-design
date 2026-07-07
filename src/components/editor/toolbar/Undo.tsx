@@ -4,15 +4,17 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type UndoPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const Undo = ({ editor }: UndoPropsType) => {
+export const Undo = ({ editor, className }: UndoPropsType) => {
   if (!editor?.can().undo()) {
     return null;
   }
 
   return (
     <Toggle
+      className={className}
       pressed={false}
       onPressedChange={() => {
         editor?.chain().focus().undo().run();

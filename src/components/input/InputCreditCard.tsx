@@ -3,6 +3,7 @@ import { CreditCardIcon as PaymentIcon } from "@/icons/outline/business-finance/
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   groupClassName?: string;
@@ -10,12 +11,19 @@ type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"
   children?: ReactNode;
 };
 
-export const InputCreditCard = ({ placeholder = "1234 5678 9012 3456", size, ...props }: InputVariantPropsType) => {
+export const InputCreditCard = ({
+  placeholder = "1234 5678 9012 3456",
+  size,
+  className,
+  groupClassName,
+  iconClassName,
+  ...props
+}: InputVariantPropsType) => {
   return (
-    <InputGroup size={size}>
-      <InputGroupInput placeholder={placeholder} size={size} className="placeholder:text-sm" {...props} />
+    <InputGroup size={size} className={groupClassName}>
+      <InputGroupInput placeholder={placeholder} size={size} className={cn("placeholder:text-sm", className)} {...props} />
       <InputGroupAddon align="inline-start">
-        <PaymentIcon />
+        <PaymentIcon className={iconClassName} />
       </InputGroupAddon>
     </InputGroup>
   );

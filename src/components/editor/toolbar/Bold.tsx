@@ -5,11 +5,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 type BoldPropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Bold = ({ editor, pressed }: BoldPropsType) => {
+export const Bold = ({ editor, pressed, className }: BoldPropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("bold")}
       onPressedChange={() => {
         editor?.chain().focus().toggleBold().run();

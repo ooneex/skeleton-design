@@ -3,6 +3,7 @@ import { LockPasswordIcon as PasswordIcon } from "@/icons/outline/design-develop
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   groupClassName?: string;
@@ -10,18 +11,25 @@ type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"
   children?: ReactNode;
 };
 
-export const InputPassword = ({ placeholder = "Password", size, ...props }: InputVariantPropsType) => {
+export const InputPassword = ({
+  placeholder = "Password",
+  size,
+  className,
+  groupClassName,
+  iconClassName,
+  ...props
+}: InputVariantPropsType) => {
   return (
-    <InputGroup size={size}>
+    <InputGroup size={size} className={groupClassName}>
       <InputGroupInput
         type="password"
         placeholder={placeholder}
         size={size}
-        className="placeholder:text-sm"
+        className={cn("placeholder:text-sm", className)}
         {...props}
       />
       <InputGroupAddon align="inline-start">
-        <PasswordIcon />
+        <PasswordIcon className={iconClassName} />
       </InputGroupAddon>
     </InputGroup>
   );

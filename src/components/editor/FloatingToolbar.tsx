@@ -1,6 +1,7 @@
 import type { Editor } from "@tiptap/react";
 import { useEditorState } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
+import { cn } from "@/utils/cn";
 import { Blockquote } from "./toolbar/Blockquote";
 import { Bold } from "./toolbar/Bold";
 import { Highlight } from "./toolbar/Highlight";
@@ -15,9 +16,10 @@ import { Underline } from "./toolbar/Underline";
 
 type FloatingToolbarPropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const FloatingToolbar = ({ editor }: FloatingToolbarPropsType) => {
+export const FloatingToolbar = ({ editor, className }: FloatingToolbarPropsType) => {
   const state = useEditorState({
     editor,
     selector: (ctx) => ({
@@ -40,7 +42,7 @@ export const FloatingToolbar = ({ editor }: FloatingToolbarPropsType) => {
       options={{
         placement: "top",
       }}
-      className="flex items-center gap-1 p-1 bg-popover text-popover-foreground rounded shadow-md"
+      className={cn("flex items-center gap-1 p-1 bg-popover text-popover-foreground rounded shadow-md", className)}
     >
       <Paragraph editor={editor} pressed={state.isParagraph} />
       <Bold editor={editor} pressed={state.isBold} />

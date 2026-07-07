@@ -7,9 +7,10 @@ import { Toggle } from "@/components/toggle/Toggle";
 type TextStylePropsType = {
   editor: Editor;
   state?: { color: string };
+  className?: string;
 };
 
-export const TextStyle = ({ editor, state }: TextStylePropsType) => {
+export const TextStyle = ({ editor, state, className }: TextStylePropsType) => {
   const isTextStyleActive = editor?.isActive("textStyle");
 
   const handlePick = async () => {
@@ -22,7 +23,7 @@ export const TextStyle = ({ editor, state }: TextStylePropsType) => {
   };
 
   return (
-    <Toggle pressed={isTextStyleActive} onClick={handlePick}>
+    <Toggle className={className} pressed={isTextStyleActive} onClick={handlePick}>
       <ColorIcon className="size-3.5" />
     </Toggle>
   );

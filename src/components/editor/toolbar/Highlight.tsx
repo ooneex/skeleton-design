@@ -7,9 +7,10 @@ import { Toggle } from "@/components/toggle/Toggle";
 type HighlightPropsType = {
   editor: Editor;
   state?: { highlight: string };
+  className?: string;
 };
 
-export const Highlight = ({ editor, state }: HighlightPropsType) => {
+export const Highlight = ({ editor, state, className }: HighlightPropsType) => {
   const isHighlightActive = editor?.isActive("highlight");
 
   const handlePick = async () => {
@@ -22,7 +23,7 @@ export const Highlight = ({ editor, state }: HighlightPropsType) => {
   };
 
   return (
-    <Toggle pressed={isHighlightActive} onClick={handlePick}>
+    <Toggle className={className} pressed={isHighlightActive} onClick={handlePick}>
       <HighlighterIcon className="size-4" />
     </Toggle>
   );

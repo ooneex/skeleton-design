@@ -1,14 +1,20 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { ArrowTriangleLineLeftIcon } from "@/icons/fill/arrows/sm/ArrowTriangleLineLeftIcon";
+import type { ComponentProps } from "react";
 import { Button, buttonVariants } from "@/components/button/Button";
 import { H1, Muted } from "@/components/typography";
+import { ArrowTriangleLineLeftIcon } from "@/icons/fill/arrows/sm/ArrowTriangleLineLeftIcon";
+import { cn } from "@/utils/cn";
 import { NotFoundIcon } from "./NotFoundIcon";
 
-export const NotFound = () => {
+export const NotFound = ({ className, ...props }: ComponentProps<"div">) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6 p-12">
+    <div
+      data-slot="not-found"
+      className={cn("flex flex-col items-center justify-center h-full gap-6 p-12", className)}
+      {...props}
+    >
       <NotFoundIcon />
       <div className="flex flex-col items-center gap-2 text-center">
         <H1>404</H1>

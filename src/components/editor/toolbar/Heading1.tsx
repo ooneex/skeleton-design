@@ -4,11 +4,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 
 type Heading1PropsType = {
   editor: Editor;
+  className?: string;
 };
 
-export const Heading1 = ({ editor }: Heading1PropsType) => {
+export const Heading1 = ({ editor, className }: Heading1PropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={editor?.isActive("heading", { level: 1 })}
       onPressedChange={() => {
         editor?.chain().focus().toggleHeading({ level: 1 }).run();

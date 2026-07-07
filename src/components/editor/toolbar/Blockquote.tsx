@@ -5,11 +5,13 @@ import { Toggle } from "@/components/toggle/Toggle";
 type BlockquotePropsType = {
   editor: Editor;
   pressed?: boolean;
+  className?: string;
 };
 
-export const Blockquote = ({ editor, pressed }: BlockquotePropsType) => {
+export const Blockquote = ({ editor, pressed, className }: BlockquotePropsType) => {
   return (
     <Toggle
+      className={className}
       pressed={pressed ?? editor?.isActive("blockquote")}
       onPressedChange={() => {
         editor?.chain().focus().toggleBlockquote().run();
