@@ -8,6 +8,7 @@
 @import "./status.css";
 @import "./themes/light.css";
 @import "./themes/dark.css";
+@import "./themes/secondary.css";
 
 @source "../../..";
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
