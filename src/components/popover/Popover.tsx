@@ -1,12 +1,26 @@
-import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
+import { type ReactNode, useMemo, useRef } from "react";
+import { useControlledState } from "@/hooks/useControlledState";
 import { PopoverContent } from "./PopoverContent";
 import { PopoverDescription } from "./PopoverDescription";
 import { PopoverHeader } from "./PopoverHeader";
 import { PopoverTitle } from "./PopoverTitle";
 import { PopoverTrigger } from "./PopoverTrigger";
+import { PopoverContext, type PopoverContextValueType } from "./popoverContext";
 
-const PopoverRoot = (props: PopoverPrimitive.Root.Props) => {
-  return <PopoverPrimitive.Root data-slot="popover" {...props} />;
+type PopoverRootPropsType = {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: ReactNode;
+};
+
+const PopoverRoot = ({ open: openProp, defaultOpen = false, onOpenChange, children }: PopoverRootPropsType) => {
+  const [open, setOpen] = useControlledState({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange });
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  const value = useMemo<PopoverContextValueType>(() => ({ open, setOpen, triggerRef }), [open, setOpen]);
+
+  return <PopoverContext.Provider value={value}>{children}</PopoverContext.Provider>;
 };
 
 /**
