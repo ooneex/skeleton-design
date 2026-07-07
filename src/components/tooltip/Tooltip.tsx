@@ -1,12 +1,62 @@
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
+import { useControlledState } from "@/hooks/useControlledState";
 import { TooltipContent } from "./TooltipContent";
 import { TooltipProvider } from "./TooltipProvider";
 import { TooltipTrigger } from "./TooltipTrigger";
+import { TooltipContext, type TooltipContextValueType, useTooltipProviderContext } from "./tooltipContext";
 
-const TooltipRoot = ({ ...props }: TooltipPrimitive.Root.Props) => {
+type TooltipRootPropsType = {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Milliseconds before the tooltip opens on hover. Falls back to the provider delay. */
+  delay?: number;
+  children?: ReactNode;
+};
+
+const TooltipStateRoot = ({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  delay,
+  children,
+}: TooltipRootPropsType) => {
+  const providerContext = useTooltipProviderContext();
+  const openDelay = delay ?? providerContext?.delay ?? 0;
+  const [open, setOpen] = useControlledState({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange });
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelOpen = useCallback(() => {
+    if (openTimerRef.current !== null) {
+      clearTimeout(openTimerRef.current);
+      openTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleOpen = useCallback(() => {
+    cancelOpen();
+    if (openDelay <= 0) {
+      setOpen(true);
+      return;
+    }
+    openTimerRef.current = setTimeout(() => setOpen(true), openDelay);
+  }, [cancelOpen, openDelay, setOpen]);
+
+  useEffect(() => cancelOpen, [cancelOpen]);
+
+  const value = useMemo<TooltipContextValueType>(
+    () => ({ open, setOpen, triggerRef, scheduleOpen, cancelOpen }),
+    [open, setOpen, scheduleOpen, cancelOpen],
+  );
+
+  return <TooltipContext.Provider value={value}>{children}</TooltipContext.Provider>;
+};
+
+const TooltipRoot = (props: TooltipRootPropsType) => {
   return (
     <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+      <TooltipStateRoot {...props} />
     </TooltipProvider>
   );
 };
