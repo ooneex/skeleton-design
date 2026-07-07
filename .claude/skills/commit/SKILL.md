@@ -34,6 +34,11 @@ Commit only as the project's git user. **Never** add a `Co-Authored-By: Claude` 
    - Commit with proper format: `type(scope): Subject`
    - Repeat until the working tree is clean (or only unrelated work remains)
 
+4. **Push**
+   - Once all commits are created, push to the remote: `git push`
+   - If the branch has no upstream yet, use `git push -u origin <branch>`
+   - Never force-push (`--force`/`--force-with-lease`) unless the user explicitly asks for it
+
 ## Commit Message Format
 
 ```
@@ -56,13 +61,12 @@ type(scope): Subject line
 ### Valid Scopes
 Scopes follow the source layout under `src/` and the established git history:
 - `components`: UI components (`src/components`)
-- `layouts`: Application layouts (`src/layouts`)
 - `icons`: Icon library, fill and outline (`src/icons`)
 - `hooks`: Shared React hooks (`src/hooks`)
 - `utils`: Utility helpers (`src/utils`)
 - `fonts`: Font families and assets (`src/fonts`)
 - `styles`: Global stylesheets and design tokens (`src/styles`)
-- `config`: Root-level tooling, dependencies, and configs (`package.json`, `bun.lock`, `biome.jsonc`, `tsconfig.json`)
+- `config`: Root-level tooling, dependencies, configs, and type declarations (`package.json`, `bun.lock`, `biome.jsonc`, `tsconfig.json`, `src/css.d.ts`)
 
 When a logical change spans multiple scopes, pick the scope that best represents the **primary** intent of the change. If truly split, prefer separate commits.
 
@@ -84,7 +88,7 @@ Let the nature of the change — not the file type — decide:
 | Only test files changed | `test` |
 | Only documentation (`*.md`) | `docs` |
 | Dependencies, lockfiles | `chore` |
-| Build tooling (Vite, bundler configs) | `build` |
+| Build tooling, type declarations (`css.d.ts`) | `build` |
 | CI/CD workflows | `ci` |
 | Formatting, whitespace only | `style` |
 | Measurable performance work | `perf` |
@@ -99,14 +103,14 @@ Git status shows:
 ```
 M src/components/tabs/Tabs.tsx
 M src/components/dialog/Dialog.tsx
-M src/hooks/useMediaQuery.ts
+M src/hooks/useClickOutside.tsx
 M src/styles/app.css
 M bun.lock
 ```
 
 After reading the diffs you discover:
 - `Tabs.tsx` + `Dialog.tsx` → new keyboard-navigation feature shared across both
-- `useMediaQuery.ts` → fixes a stale-listener bug
+- `useClickOutside.tsx` → fixes a stale-listener bug
 - `app.css` → adds a new design token (separate concern)
 - `bun.lock` → unrelated dependency bump
 
@@ -117,8 +121,8 @@ git add src/components/tabs/Tabs.tsx src/components/dialog/Dialog.tsx
 git commit -m "feat(components): Add keyboard navigation to tabs and dialog"
 
 # Fix: stale listener in hook
-git add src/hooks/useMediaQuery.ts
-git commit -m "fix(hooks): Remove stale listener in useMediaQuery"
+git add src/hooks/useClickOutside.tsx
+git commit -m "fix(hooks): Remove stale listener in useClickOutside"
 
 # Styles: new design token
 git add src/styles/app.css
@@ -127,20 +131,23 @@ git commit -m "feat(styles): Add accent color design token"
 # Dependency bump
 git add bun.lock
 git commit -m "chore(config): Update dependencies"
+
+# Push all commits to the remote
+git push
 ```
 
 ### Example 2: Single Logical Change Spanning Directories
 
 Git status shows:
 ```
-M src/components/upload/Upload.tsx
-M src/hooks/useUpload.ts
+M src/components/upload/FileUpload.tsx
+M src/hooks/useControlledState.tsx
 M src/utils/cn.ts
 ```
 
 All three files implement the same feature (drag-and-drop upload). This is **one** commit — pick the scope that represents the primary intent:
 ```bash
-git add src/components/upload/Upload.tsx src/hooks/useUpload.ts src/utils/cn.ts
+git add src/components/upload/FileUpload.tsx src/hooks/useControlledState.tsx src/utils/cn.ts
 git commit -m "feat(components): Add drag-and-drop upload support"
 ```
 
@@ -163,15 +170,15 @@ git commit -m "refactor(components): Rename form state variables"
 
 Git status shows:
 ```
-D src/components/error/OldError.tsx
-A src/components/error/Error.tsx
-M src/layouts/AppLayout.tsx
+D src/components/error/ErrorPage.tsx
+A src/components/error/ErrorFallback.tsx
+M src/components/editor/Editor.tsx
 ```
 
 All part of the same rewrite:
 ```bash
-git add src/components/error/OldError.tsx src/components/error/Error.tsx src/layouts/AppLayout.tsx
-git commit -m "refactor(components): Replace OldError with Error"
+git add src/components/error/ErrorPage.tsx src/components/error/ErrorFallback.tsx src/components/editor/Editor.tsx
+git commit -m "refactor(components): Replace ErrorPage with ErrorFallback"
 ```
 
 ## Subject Line Guidelines
@@ -181,8 +188,8 @@ Write clear, descriptive subjects:
 | Good | Bad |
 |------|-----|
 | `Add drag-and-drop upload support` | `upload` |
-| `Remove stale listener in useMediaQuery` | `fix bug` |
-| `Replace OldError with Error` | `rename` |
+| `Remove stale listener in useClickOutside` | `fix bug` |
+| `Replace ErrorPage with ErrorFallback` | `rename` |
 | `Remove deprecated icon variants` | `cleanup` |
 | `Add accent color design token` | `css change` |
 
