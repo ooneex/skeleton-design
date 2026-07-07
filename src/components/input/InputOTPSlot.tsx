@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { OTPInputContext } from "input-otp";
 import { type ComponentProps, useContext } from "react";
 import { cn } from "@/utils/cn";
+import "./inputOtp.css";
 
 export const inputOTPSlotVariants = cva(
   "relative flex items-center justify-center border-y border-r border-input bg-transparent shadow-xs transition-[color,box-shadow] outline-none first:border-l aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20",
@@ -41,7 +42,7 @@ export const InputOTPSlot = ({ index, size = "sm", className, ...props }: InputO
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+          <div className="input-otp-caret h-4 w-px bg-foreground" />
         </div>
       )}
     </div>

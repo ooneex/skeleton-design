@@ -14,40 +14,15 @@
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 @layer base {
-  * ::selection {
-    @apply bg-primary text-primary-foreground;
+  html {
+    @apply font-sans leading-relaxed tracking-normal;
   }
 
   body {
-    @apply font-sans tracking-normal overflow-hidden;
+    @apply overflow-hidden;
   }
 
-  html {
-    @apply font-sans leading-relaxed;
-  }
-}
-
-@keyframes toast-progress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0%;
-  }
-}
-
-@theme {
-  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
-}
-
-@keyframes caret-blink {
-  0%,
-  70%,
-  100% {
-    opacity: 1;
-  }
-  20%,
-  50% {
-    opacity: 0;
+  ::selection {
+    @apply bg-primary text-primary-foreground;
   }
 }

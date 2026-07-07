@@ -8,6 +8,7 @@ import { TriangleWarningIcon } from "@/icons/outline/ui-layout/sm/TriangleWarnin
 import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
+import "./toaster.css";
 
 const TOAST_DURATION = 4000;
 /** Keep the toast mounted briefly so its exit animation can play. */
