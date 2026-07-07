@@ -1,30 +1,42 @@
-import type React from "react";
 import { useEffect } from "react";
 import { Select } from "@/components/select";
 import { useControlledState } from "@/hooks/useControlledState";
 import { ThemeSwitcherOption, type ThemeType, themeIcons, themeLabels } from "./ThemeSwitcherOption";
 
+/** All supported themes, in declaration order. */
+const themes = Object.keys(themeLabels) as ThemeType[];
+
 export type ThemeSwitcherPropsType = {
   value?: ThemeType;
   defaultValue?: ThemeType;
-  onValueChange?: (theme: ThemeType) => void;
+  onChange?: (theme: ThemeType) => void;
   size?: "xs" | "sm" | "md" | "lg";
   disabled?: boolean;
   /** Applied to the select trigger. */
   className?: string;
-  children?: React.ReactNode;
 };
 
-const ThemeSwitcherRoot = ({
+/**
+ * A `Select`-based theme picker. Lists every supported theme (icon + label)
+ * and reports the chosen one via `onChange`:
+ *
+ * ```tsx
+ * <ThemeSwitcher defaultValue="system" onChange={(theme) => ...} />
+ * ```
+ *
+ * The selection is controlled via `value` or uncontrolled via `defaultValue`.
+ * The resolved theme is mirrored onto `<html data-theme>`, tracking the OS
+ * preference while `system` is selected.
+ */
+export const ThemeSwitcher = ({
   className,
   value,
   defaultValue = "system",
-  onValueChange,
+  onChange,
   size,
   disabled,
-  children,
 }: ThemeSwitcherPropsType) => {
-  const [theme, setTheme] = useControlledState({ value, defaultValue, onChange: onValueChange });
+  const [theme, setTheme] = useControlledState({ value, defaultValue, onChange });
 
   /** Reflect the selection on <html> so the `.light`/`.dark` theme stylesheets apply. */
   useEffect(() => {
@@ -53,28 +65,11 @@ const ThemeSwitcherRoot = ({
           {themeLabels[theme]}
         </Select.Value>
       </Select.Trigger>
-      <Select.Content>{children}</Select.Content>
+      <Select.Content>
+        {themes.map((code) => (
+          <ThemeSwitcherOption key={code} value={code} />
+        ))}
+      </Select.Content>
     </Select>
   );
 };
-
-/**
- * Compound component built on `Select`. Sub-components are attached as
- * properties on `ThemeSwitcher`, so a single import exposes the whole API:
- *
- * ```tsx
- * <ThemeSwitcher defaultValue="system">
- *   <ThemeSwitcher.Option value="light" />
- *   <ThemeSwitcher.Option value="dark" />
- *   <ThemeSwitcher.Option value="system" />
- * </ThemeSwitcher>
- * ```
- *
- * Options render a default icon and label per theme; pass children to
- * customize. The root owns the selection (controlled via `value` or
- * uncontrolled via `defaultValue`) and mirrors the resolved theme onto
- * `<html data-theme>`, tracking the OS preference while `system` is selected.
- */
-export const ThemeSwitcher = Object.assign(ThemeSwitcherRoot, {
-  Option: ThemeSwitcherOption,
-});

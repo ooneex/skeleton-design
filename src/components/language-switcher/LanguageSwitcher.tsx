@@ -1,30 +1,41 @@
-import type React from "react";
 import { useEffect } from "react";
 import { Select } from "@/components/select";
 import { useControlledState } from "@/hooks/useControlledState";
 import { LanguageSwitcherOption, type LanguageType, languageFlags, languageLabels } from "./LanguageSwitcherOption";
 
+/** All supported languages, in declaration order. */
+const languages = Object.keys(languageLabels) as LanguageType[];
+
 export type LanguageSwitcherPropsType = {
   value?: LanguageType;
   defaultValue?: LanguageType;
-  onValueChange?: (language: LanguageType) => void;
+  onChange?: (language: LanguageType) => void;
   size?: "xs" | "sm" | "md" | "lg";
   disabled?: boolean;
   /** Applied to the select trigger. */
   className?: string;
-  children?: React.ReactNode;
 };
 
-const LanguageSwitcherRoot = ({
+/**
+ * A `Select`-based language picker. Lists every supported language (flag +
+ * label) and reports the chosen one via `onChange`:
+ *
+ * ```tsx
+ * <LanguageSwitcher defaultValue="en" onChange={(lang) => ...} />
+ * ```
+ *
+ * The selection is controlled via `value` or uncontrolled via `defaultValue`,
+ * and the active language is mirrored onto `<html lang>`.
+ */
+export const LanguageSwitcher = ({
   className,
   value,
   defaultValue = "en",
-  onValueChange,
+  onChange,
   size,
   disabled,
-  children,
 }: LanguageSwitcherPropsType) => {
-  const [language, setLanguage] = useControlledState({ value, defaultValue, onChange: onValueChange });
+  const [language, setLanguage] = useControlledState({ value, defaultValue, onChange });
 
   /** Reflect the selection on <html lang> so assistive tech and CSS can react to it. */
   useEffect(() => {
@@ -41,28 +52,11 @@ const LanguageSwitcherRoot = ({
           {languageLabels[language]}
         </Select.Value>
       </Select.Trigger>
-      <Select.Content>{children}</Select.Content>
+      <Select.Content>
+        {languages.map((code) => (
+          <LanguageSwitcherOption key={code} value={code} />
+        ))}
+      </Select.Content>
     </Select>
   );
 };
-
-/**
- * Compound component built on `Select`. Sub-components are attached as
- * properties on `LanguageSwitcher`, so a single import exposes the whole API:
- *
- * ```tsx
- * <LanguageSwitcher defaultValue="en">
- *   <LanguageSwitcher.Option value="en" />
- *   <LanguageSwitcher.Option value="fr" />
- *   <LanguageSwitcher.Option value="de" />
- * </LanguageSwitcher>
- * ```
- *
- * Options render a default flag and label per language; pass children to
- * customize. The root owns the selection (controlled via `value` or
- * uncontrolled via `defaultValue`) and mirrors the active language onto
- * `<html lang>`.
- */
-export const LanguageSwitcher = Object.assign(LanguageSwitcherRoot, {
-  Option: LanguageSwitcherOption,
-});
