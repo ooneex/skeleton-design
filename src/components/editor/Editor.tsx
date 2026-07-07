@@ -35,6 +35,7 @@ import { SimpleColorPicker } from "@/components/color/SimpleColorPicker";
 import { cn } from "@/utils/cn";
 import { EnterHandler } from "./extensions/EnterHandler";
 import { FloatingToolbar } from "./FloatingToolbar";
+import { LinkDialog } from "./LinkDialog";
 import { LinkMark } from "./marks/Link";
 import { SlashMenu } from "./SlashMenu";
 import { YouTubeDialog } from "./YouTubeDialog";
@@ -271,8 +272,9 @@ export const Editor = ({
   return (
     <>
       {editor && editable && showToolbar ? <FloatingToolbar editor={editor} /> : null}
-      {/* react-call Root for the toolbar's imperative color picker (single mount per editor). */}
+      {/* react-call Roots for the toolbar's imperative color picker and link dialog (single mount per editor). */}
       {editor && editable && showToolbar ? <SimpleColorPicker /> : null}
+      {editor && editable && showToolbar ? <LinkDialog /> : null}
       <EditorContent editor={editor} className={cn("h-full w-full p-0 m-0", className)} />
       {showMedia ? <YouTubeDialog /> : null}
     </>
