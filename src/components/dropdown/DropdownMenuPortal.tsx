@@ -1,5 +1,11 @@
-import { Menu as MenuPrimitive } from "@base-ui/react/menu";
+import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-export const DropdownMenuPortal = (props: MenuPrimitive.Portal.Props) => {
-  return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />;
+type DropdownMenuPortalPropsType = {
+  children?: ReactNode;
+  container?: Element | DocumentFragment | null;
+};
+
+export const DropdownMenuPortal = ({ children, container }: DropdownMenuPortalPropsType) => {
+  return createPortal(children, container ?? document.body);
 };

@@ -1,4 +1,5 @@
-import { Menu as MenuPrimitive } from "@base-ui/react/menu";
+import { type ReactNode, useCallback, useMemo, useRef } from "react";
+import { useControlledState } from "@/hooks/useControlledState";
 import { DropdownMenuCheckboxItem } from "./DropdownMenuCheckboxItem";
 import { DropdownMenuContent } from "./DropdownMenuContent";
 import { DropdownMenuGroup } from "./DropdownMenuGroup";
@@ -13,9 +14,48 @@ import { DropdownMenuSub } from "./DropdownMenuSub";
 import { DropdownMenuSubContent } from "./DropdownMenuSubContent";
 import { DropdownMenuSubTrigger } from "./DropdownMenuSubTrigger";
 import { DropdownMenuTrigger } from "./DropdownMenuTrigger";
+import { DropdownMenuContext, type DropdownMenuContextValueType } from "./dropdownMenuContext";
 
-const DropdownMenuRoot = (props: MenuPrimitive.Root.Props) => {
-  return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+type DropdownMenuRootPropsType = {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: ReactNode;
+};
+
+const DropdownMenuRoot = ({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  children,
+}: DropdownMenuRootPropsType) => {
+  const [open, setOpen] = useControlledState({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange });
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const popupsRef = useRef(new Set<HTMLElement>());
+
+  const registerPopup = useCallback((popup: HTMLElement) => {
+    popupsRef.current.add(popup);
+    return () => {
+      popupsRef.current.delete(popup);
+    };
+  }, []);
+
+  const isInsideMenu = useCallback((target: Node) => {
+    if (triggerRef.current?.contains(target)) return true;
+    for (const popup of popupsRef.current) {
+      if (popup.contains(target)) return true;
+    }
+    return false;
+  }, []);
+
+  const closeAll = useCallback(() => setOpen(false), [setOpen]);
+
+  const value = useMemo<DropdownMenuContextValueType>(
+    () => ({ open, setOpen, triggerRef, registerPopup, isInsideMenu, closeAll }),
+    [open, setOpen, registerPopup, isInsideMenu, closeAll],
+  );
+
+  return <DropdownMenuContext.Provider value={value}>{children}</DropdownMenuContext.Provider>;
 };
 
 /**
