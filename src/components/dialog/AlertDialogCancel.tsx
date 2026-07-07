@@ -1,22 +1,28 @@
-import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
 import type * as React from "react";
 import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
+import { useDialogContext } from "./DialogContext";
 
-type AlertDialogCancelPropsType = AlertDialogPrimitive.Close.Props &
-  Pick<React.ComponentProps<typeof Button>, "variant" | "size">;
+type AlertDialogCancelPropsType = React.ComponentProps<typeof Button>;
 
 export const AlertDialogCancel = ({
   className,
   variant = "outline",
   size = "sm",
+  onClick,
   ...props
 }: AlertDialogCancelPropsType) => {
+  const context = useDialogContext();
   return (
-    <AlertDialogPrimitive.Close
+    <Button
       data-slot="alert-dialog-cancel"
+      variant={variant}
+      size={size}
       className={cn(className)}
-      render={<Button variant={variant} size={size} />}
+      onClick={(event) => {
+        onClick?.(event);
+        context?.dismiss();
+      }}
       {...props}
     />
   );

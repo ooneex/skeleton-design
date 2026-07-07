@@ -1,4 +1,3 @@
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import type { ReactNode } from "react";
 import { type Callable, createCallable, type PropsWithCall } from "react-call";
 import { DialogContent } from "./DialogContent";
@@ -62,18 +61,16 @@ export function createDialog<Props = void, Response = void>(
   return createCallable<Props, Response>((props) => {
     const { call } = props;
     return (
-      <DialogPrimitive.Root
+      <DialogContent
         open={!call.ended}
         modal={modal}
         disablePointerDismissal={disablePointerDismissal}
-        onOpenChange={(open) => {
-          if (!open) call.end(dismissValue as Response);
-        }}
+        showCloseButton={showCloseButton}
+        className={className}
+        onDismiss={() => call.end(dismissValue as Response)}
       >
-        <DialogContent className={className} showCloseButton={showCloseButton}>
-          {render(props)}
-        </DialogContent>
-      </DialogPrimitive.Root>
+        {render(props)}
+      </DialogContent>
     );
   }, unmountingDelay);
 }

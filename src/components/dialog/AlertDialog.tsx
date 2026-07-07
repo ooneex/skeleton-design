@@ -1,4 +1,3 @@
-import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
 import type { ReactNode } from "react";
 import { createCallable } from "react-call";
 import type { Button } from "@/components/button/Button";
@@ -62,28 +61,21 @@ export const AlertDialog = createCallable<AlertDialogPropsType, boolean>(
     size = "md",
   }) => {
     return (
-      <AlertDialogPrimitive.Root
-        open={!call.ended}
-        onOpenChange={(open) => {
-          if (!open) call.end(false);
-        }}
-      >
-        <AlertDialogContent size={size}>
-          <AlertDialogHeader>
-            {media ? <AlertDialogMedia>{media}</AlertDialogMedia> : null}
-            <AlertDialogTitle>{title}</AlertDialogTitle>
-            {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            {mode === "confirm" ? (
-              <AlertDialogCancel onClick={() => call.end(false)}>{cancelLabel}</AlertDialogCancel>
-            ) : null}
-            <AlertDialogAction variant={confirmVariant} onClick={() => call.end(true)}>
-              {confirmLabel}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogPrimitive.Root>
+      <AlertDialogContent size={size} open={!call.ended} onDismiss={() => call.end(false)}>
+        <AlertDialogHeader>
+          {media ? <AlertDialogMedia>{media}</AlertDialogMedia> : null}
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          {mode === "confirm" ? (
+            <AlertDialogCancel onClick={() => call.end(false)}>{cancelLabel}</AlertDialogCancel>
+          ) : null}
+          <AlertDialogAction variant={confirmVariant} onClick={() => call.end(true)}>
+            {confirmLabel}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
     );
   },
   UNMOUNTING_DELAY,

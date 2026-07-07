@@ -1,13 +1,14 @@
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import type * as React from "react";
 import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
+import { useDialogContext } from "./DialogContext";
 
 type DialogFooterPropsType = React.ComponentProps<"div"> & {
   showCloseButton?: boolean;
 };
 
 export const DialogFooter = ({ className, showCloseButton = false, children, ...props }: DialogFooterPropsType) => {
+  const context = useDialogContext();
   return (
     <div
       data-slot="dialog-footer"
@@ -15,7 +16,11 @@ export const DialogFooter = ({ className, showCloseButton = false, children, ...
       {...props}
     >
       {children}
-      {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>}
+      {showCloseButton && (
+        <Button data-slot="dialog-close" variant="outline" onClick={() => context?.dismiss()}>
+          Close
+        </Button>
+      )}
     </div>
   );
 };

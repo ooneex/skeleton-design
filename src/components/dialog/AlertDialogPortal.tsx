@@ -1,5 +1,11 @@
-import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
+import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-export const AlertDialogPortal = (props: AlertDialogPrimitive.Portal.Props) => {
-  return <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />;
+type AlertDialogPortalPropsType = {
+  children?: ReactNode;
+  container?: Element | DocumentFragment | null;
+};
+
+export const AlertDialogPortal = ({ children, container }: AlertDialogPortalPropsType) => {
+  return createPortal(children, container ?? document.body);
 };

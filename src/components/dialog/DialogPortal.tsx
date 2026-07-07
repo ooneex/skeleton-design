@@ -1,5 +1,11 @@
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-export const DialogPortal = (props: DialogPrimitive.Portal.Props) => {
-  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
+type DialogPortalPropsType = {
+  children?: ReactNode;
+  container?: Element | DocumentFragment | null;
+};
+
+export const DialogPortal = ({ children, container }: DialogPortalPropsType) => {
+  return createPortal(children, container ?? document.body);
 };
