@@ -1,8 +1,8 @@
 import { type DragEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
-import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { Button } from "@/components/button/Button";
 import { ImageZoom } from "@/components/image/ImageZoom";
+import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
+import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { cn } from "@/utils/cn";
 
 type FileSizeUnit = "B" | "KB" | "MB" | "GB" | "TB";

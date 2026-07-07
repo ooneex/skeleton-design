@@ -1,10 +1,10 @@
 import { type DragEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/button/Button";
+import { Muted, Small } from "@/components/typography";
 import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
 import { FilePdfIcon } from "@/icons/outline/design-development/sm/FilePdfIcon";
 import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
-import { Button } from "@/components/button/Button";
-import { Muted, Small } from "@/components/typography";
 import { cn } from "@/utils/cn";
 
 type FileStatus = "idle" | "dragging" | "uploading" | "completed" | "error";
