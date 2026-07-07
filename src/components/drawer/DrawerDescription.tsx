@@ -1,13 +1,18 @@
-import type * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul";
+import { useLayoutEffect } from "react";
+import { useDialogContext } from "@/components/dialog/DialogContext";
 import { cn } from "@/utils/cn";
 
-export const DrawerDescription = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Description>) => {
+export const DrawerDescription = ({ className, id, ...props }: React.ComponentProps<"p">) => {
+  const context = useDialogContext();
+  const setHasDescription = context?.setHasDescription;
+  useLayoutEffect(() => {
+    if (!setHasDescription) return;
+    setHasDescription(true);
+    return () => setHasDescription(false);
+  }, [setHasDescription]);
   return (
-    <DrawerPrimitive.Description
+    <p
+      id={id ?? context?.descriptionId}
       data-slot="drawer-description"
       className={cn("text-muted-foreground text-sm", className)}
       {...props}

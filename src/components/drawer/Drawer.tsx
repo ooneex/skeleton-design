@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { type Callable, createCallable, type PropsWithCall } from "react-call";
-import { Drawer as DrawerPrimitive } from "vaul";
 import { DrawerContent } from "./DrawerContent";
 import { DrawerDescription } from "./DrawerDescription";
 import { DrawerHeader } from "./DrawerHeader";
@@ -13,17 +12,17 @@ export type CreateDrawerOptions<Response> = {
   className?: string;
   /** Edge the drawer slides in from. Defaults to `'bottom'`. */
   side?: "top" | "right" | "bottom" | "left";
-  /** Disable swipe/outside-click/Escape dismissal. */
+  /** Disable outside-click/Escape dismissal. */
   dismissible?: boolean;
   /** `false` keeps the page interactive behind the drawer. Defaults to `true`. */
   modal?: boolean;
-  /** Value the promise resolves with when the drawer is dismissed (swipe / outside click / Escape). */
+  /** Value the promise resolves with when the drawer is dismissed (outside click / Escape). */
   dismissValue?: Response;
   unmountingDelay?: number;
 };
 
 /**
- * Build a typed, imperatively-callable drawer on top of `react-call` and `vaul`.
+ * Build a typed, imperatively-callable drawer on top of `react-call`.
  *
  * `render` receives the `call` context (`end`, `ended`, …) plus your props and
  * returns the drawer body. Resolve a value with `call.end(value)`; dismissing
@@ -58,18 +57,16 @@ export function createDrawer<Props = void, Response = void>(
   return createCallable<Props, Response>((props) => {
     const { call } = props;
     return (
-      <DrawerPrimitive.Root
-        data-slot="drawer"
+      <DrawerContent
         open={!call.ended}
-        direction={side}
-        dismissible={dismissible}
+        side={side}
         modal={modal}
-        onOpenChange={(open) => {
-          if (!open) call.end(dismissValue as Response);
-        }}
+        dismissible={dismissible}
+        className={className}
+        onDismiss={() => call.end(dismissValue as Response)}
       >
-        <DrawerContent className={className}>{render(props)}</DrawerContent>
-      </DrawerPrimitive.Root>
+        {render(props)}
+      </DrawerContent>
     );
   }, unmountingDelay);
 }

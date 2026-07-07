@@ -1,13 +1,36 @@
-import type * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul";
+import { useRef } from "react";
 import { cn } from "@/utils/cn";
 
-export const DrawerOverlay = ({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Overlay>) => {
+type DrawerOverlayPropsType = React.ComponentProps<"div"> & {
+  open?: boolean;
+  /** When `false` the overlay lets pointer events through to the page. */
+  blocking?: boolean;
+  /** Called when a click both starts and ends on the overlay itself. */
+  onDismiss?: () => void;
+};
+
+export const DrawerOverlay = ({
+  className,
+  open = true,
+  blocking = true,
+  onDismiss,
+  ...props
+}: DrawerOverlayPropsType) => {
+  const pointerDownOnOverlay = useRef(false);
   return (
-    <DrawerPrimitive.Overlay
+    <div
       data-slot="drawer-overlay"
+      {...(open ? { "data-open": "" } : { "data-closed": "" })}
+      onPointerDown={(event) => {
+        pointerDownOnOverlay.current = event.target === event.currentTarget;
+      }}
+      onClick={(event) => {
+        if (pointerDownOnOverlay.current && event.target === event.currentTarget) onDismiss?.();
+        pointerDownOnOverlay.current = false;
+      }}
       className={cn(
-        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 supports-backdrop-filter:backdrop-blur-none fixed inset-0 z-50",
+        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-200 supports-backdrop-filter:backdrop-blur-none fixed inset-0 z-50",
+        !blocking && "pointer-events-none",
         className,
       )}
       {...props}

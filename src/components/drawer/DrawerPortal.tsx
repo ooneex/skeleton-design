@@ -1,6 +1,11 @@
-import type * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul";
+import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-export const DrawerPortal = (props: React.ComponentProps<typeof DrawerPrimitive.Portal>) => {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
+type DrawerPortalPropsType = {
+  children?: ReactNode;
+  container?: Element | DocumentFragment | null;
+};
+
+export const DrawerPortal = ({ children, container }: DrawerPortalPropsType) => {
+  return createPortal(children, container ?? document.body);
 };
