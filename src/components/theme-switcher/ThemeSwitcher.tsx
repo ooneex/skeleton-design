@@ -8,7 +8,7 @@ export type ThemeSwitcherPropsType = {
   value?: ThemeType;
   defaultValue?: ThemeType;
   onValueChange?: (theme: ThemeType) => void;
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md" | "lg";
   disabled?: boolean;
   /** Applied to the select trigger. */
   className?: string;

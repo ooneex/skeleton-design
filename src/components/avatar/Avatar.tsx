@@ -1,4 +1,5 @@
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { AvatarBadge } from "./AvatarBadge";
 import { AvatarFallback } from "./AvatarFallback";
@@ -6,16 +7,30 @@ import { AvatarGroup } from "./AvatarGroup";
 import { AvatarGroupCount } from "./AvatarGroupCount";
 import { AvatarImage } from "./AvatarImage";
 
-type AvatarPropsType = AvatarPrimitive.Root.Props & { size?: "md" | "sm" | "lg" | "xl" };
-const AvatarRoot = ({ className, size = "md", ...props }: AvatarPropsType) => {
+const avatarVariants = cva(
+  "rounded-full after:rounded-full after:border-border group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:mix-blend-darken",
+  {
+    variants: {
+      size: {
+        xs: "size-6",
+        sm: "size-8",
+        md: "size-10",
+        lg: "size-28",
+      },
+    },
+    defaultVariants: {
+      size: "sm",
+    },
+  },
+);
+
+type AvatarPropsType = AvatarPrimitive.Root.Props & VariantProps<typeof avatarVariants>;
+const AvatarRoot = ({ className, size = "sm", ...props }: AvatarPropsType) => {
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
       data-size={size}
-      className={cn(
-        "size-8 rounded-full after:rounded-full data-[size=lg]:size-10 data-[size=xl]:size-28 data-[size=sm]:size-6 after:border-border group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:mix-blend-darken",
-        className,
-      )}
+      className={cn(avatarVariants({ size }), className)}
       {...props}
     />
   );
@@ -33,3 +48,5 @@ export const Avatar = Object.assign(AvatarRoot, {
   Group: AvatarGroup,
   GroupCount: AvatarGroupCount,
 });
+
+export { avatarVariants };
