@@ -19,7 +19,7 @@ src/
 ├── icons/        fill/ and outline/ icon sets, grouped by category
 ├── hooks/        useControlledState, useAutoHeight, useMobile, useClickOutside
 ├── utils/        cn (class merging), staleChunk
-├── styles/       app.css entry + typography, shape, brand, status layers
+├── styles/       app.css entry + typography, shape, brand, status layers + themes/ (light, dark, premium)
 └── fonts/        bundled font faces (Space Grotesk)
 ```
 
@@ -45,6 +45,20 @@ Pull the styles into your app entry:
 ```css
 @import "@/styles/app.css";
 ```
+
+### Theming
+
+Three themes ship with the design system: `light` (default), `dark`, and `premium`. Each lives in its own file under `src/styles/themes/` and redefines the CSS variables — the `--primary-*`/`--secondary-*` color ramps and the semantic tokens (`--background`, `--primary`, `--muted`, …) — that `brand.css` maps to Tailwind utilities via `@theme inline`.
+
+Activate a theme with a class or a `data-theme` attribute on `<html>` (or any subtree):
+
+```html
+<html data-theme="dark">
+<!-- or -->
+<html class="premium">
+```
+
+To add a theme, copy one of the files in `src/styles/themes/`, change the selector and values, and import it from `app.css`.
 
 ## Scripts
 
