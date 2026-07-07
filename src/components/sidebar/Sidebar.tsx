@@ -1,5 +1,8 @@
-import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import type React from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { DialogOverlay } from "@/components/dialog/DialogOverlay";
+import { DialogPortal } from "@/components/dialog/DialogPortal";
+import { useDialogBehavior } from "@/components/dialog/useDialogBehavior";
 import { cn } from "@/utils/cn";
 import { SIDEBAR_WIDTH_MOBILE } from "./constants";
 import { SidebarContent } from "./SidebarContent";
@@ -26,6 +29,9 @@ import { SidebarSeparator } from "./SidebarSeparator";
 import { SidebarTrigger } from "./SidebarTrigger";
 import { useSidebar } from "./useSidebar";
 
+/** Milliseconds the mobile panel stays mounted after close so the exit animation can play. */
+const MOBILE_UNMOUNTING_DELAY = 200;
+
 type SidebarPropsType = React.ComponentProps<"div"> & {
   side?: "left" | "right";
   variant?: "sidebar" | "floating" | "inset";
@@ -41,6 +47,26 @@ const SidebarRoot = ({
   ...props
 }: SidebarPropsType) => {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const mobilePopupRef = useRef<HTMLDivElement>(null);
+  const mobileTitleId = useId();
+  const mobileDescriptionId = useId();
+
+  const [mobileMounted, setMobileMounted] = useState(openMobile);
+  useEffect(() => {
+    if (openMobile) {
+      setMobileMounted(true);
+      return;
+    }
+    const timer = setTimeout(() => setMobileMounted(false), MOBILE_UNMOUNTING_DELAY);
+    return () => clearTimeout(timer);
+  }, [openMobile]);
+
+  useDialogBehavior({
+    open: isMobile && openMobile,
+    modal: true,
+    popupRef: mobilePopupRef,
+    onDismiss: () => setOpenMobile(false),
+  });
 
   if (collapsible === "none") {
     return (
@@ -55,37 +81,44 @@ const SidebarRoot = ({
   }
 
   if (isMobile) {
+    if (!mobileMounted) return null;
     return (
-      <SheetPrimitive.Root open={openMobile} onOpenChange={setOpenMobile}>
-        <SheetPrimitive.Portal>
-          <SheetPrimitive.Backdrop
-            data-slot="sidebar-overlay"
-            className="data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-100 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs fixed inset-0 z-50"
-          />
-          <SheetPrimitive.Popup
-            data-sidebar="sidebar"
-            data-slot="sidebar"
-            data-mobile="true"
-            data-side={side}
-            className={cn(
-              "bg-background text-primary fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col p-0",
-              "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 transition duration-200 ease-in-out",
-              side === "left"
-                ? "left-0 data-[side=left]:data-closed:slide-out-to-left-10 data-[side=left]:data-open:slide-in-from-left-10"
-                : "right-0 data-[side=right]:data-closed:slide-out-to-right-10 data-[side=right]:data-open:slide-in-from-right-10",
-            )}
-            style={
-              {
-                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              } as React.CSSProperties
-            }
-          >
-            <SheetPrimitive.Title className="sr-only">Sidebar</SheetPrimitive.Title>
-            <SheetPrimitive.Description className="sr-only">Displays the mobile sidebar.</SheetPrimitive.Description>
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </SheetPrimitive.Popup>
-        </SheetPrimitive.Portal>
-      </SheetPrimitive.Root>
+      <DialogPortal>
+        <DialogOverlay data-slot="sidebar-overlay" open={openMobile} onDismiss={() => setOpenMobile(false)} />
+        <div
+          ref={mobilePopupRef}
+          role="dialog"
+          aria-modal
+          aria-labelledby={mobileTitleId}
+          aria-describedby={mobileDescriptionId}
+          tabIndex={-1}
+          data-sidebar="sidebar"
+          data-slot="sidebar"
+          data-mobile="true"
+          data-side={side}
+          {...(openMobile ? { "data-open": "" } : { "data-closed": "" })}
+          className={cn(
+            "bg-background text-primary fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col p-0 outline-none",
+            "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 transition duration-200 ease-in-out",
+            side === "left"
+              ? "left-0 data-[side=left]:data-closed:slide-out-to-left-10 data-[side=left]:data-open:slide-in-from-left-10"
+              : "right-0 data-[side=right]:data-closed:slide-out-to-right-10 data-[side=right]:data-open:slide-in-from-right-10",
+          )}
+          style={
+            {
+              "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+            } as React.CSSProperties
+          }
+        >
+          <h2 id={mobileTitleId} className="sr-only">
+            Sidebar
+          </h2>
+          <p id={mobileDescriptionId} className="sr-only">
+            Displays the mobile sidebar.
+          </p>
+          <div className="flex h-full w-full flex-col">{children}</div>
+        </div>
+      </DialogPortal>
     );
   }
 

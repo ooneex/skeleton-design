@@ -1,8 +1,6 @@
-import { mergeProps } from "@base-ui/react/merge-props";
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
-import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type React from "react";
+import { cloneElement, isValidElement, type ReactElement } from "react";
+import { Tooltip } from "@/components/tooltip/Tooltip";
 import { cn } from "@/utils/cn";
 import { useSidebar } from "./useSidebar";
 
@@ -28,11 +26,12 @@ export const sidebarMenuButtonVariants = cva(
   },
 );
 
-type SidebarMenuButtonPropsType = useRender.ComponentProps<"button"> &
-  React.ComponentProps<"button"> & {
-    isActive?: boolean;
-    tooltip?: string | React.ComponentProps<typeof TooltipPrimitive.Popup>;
-  } & VariantProps<typeof sidebarMenuButtonVariants>;
+type SidebarMenuButtonPropsType = React.ComponentProps<"button"> & {
+  /** Element to render as the button instead of the default `button`. */
+  render?: ReactElement<Record<string, unknown>>;
+  isActive?: boolean;
+  tooltip?: string | React.ComponentProps<typeof Tooltip.Content>;
+} & VariantProps<typeof sidebarMenuButtonVariants>;
 
 export const SidebarMenuButton = ({
   render,
@@ -41,56 +40,50 @@ export const SidebarMenuButton = ({
   size = "md",
   tooltip,
   className,
+  children,
   ...props
 }: SidebarMenuButtonPropsType) => {
   const { isMobile, state } = useSidebar();
   const showTooltip = tooltip && state === "collapsed" && !isMobile;
 
-  const comp = useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(
-      {
-        className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      },
-      props,
+  const buttonProps = {
+    "data-slot": "sidebar-menu-button",
+    "data-sidebar": "menu-button",
+    "data-size": size,
+    ...(isActive ? { "data-active": "" } : {}),
+    ...props,
+    className: cn(
+      sidebarMenuButtonVariants({ variant, size }),
+      className,
+      render?.props.className as string | undefined,
     ),
-    render: showTooltip
-      ? (renderProps, renderState) => (
-          <TooltipPrimitive.Trigger render={<span />}>
-            {typeof render === "function" ? (
-              render(renderProps, renderState)
-            ) : (
-              <button type="button" {...renderProps} />
-            )}
-          </TooltipPrimitive.Trigger>
-        )
-      : render,
-    state: {
-      slot: "sidebar-menu-button",
-      sidebar: "menu-button",
-      size,
-      active: isActive,
-    },
-  });
+  };
+
+  const button =
+    render && isValidElement(render) ? (
+      cloneElement(render, { ...buttonProps, children: children ?? render.props.children })
+    ) : (
+      <button type="button" {...buttonProps}>
+        {children}
+      </button>
+    );
 
   if (!showTooltip) {
-    return comp;
+    return button;
   }
 
   const tooltipProps = typeof tooltip === "string" ? { children: tooltip } : tooltip;
 
   return (
-    <TooltipPrimitive.Root>
-      {comp}
-      <TooltipPrimitive.Portal>
-        <TooltipPrimitive.Positioner side="right" sideOffset={4} align="center" className="isolate z-50">
-          <TooltipPrimitive.Popup
-            data-slot="tooltip-content"
-            className="rounded px-3 py-1.5 text-sm bg-background text-primary z-50 w-fit max-w-xs origin-(--transform-origin) font-normal shadow-md shadow-black/20"
-            {...tooltipProps}
-          />
-        </TooltipPrimitive.Positioner>
-      </TooltipPrimitive.Portal>
-    </TooltipPrimitive.Root>
+    <Tooltip>
+      <Tooltip.Trigger render={<span />}>{button}</Tooltip.Trigger>
+      <Tooltip.Content
+        side="right"
+        sideOffset={4}
+        align="center"
+        className="bg-background text-primary"
+        {...tooltipProps}
+      />
+    </Tooltip>
   );
 };

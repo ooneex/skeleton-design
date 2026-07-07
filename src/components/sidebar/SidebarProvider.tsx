@@ -1,5 +1,5 @@
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import React from "react";
+import { TooltipProvider } from "@/components/tooltip/TooltipProvider";
 import { useIsMobile } from "@/hooks/useMobile";
 import { cn } from "@/utils/cn";
 import {
@@ -86,7 +86,7 @@ export const SidebarProvider = ({
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <TooltipPrimitive.Provider delay={0}>
+      <TooltipProvider delay={0}>
         <div
           data-slot="sidebar-wrapper"
           style={
@@ -101,7 +101,7 @@ export const SidebarProvider = ({
         >
           {children}
         </div>
-      </TooltipPrimitive.Provider>
+      </TooltipProvider>
     </SidebarContext.Provider>
   );
 };
