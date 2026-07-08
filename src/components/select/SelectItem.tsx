@@ -45,7 +45,7 @@ export const SelectItem = ({ className, size = "sm", children, ...props }: Selec
       className={cn(selectItemVariants({ size }), className)}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex items-center flex-1 gap-2 shrink-0 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="flex items-center flex-1 gap-2 min-w-0 truncate">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
