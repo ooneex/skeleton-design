@@ -1,12 +1,9 @@
 import { cva } from "class-variance-authority";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { Select } from "@/components/select";
 import { useControlledState } from "@/hooks/useControlledState";
 import { cn } from "@/utils/cn";
-import { ThemeSwitcherOption, type ThemeType, themeIcons, themeLabels } from "./ThemeSwitcherOption";
-
-/** All supported themes, in declaration order. */
-const themes = Object.keys(themeLabels) as ThemeType[];
+import { ThemeSwitcherOption, type ThemeType, themeGroups, themeIcons, themeLabels } from "./ThemeSwitcherOption";
 
 const themeIconVariants = cva("shrink-0", {
   variants: {
@@ -90,12 +87,22 @@ export const ThemeSwitcher = ({
   return (
     <Select value={theme} onValueChange={(next) => next && setTheme(next)} disabled={disabled}>
       <Select.Trigger data-slot="theme-switcher" aria-label="Theme" size={size} className={className}>
-        <Icon className={cn(themeIconVariants({ size }))} />
-        <span className={cn(themeLabelVariants({ size }))}>{themeLabels[theme]}</span>
+        <span className="flex items-center gap-2">
+          <Icon className={cn(themeIconVariants({ size }))} />
+          <span className={cn(themeLabelVariants({ size }))}>{themeLabels[theme]}</span>
+        </span>
       </Select.Trigger>
       <Select.Content className="min-w-3xs">
-        {themes.map((code) => (
-          <ThemeSwitcherOption key={code} value={code} size={size} />
+        {themeGroups.map((group, index) => (
+          <Fragment key={group.label}>
+            {index > 0 && <Select.Separator />}
+            <Select.Group>
+              <Select.Label>{group.label}</Select.Label>
+              {group.themes.map((theme) => (
+                <ThemeSwitcherOption key={theme.code} value={theme.code} size={size} />
+              ))}
+            </Select.Group>
+          </Fragment>
         ))}
       </Select.Content>
     </Select>
