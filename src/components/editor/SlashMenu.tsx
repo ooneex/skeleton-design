@@ -15,6 +15,7 @@ import {
   useState,
 } from "react";
 import tippy, { type Instance } from "tippy.js";
+import { Button } from "@/components/button/Button";
 import { RedoIcon } from "@/icons/outline/arrows/sm/RedoIcon";
 import { UndoIcon } from "@/icons/outline/arrows/sm/UndoIcon";
 import { Heading1Icon } from "@/icons/outline/design-development/sm/Heading1Icon";
@@ -36,7 +37,6 @@ import { TextBoldIcon } from "@/icons/outline/editing/sm/TextBoldIcon";
 import { VideoIcon as YoutubeIcon } from "@/icons/outline/photography-video/sm/VideoIcon";
 import { BulletListIcon } from "@/icons/outline/ui-layout/sm/BulletListIcon";
 import { CircleCheckIcon as CompletedIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
-import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
 import { openYouTubeDialog } from "./YouTubeDialog";
 
@@ -298,7 +298,7 @@ const SlashMenuList = forwardRef<SlashMenuListRefType, SlashMenuListPropsType>((
     [items, command],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Reset selected index when items change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trust me
   useEffect(() => {
     setSelectedIndex(0);
   }, [items]);

@@ -86,19 +86,13 @@ export const TimePicker = createDialog<TimePickerPropsType, string | null>(
       return minutes;
     }, [minTimeParsed, hour]);
 
-    const handleHourChange = useCallback(
-      (val: string | null) => {
-        if (val) setHour(val);
-      },
-      [],
-    );
+    const handleHourChange = useCallback((val: string | null) => {
+      if (val) setHour(val);
+    }, []);
 
-    const handleMinuteChange = useCallback(
-      (val: string | null) => {
-        if (val) setMinute(val);
-      },
-      [],
-    );
+    const handleMinuteChange = useCallback((val: string | null) => {
+      if (val) setMinute(val);
+    }, []);
 
     return (
       <>
