@@ -77,8 +77,10 @@ export const LanguageSwitcher = ({
   return (
     <Select value={language} onValueChange={(next) => next && setLanguage(next)} disabled={disabled}>
       <Select.Trigger data-slot="language-switcher" aria-label="Language" size={size} className={className}>
-        <Flag className={cn(languageFlagVariants({ size }))} />
-        <span className={cn(languageLabelVariants({ size }))}>{languageLabels[language]}</span>
+        <span className="flex items-center gap-2">
+          <Flag className={cn(languageFlagVariants({ size }))} />
+          <span className={cn(languageLabelVariants({ size }))}>{languageLabels[language]}</span>
+        </span>
       </Select.Trigger>
       <Select.Content className="min-w-3xs">
         {languages.map((code) => (
