@@ -5,7 +5,10 @@ export const GreeceFlag = (props: SVGProps<SVGSVGElement>) => {
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" {...props}>
       <title>greece</title>
       <g>
-        <path fill="#010080" d="M48,40c0,1.105-0.895,2-2,2H2c-1.105,0-2-0.895-2-2V8c0-1.105,0.895-2,2-2h44c1.105,0,2,0.895,2,2V40z" />
+        <path
+          fill="#010080"
+          d="M48,40c0,1.105-0.895,2-2,2H2c-1.105,0-2-0.895-2-2V8c0-1.105,0.895-2,2-2h44c1.105,0,2,0.895,2,2V40z"
+        />
         <rect x="20" y="10" fill="#E6E6E6" width="28" height="4" />
         <rect x="20" y="18" fill="#E6E6E6" width="28" height="4" />
         <polygon
