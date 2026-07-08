@@ -1,11 +1,13 @@
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import type * as React from "react";
+import { ScrollArea } from "@/components/scroll-area";
 import { cn } from "@/utils/cn";
-import { SelectScrollDownButton } from "./SelectScrollDownButton";
-import { SelectScrollUpButton } from "./SelectScrollUpButton";
 
 type SelectContentPropsType = SelectPrimitive.Popup.Props &
-  Pick<SelectPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"> & {
+  Pick<
+    SelectPrimitive.Positioner.Props,
+    "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger" | "collisionPadding"
+  > & {
     container?: HTMLElement | null | React.RefObject<HTMLElement | null>;
   };
 
@@ -15,9 +17,10 @@ export const SelectContent = ({
   children,
   side = "bottom",
   sideOffset = 4,
-  align = "center",
+  align = "start",
   alignOffset = 0,
-  alignItemWithTrigger = true,
+  alignItemWithTrigger = false,
+  collisionPadding = 15,
   container,
   ...props
 }: SelectContentPropsType) => {
@@ -29,19 +32,20 @@ export const SelectContent = ({
         align={align}
         alignOffset={alignOffset}
         alignItemWithTrigger={alignItemWithTrigger}
+        collisionPadding={collisionPadding}
         className="isolate z-50"
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
           className={cn(
-            "bg-popover text-popover-foreground min-w-36 rounded p-1 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto ring ring-ring-active",
+            "bg-popover text-popover-foreground min-w-36 rounded p-1 relative isolate z-50 overflow-hidden w-(--anchor-width) origin-(--transform-origin) ring ring-ring-active",
             className,
           )}
           {...props}
         >
-          <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
-          <SelectScrollDownButton />
+          <ScrollArea viewportClassName="h-auto max-h-(--available-height)">
+            <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          </ScrollArea>
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
