@@ -17,7 +17,7 @@ export const SelectScrollDownButton = ({
       )}
       {...props}
     >
-      <ChevronDownIcon className="size-4" />
+      <ChevronDownIcon className="size-4 text-foreground" />
     </SelectPrimitive.ScrollDownArrow>
   );
 };

@@ -17,7 +17,7 @@ export const SelectScrollUpButton = ({
       )}
       {...props}
     >
-      <ChevronUpIcon className="size-4" />
+      <ChevronUpIcon className="size-4 text-foreground" />
     </SelectPrimitive.ScrollUpArrow>
   );
 };
