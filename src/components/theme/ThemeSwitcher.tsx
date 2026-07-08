@@ -1,9 +1,20 @@
 import { cva } from "class-variance-authority";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Select } from "@/components/select";
 import { useControlledState } from "@/hooks/useControlledState";
 import { cn } from "@/utils/cn";
 import { ThemeSwitcherOption, type ThemeType, themeGroups, themeIcons, themeLabels } from "./ThemeSwitcherOption";
+
+/** localStorage key under which the last picked theme is persisted. */
+const THEME_STORAGE_KEY = "theme";
+
+/** Read the persisted theme, ignoring absent/unknown values (e.g. a since-removed theme). */
+const readStoredTheme = (): ThemeType | undefined => {
+  if (typeof window === "undefined") return undefined;
+
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  return stored !== null && stored in themeIcons ? (stored as ThemeType) : undefined;
+};
 
 const themeIconVariants = cva("shrink-0", {
   variants: {
@@ -52,8 +63,9 @@ export type ThemeSwitcherPropsType = {
  * ```
  *
  * The selection is controlled via `value` or uncontrolled via `defaultValue`.
- * The resolved theme is mirrored onto `<html data-theme>`, tracking the OS
- * preference while `system` is selected.
+ * When uncontrolled, the choice is persisted to `localStorage` and restored on
+ * the next visit. The resolved theme is mirrored onto `<html data-theme>`,
+ * tracking the OS preference while `system` is selected.
  */
 export const ThemeSwitcher = ({
   className,
@@ -63,7 +75,15 @@ export const ThemeSwitcher = ({
   size = "sm",
   disabled,
 }: ThemeSwitcherPropsType) => {
-  const [theme, setTheme] = useControlledState({ value, defaultValue, onChange });
+  /** Restore the persisted choice once, falling back to `defaultValue`. */
+  const [initialTheme] = useState(() => readStoredTheme() ?? defaultValue);
+  const [theme, setTheme] = useControlledState({ value, defaultValue: initialTheme, onChange });
+
+  /** Persist every selection so it survives reloads. */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
 
   /** Reflect the selection on <html> so the `.light`/`.dark` theme stylesheets apply. */
   useEffect(() => {
