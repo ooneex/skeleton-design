@@ -1,5 +1,7 @@
+import { cva } from "class-variance-authority";
 import type React from "react";
 import { Select } from "@/components/select";
+import { cn } from "@/utils/cn";
 import { EnglishFlag } from "./flags/EnglishFlag";
 import { FranceFlag } from "./flags/FranceFlag";
 import { GermanyFlag } from "./flags/GermanyFlag";
@@ -33,18 +35,32 @@ export const languageLabels: Record<LanguageType, string> = {
   sv: "Svenska",
 };
 
+const languageFlagVariants = cva("shrink-0", {
+  variants: {
+    size: {
+      xs: "size-3.5",
+      sm: "size-4",
+      md: "size-4.5",
+      lg: "size-5",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
 export type LanguageSwitcherOptionPropsType = Omit<React.ComponentProps<typeof Select.Item>, "value"> & {
   value: LanguageType;
 };
 
-export const LanguageSwitcherOption = ({ value, children, ...props }: LanguageSwitcherOptionPropsType) => {
+export const LanguageSwitcherOption = ({ value, size = "sm", children, ...props }: LanguageSwitcherOptionPropsType) => {
   const Flag = languageFlags[value];
 
   return (
-    <Select.Item data-slot="language-switcher-option" value={value} {...props}>
+    <Select.Item data-slot="language-switcher-option" value={value} size={size} {...props}>
       {children ?? (
         <>
-          <Flag />
+          <Flag className={cn(languageFlagVariants({ size }))} />
           {languageLabels[value]}
         </>
       )}

@@ -1,10 +1,40 @@
+import { cva } from "class-variance-authority";
 import { useEffect } from "react";
 import { Select } from "@/components/select";
 import { useControlledState } from "@/hooks/useControlledState";
+import { cn } from "@/utils/cn";
 import { LanguageSwitcherOption, type LanguageType, languageFlags, languageLabels } from "./LanguageSwitcherOption";
 
 /** All supported languages, in declaration order. */
 const languages = Object.keys(languageLabels) as LanguageType[];
+
+const languageFlagVariants = cva("shrink-0", {
+  variants: {
+    size: {
+      xs: "size-3.5",
+      sm: "size-4",
+      md: "size-4.5",
+      lg: "size-5",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
+const languageLabelVariants = cva("text-foreground", {
+  variants: {
+    size: {
+      xs: "text-xs",
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
 
 export type LanguageSwitcherPropsType = {
   value?: LanguageType;
@@ -32,7 +62,7 @@ export const LanguageSwitcher = ({
   value,
   defaultValue = "en",
   onChange,
-  size,
+  size = "sm",
   disabled,
 }: LanguageSwitcherPropsType) => {
   const [language, setLanguage] = useControlledState({ value, defaultValue, onChange });
@@ -47,14 +77,12 @@ export const LanguageSwitcher = ({
   return (
     <Select value={language} onValueChange={(next) => next && setLanguage(next)} disabled={disabled}>
       <Select.Trigger data-slot="language-switcher" aria-label="Language" size={size} className={className}>
-        <Select.Value>
-          <Flag />
-          {languageLabels[language]}
-        </Select.Value>
+        <Flag className={cn(languageFlagVariants({ size }))} />
+        <span className={cn(languageLabelVariants({ size }))}>{languageLabels[language]}</span>
       </Select.Trigger>
-      <Select.Content>
+      <Select.Content className="min-w-3xs">
         {languages.map((code) => (
-          <LanguageSwitcherOption key={code} value={code} />
+          <LanguageSwitcherOption key={code} value={code} size={size} />
         ))}
       </Select.Content>
     </Select>
