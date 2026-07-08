@@ -16,13 +16,14 @@ import type { ToolbarSlot } from "@react-pdf-viewer/default-layout";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
 import { useCallback, useEffect, useRef } from "react";
-import { BookIcon } from "@/icons/outline/school-education/sm/BookIcon";
 import { Empty } from "@/components/empty/Empty";
 import { EmptyDescription } from "@/components/empty/EmptyDescription";
 import { EmptyHeader } from "@/components/empty/EmptyHeader";
 import { EmptyMedia } from "@/components/empty/EmptyMedia";
 import { EmptyTitle } from "@/components/empty/EmptyTitle";
+import { BookIcon } from "@/icons/outline/school-education/sm/BookIcon";
 import { cn } from "@/utils/cn";
+import "./pdfViewer.css";
 
 const renderError = () => {
   return (
