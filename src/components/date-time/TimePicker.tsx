@@ -22,7 +22,8 @@ export type TimePickerPropsType = {
 const parseTime = (time: string): { hour: number; minute: number } | null => {
   const match = time.match(/^(\d{1,2}):(\d{2})$/);
   if (!match) return null;
-  return { hour: Number.parseInt(match[1], 10), minute: Number.parseInt(match[2], 10) };
+  const [, hourStr = "", minuteStr = ""] = match;
+  return { hour: Number.parseInt(hourStr, 10), minute: Number.parseInt(minuteStr, 10) };
 };
 
 const getDefaultTime = (): { hour: string; minute: string } => {
@@ -35,7 +36,7 @@ const getDefaultTime = (): { hour: string; minute: string } => {
 
 const initialTime = (value?: string): { hour: string; minute: string } => {
   if (value && /^\d{1,2}:\d{2}$/.test(value)) {
-    const [h, m] = value.split(":");
+    const [h = "", m = ""] = value.split(":");
     return { hour: h.padStart(2, "0"), minute: m };
   }
   return getDefaultTime();

@@ -338,10 +338,9 @@ const SlashMenuList = forwardRef<SlashMenuListRefType, SlashMenuListPropsType>((
 
   // Group items by their group property
   const groupedItems = items.reduce<Record<string, SlashMenuItemType[]>>((acc, item) => {
-    if (!acc[item.group]) {
-      acc[item.group] = [];
-    }
-    acc[item.group].push(item);
+    const group = acc[item.group] ?? [];
+    group.push(item);
+    acc[item.group] = group;
     return acc;
   }, {});
 
@@ -358,10 +357,9 @@ const SlashMenuList = forwardRef<SlashMenuListRefType, SlashMenuListPropsType>((
   // Group the items with their indices
   const groupedItemsWithIndex = itemsWithIndex.reduce<Record<string, { item: SlashMenuItemType; index: number }[]>>(
     (acc, { item, index }) => {
-      if (!acc[item.group]) {
-        acc[item.group] = [];
-      }
-      acc[item.group].push({ item, index });
+      const group = acc[item.group] ?? [];
+      group.push({ item, index });
+      acc[item.group] = group;
       return acc;
     },
     {},

@@ -91,6 +91,7 @@ export const useDialogBehavior = ({ open, modal, popupRef, onDismiss }: UseDialo
       }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
+      if (!first || !last) return;
       const active = document.activeElement;
       if (event.shiftKey) {
         if (active === first || active === popup) {

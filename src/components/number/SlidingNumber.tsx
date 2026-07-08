@@ -73,7 +73,7 @@ export const SlidingNumber = ({
   ...props
 }: SlidingNumberPropsType) => {
   const absValue = Math.abs(value);
-  const [integerPart, decimalPart] = absValue.toString().split(".");
+  const [integerPart = "", decimalPart] = absValue.toString().split(".");
   const integerValue = Number.parseInt(integerPart, 10);
   const paddedInteger = padStart && integerValue < 10 ? `0${integerPart}` : integerPart;
   const integerPlaces = Array.from({ length: paddedInteger.length }, (_, i) => 10 ** (paddedInteger.length - i - 1));
