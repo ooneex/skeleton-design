@@ -3,10 +3,14 @@ import { forwardRef } from "react";
 import { cn } from "@/utils/cn";
 import { ScrollBar } from "./ScrollBar";
 
-type ScrollAreaPropsType = ScrollAreaPrimitive.Root.Props & { hideScrollbar?: boolean };
+type ScrollAreaPropsType = ScrollAreaPrimitive.Root.Props & {
+  hideScrollbar?: boolean;
+  /** Applied to the scrolling viewport — use it to cap the scroll height (e.g. `max-h-*`). */
+  viewportClassName?: string;
+};
 
 const ScrollAreaRoot = forwardRef<HTMLDivElement, ScrollAreaPropsType>(
-  ({ className, children, hideScrollbar, ...props }, ref) => {
+  ({ className, children, hideScrollbar, viewportClassName, ...props }, ref) => {
     return (
       <ScrollAreaPrimitive.Root
         ref={ref}
@@ -21,7 +25,10 @@ const ScrollAreaRoot = forwardRef<HTMLDivElement, ScrollAreaPropsType>(
       >
         <ScrollAreaPrimitive.Viewport
           data-slot="scroll-area-viewport"
-          className="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1"
+          className={cn(
+            "focus-visible:ring-ring/50 h-full w-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1",
+            viewportClassName,
+          )}
         >
           {children}
         </ScrollAreaPrimitive.Viewport>
