@@ -13,7 +13,7 @@ import { AlertDialogTitle } from "./AlertDialogTitle";
 /** Milliseconds to keep the popup mounted so the close animation can play. */
 const UNMOUNTING_DELAY = 200;
 
-type ButtonVariant = NonNullable<React.ComponentProps<typeof Button>["variant"]>;
+type ButtonVariantType = NonNullable<React.ComponentProps<typeof Button>["variant"]>;
 
 export type AlertDialogPropsType = {
   /** `confirm` shows Cancel + Action; `alert` shows a single acknowledge button. */
@@ -24,7 +24,7 @@ export type AlertDialogPropsType = {
   media?: ReactNode;
   confirmLabel?: ReactNode;
   cancelLabel?: ReactNode;
-  confirmVariant?: ButtonVariant;
+  confirmVariant?: ButtonVariantType;
   size?: "sm" | "md";
 };
 

@@ -1,6 +1,6 @@
 import { type RefObject, useEffect, useRef } from "react";
 
-type UseDialogBehaviorOptions = {
+type UseDialogBehaviorOptionsType = {
   open: boolean;
   /** `true` locks scroll and blocks the page; `'trap-focus'` only traps focus; `false` does neither. */
   modal: boolean | "trap-focus";
@@ -43,7 +43,7 @@ const FOCUSABLE_SELECTOR = [
  * Escape only closes the topmost open dialog; nested popups that handle
  * Escape themselves (and call `preventDefault`) are left alone.
  */
-export const useDialogBehavior = ({ open, modal, popupRef, onDismiss }: UseDialogBehaviorOptions) => {
+export const useDialogBehavior = ({ open, modal, popupRef, onDismiss }: UseDialogBehaviorOptionsType) => {
   const onDismissRef = useRef(onDismiss);
   useEffect(() => {
     onDismissRef.current = onDismiss;

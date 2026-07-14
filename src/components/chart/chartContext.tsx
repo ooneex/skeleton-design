@@ -2,14 +2,14 @@ import * as React from "react";
 
 export const THEMES = { light: "", dark: ".dark" } as const;
 
-export type ChartConfig = {
+export type ChartConfigType = {
   [k in string]: {
     label?: React.ReactNode;
     icon?: React.ComponentType;
   } & ({ color?: string; theme?: never } | { color?: never; theme: Record<keyof typeof THEMES, string> });
 };
 
-type ChartContextPropsType = { config: ChartConfig };
+type ChartContextPropsType = { config: ChartConfigType };
 
 export const ChartContext = React.createContext<ChartContextPropsType | null>(null);
 
@@ -21,7 +21,7 @@ export const useChart = () => {
   return context;
 };
 
-export const getPayloadConfigFromPayload = (config: ChartConfig, payload: unknown, key: string) => {
+export const getPayloadConfigFromPayload = (config: ChartConfigType, payload: unknown, key: string) => {
   if (typeof payload !== "object" || payload === null) {
     return undefined;
   }

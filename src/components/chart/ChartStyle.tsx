@@ -1,6 +1,6 @@
-import { type ChartConfig, THEMES } from "./chartContext";
+import { type ChartConfigType, THEMES } from "./chartContext";
 
-export const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+export const ChartStyle = ({ id, config }: { id: string; config: ChartConfigType }) => {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color);
   if (!colorConfig.length) {
     return null;

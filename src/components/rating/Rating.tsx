@@ -26,7 +26,7 @@ const DEFAULT_EMOJIS = ["😡", "😟", "😐", "😊", "😍"];
 
 const FILL_CLIP_STYLE = { clipPath: "inset(100% 0 0 0)" };
 
-type ClickPosition = { top: number; left: number };
+type ClickPositionType = { top: number; left: number };
 
 export type RatingPropsType = ComponentProps<"div"> & {
   value: number;
@@ -62,11 +62,11 @@ export const Rating = ({
   const [isConfirming, setIsConfirming] = useState(false);
   const [tooltipText, setTooltipText] = useState("");
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [sparklePosition, setSparklePosition] = useState<ClickPosition | null>(null);
+  const [sparklePosition, setSparklePosition] = useState<ClickPositionType | null>(null);
 
   const id = useId();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const lastClickPosition = useRef<ClickPosition | null>(null);
+  const lastClickPosition = useRef<ClickPositionType | null>(null);
 
   const interactive = !disabled && !readOnly;
 
@@ -351,7 +351,7 @@ type GradientRatingPropsType = {
   disabled: boolean;
   isConfirming: boolean;
   setIsConfirming: Dispatch<SetStateAction<boolean>>;
-  setSparklePosition: Dispatch<SetStateAction<ClickPosition | null>>;
+  setSparklePosition: Dispatch<SetStateAction<ClickPositionType | null>>;
   containerRef: RefObject<HTMLDivElement | null>;
   Icon: ElementType<{ className?: string }>;
   colors: { fill: string; empty: string };
@@ -466,7 +466,7 @@ const SPARKLE_COLORS = ["#F778BA", "#63D2F2", "#F9DD70", "#A57BF1", "#72E8A4"];
 const PARTICLE_COUNT = 12;
 
 type SparklesPropsType = {
-  position: ClickPosition;
+  position: ClickPositionType;
   onComplete: () => void;
 };
 

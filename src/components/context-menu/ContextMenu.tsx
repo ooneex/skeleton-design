@@ -24,7 +24,7 @@ const INDICATOR_ITEM_CLASS =
  * A single entry in a context menu. Discriminated by `type` (defaults to
  * `"item"`). Values resolved by the menu are returned from {@link openContextMenu}.
  */
-export type ContextMenuItemModel =
+export type ContextMenuItemType =
   | {
       type?: "item";
       /** Value resolved by `ContextMenu.call` when this row is selected. */
@@ -57,7 +57,7 @@ export type ContextMenuItemModel =
       label: ReactNode;
       icon?: ReactNode;
       disabled?: boolean;
-      items: ContextMenuItemModel[];
+      items: ContextMenuItemType[];
     };
 
 export type ContextMenuPropsType = {
@@ -66,7 +66,7 @@ export type ContextMenuPropsType = {
   /** Viewport Y coordinate of the triggering pointer (e.g. `event.clientY`). */
   y: number;
   /** Flat list of rows to render. */
-  items: ContextMenuItemModel[];
+  items: ContextMenuItemType[];
 };
 
 /**
@@ -88,7 +88,7 @@ const virtualAnchor = (x: number, y: number) => ({
 });
 
 /** Renders one row of the menu, recursing into submenus. */
-const renderItem = (item: ContextMenuItemModel, index: number, end: (value: string | null) => void): ReactNode => {
+const renderItem = (item: ContextMenuItemType, index: number, end: (value: string | null) => void): ReactNode => {
   switch (item.type) {
     case "separator":
       return (
@@ -273,7 +273,7 @@ type PointerLikeType = { clientX: number; clientY: number; preventDefault?: () =
  * onContextMenu={(e) => openContextMenu(e, items).then(handleSelection)}
  * ```
  */
-export const openContextMenu = (event: PointerLikeType, items: ContextMenuItemModel[]) => {
+export const openContextMenu = (event: PointerLikeType, items: ContextMenuItemType[]) => {
   event.preventDefault?.();
   return ContextMenu.call({ x: event.clientX, y: event.clientY, items });
 };

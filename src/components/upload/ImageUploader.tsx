@@ -4,32 +4,15 @@ import { ImageZoom } from "@/components/image/ImageZoom";
 import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
 import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { cn } from "@/utils/cn";
+import { formatBytes, type MaxFileSizeType, parseFileSize } from "./fileSize";
 
-type FileSizeUnit = "B" | "KB" | "MB" | "GB" | "TB";
-type MaxFileSize = number | `${number}${FileSizeUnit}`;
 const IMAGE_MIME_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"];
-const parseFileSize = (size: MaxFileSize): number => {
-  if (typeof size === "number") return size;
-  const match = size.match(/^(\d+(?:\.\d+)?)(B|KB|MB|GB|TB)$/i);
-  if (!match) return 0;
-  const value = Number.parseFloat(match[1] ?? "0");
-  const unit = (match[2] ?? "B").toUpperCase();
-  const multipliers: Record<string, number> = { B: 1, KB: 1024, MB: 1048576, GB: 1073741824, TB: 1099511627776 };
-  return value * (multipliers[unit] ?? 1);
-};
-const formatBytes = (bytes: number): string => {
-  const units = ["B", "KB", "MB", "GB"] as const;
-  const k = 1024;
-  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), units.length - 1);
-  const value = bytes / k ** i;
-  return `${value % 1 === 0 ? value : value.toFixed(1).replace(/\.0$/, "")}${units[i]}`;
-};
 type ImageUploaderPropsType = {
   images: string[];
   onAdd: (file: File) => void;
   onRemove: (index: number) => void;
-  maxFileSize?: MaxFileSize;
+  maxFileSize?: MaxFileSizeType;
   multiple?: boolean;
   className?: string;
 };

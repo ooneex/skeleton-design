@@ -1,18 +1,11 @@
-import { useLayoutEffect } from "react";
 import { cn } from "@/utils/cn";
-import { useDialogContext } from "./DialogContext";
+import { useRegisterDialogTitle } from "./useDialogPresence";
 
 export const DialogTitle = ({ className, id, ...props }: React.ComponentProps<"h2">) => {
-  const context = useDialogContext();
-  const setHasTitle = context?.setHasTitle;
-  useLayoutEffect(() => {
-    if (!setHasTitle) return;
-    setHasTitle(true);
-    return () => setHasTitle(false);
-  }, [setHasTitle]);
+  const titleId = useRegisterDialogTitle();
   return (
     <h2
-      id={id ?? context?.titleId}
+      id={id ?? titleId}
       data-slot="dialog-title"
       className={cn("leading-none font-medium", className)}
       {...props}

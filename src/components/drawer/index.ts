@@ -1,5 +1,5 @@
 export {
-  type CreateDrawerOptions,
+  type CreateDrawerOptionsType,
   createDrawer,
   Drawer,
   type DrawerPropsType,

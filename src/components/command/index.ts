@@ -1,2 +1,2 @@
 export { Command } from "./Command";
-export { CommandPalette, type CommandPaletteItem, type CommandPalettePropsType } from "./CommandDialog";
+export { CommandPalette, type CommandPaletteItemType, type CommandPalettePropsType } from "./CommandDialog";

@@ -9,7 +9,7 @@ import { SheetTitle } from "./SheetTitle";
 /** Milliseconds to keep the popup mounted so the close animation can play. */
 const UNMOUNTING_DELAY = 300;
 
-export type CreateSheetOptions<Response> = {
+export type CreateSheetOptionsType<Response> = {
   className?: string;
   /** Edge the sheet slides in from. Defaults to `'right'`. */
   side?: "top" | "right" | "bottom" | "left";
@@ -43,10 +43,10 @@ export type CreateSheetOptions<Response> = {
  * const updated = await EditSheet.call({ user })
  * ```
  */
-export function createSheet<Props = void, Response = void>(
+export const createSheet = <Props = void, Response = void>(
   render: (props: PropsWithCall<Props, Response, Record<string, never>>) => ReactNode,
-  options: CreateSheetOptions<Response> = {},
-): Callable<Props, Response, Record<string, never>> {
+  options: CreateSheetOptionsType<Response> = {},
+): Callable<Props, Response, Record<string, never>> => {
   const {
     className,
     side = "right",
@@ -75,7 +75,7 @@ export function createSheet<Props = void, Response = void>(
       </SheetPrimitive.Root>
     );
   }, unmountingDelay);
-}
+};
 
 export type SheetPropsType = {
   title?: ReactNode;

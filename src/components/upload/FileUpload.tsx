@@ -6,8 +6,9 @@ import { FilePdfIcon } from "@/icons/outline/design-development/sm/FilePdfIcon";
 import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { cn } from "@/utils/cn";
+import { formatBytes, type MaxFileSizeType, parseFileSize } from "./fileSize";
 
-type FileStatus = "idle" | "dragging" | "uploading" | "completed" | "error";
+type FileStatusType = "idle" | "dragging" | "uploading" | "completed" | "error";
 
 type AcceptedFileType = "image" | "pdf" | "video" | "audio" | "document" | "spreadsheet" | "archive";
 
@@ -62,26 +63,6 @@ type FileErrorType = {
   code: string;
 };
 
-type FileSizeUnit = "B" | "KB" | "MB" | "GB" | "TB";
-
-type MaxFileSize = number | `${number}${FileSizeUnit}`;
-
-const parseFileSize = (size: MaxFileSize): number => {
-  if (typeof size === "number") return size;
-  const match = size.match(/^(\d+(?:\.\d+)?)(B|KB|MB|GB|TB)$/i);
-  if (!match) return 0;
-  const value = Number.parseFloat(match[1] ?? "0");
-  const unit = (match[2] ?? "B").toUpperCase();
-  const multipliers: Record<string, number> = {
-    B: 1,
-    KB: 1024,
-    MB: 1024 * 1024,
-    GB: 1024 * 1024 * 1024,
-    TB: 1024 * 1024 * 1024 * 1024,
-  };
-  return value * (multipliers[unit] ?? 1);
-};
-
 type FileUploadPropsType = {
   onUploadSuccess?: (file: File) => void;
   onUploadError?: (error: FileErrorType) => void;
@@ -90,7 +71,7 @@ type FileUploadPropsType = {
   /** Custom accept attribute for the file input (e.g., ".pdf,.doc,.docx") */
   accept?: string;
   /** Max file size. Can be a number (bytes) or string like "5MB", "500KB", "1GB" */
-  maxFileSize?: MaxFileSize;
+  maxFileSize?: MaxFileSizeType;
   currentFile?: File | null;
   onFileRemove?: () => void;
   /** Duration in milliseconds for the upload simulation. Defaults to 2000ms (2s), 0 for no simulation */
@@ -103,19 +84,8 @@ type FileUploadPropsType = {
   className?: string;
 };
 
-const DEFAULT_MAX_FILE_SIZE: MaxFileSize = "5MB";
+const DEFAULT_MAX_FILE_SIZE: MaxFileSizeType = "5MB";
 const UPLOAD_STEP_SIZE = 5;
-const FILE_SIZES = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"] as const;
-
-const formatBytes = (bytes: number): string => {
-  if (!+bytes) return "0B";
-  const k = 1024;
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  const unit = FILE_SIZES[i] || FILE_SIZES[FILE_SIZES.length - 1];
-  const value = bytes / k ** i;
-  const formatted = value % 1 === 0 ? value.toString() : value.toFixed(1).replace(/\.0$/, "");
-  return `${formatted}${unit}`;
-};
 
 const UploadingAnimation = ({ progress }: { progress: number }) => (
   <div className="relative h-16 w-16">
@@ -212,7 +182,7 @@ const FileUpload = ({
   className,
 }: FileUploadPropsType) => {
   const [files, setFiles] = useState<File[]>(initialFile ? [initialFile] : []);
-  const [status, setStatus] = useState<FileStatus>("idle");
+  const [status, setStatus] = useState<FileStatusType>("idle");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<FileErrorType | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

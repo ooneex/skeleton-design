@@ -8,7 +8,7 @@ import { DrawerTitle } from "./DrawerTitle";
 /** Milliseconds to keep the popup mounted so the close animation can play. */
 const UNMOUNTING_DELAY = 300;
 
-export type CreateDrawerOptions<Response> = {
+export type CreateDrawerOptionsType<Response> = {
   className?: string;
   /** Edge the drawer slides in from. Defaults to `'bottom'`. */
   side?: "top" | "right" | "bottom" | "left";
@@ -41,10 +41,10 @@ export type CreateDrawerOptions<Response> = {
  * const filters = await FilterDrawer.call({ initial })
  * ```
  */
-export function createDrawer<Props = void, Response = void>(
+export const createDrawer = <Props = void, Response = void>(
   render: (props: PropsWithCall<Props, Response, Record<string, never>>) => ReactNode,
-  options: CreateDrawerOptions<Response> = {},
-): Callable<Props, Response, Record<string, never>> {
+  options: CreateDrawerOptionsType<Response> = {},
+): Callable<Props, Response, Record<string, never>> => {
   const {
     className,
     side = "bottom",
@@ -69,7 +69,7 @@ export function createDrawer<Props = void, Response = void>(
       </DrawerContent>
     );
   }, unmountingDelay);
-}
+};
 
 export type DrawerPropsType = {
   title?: ReactNode;

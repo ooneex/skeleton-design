@@ -119,12 +119,12 @@ const Toast = createCallable<ToastPropsType, void>(({ call, state, title, descri
 Toast.displayName = "Toaster";
 
 /** Handle returned by every toaster call — pass it to `toaster.dismiss(handle)`. */
-export type ToastHandle = Promise<void>;
+export type ToastHandleType = Promise<void>;
 
-const emit = (state: ToastStateType) => (title: string, options: ToastOptionsType = {}): ToastHandle =>
+const emit = (state: ToastStateType) => (title: string, options: ToastOptionsType = {}): ToastHandleType =>
   Toast.call({ state, title, description: options.description, duration: options.duration });
 
-type PromiseMessages<T> = {
+type PromiseMessagesType<T> = {
   loading: string;
   success: string | ((data: T) => string);
   error: string | ((error: unknown) => string);
@@ -149,12 +149,12 @@ export const toaster = {
   warning: emit("warning"),
   loading: emit("loading"),
   /** Dismiss a specific toast (pass its handle) or all toasts (no argument). */
-  dismiss: (handle?: ToastHandle) => {
+  dismiss: (handle?: ToastHandleType) => {
     if (handle) Toast.end(handle, undefined);
     else Toast.end();
   },
   /** Show a loading toast that resolves to success/error when the promise settles. */
-  promise: async <T,>(promise: Promise<T>, messages: PromiseMessages<T>): Promise<T> => {
+  promise: async <T,>(promise: Promise<T>, messages: PromiseMessagesType<T>): Promise<T> => {
     const loading = Toast.call({ state: "loading", title: messages.loading });
     try {
       const data = await promise;

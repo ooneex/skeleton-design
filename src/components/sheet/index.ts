@@ -1,5 +1,5 @@
 export {
-  type CreateSheetOptions,
+  type CreateSheetOptionsType,
   createSheet,
   Sheet,
   type SheetPropsType,

@@ -8,7 +8,7 @@ import { DialogTitle } from "./DialogTitle";
 /** Milliseconds to keep the popup mounted so the close animation can play. */
 const UNMOUNTING_DELAY = 200;
 
-export type CreateDialogOptions<Response> = {
+export type CreateDialogOptionsType<Response> = {
   className?: string;
   showCloseButton?: boolean;
   /** `'trap-focus'` keeps the page interactive; `true` (default) blocks it. */
@@ -45,10 +45,10 @@ export type CreateDialogOptions<Response> = {
  * const name = await RenameDialog.call({ current: "Untitled" })
  * ```
  */
-export function createDialog<Props = void, Response = void>(
+export const createDialog = <Props = void, Response = void>(
   render: (props: PropsWithCall<Props, Response, Record<string, never>>) => ReactNode,
-  options: CreateDialogOptions<Response> = {},
-): Callable<Props, Response, Record<string, never>> {
+  options: CreateDialogOptionsType<Response> = {},
+): Callable<Props, Response, Record<string, never>> => {
   const {
     className,
     showCloseButton = true,
@@ -73,7 +73,7 @@ export function createDialog<Props = void, Response = void>(
       </DialogContent>
     );
   }, unmountingDelay);
-}
+};
 
 export type DialogPropsType = {
   title?: ReactNode;

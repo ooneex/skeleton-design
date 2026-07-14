@@ -9,7 +9,7 @@ import { CommandItem } from "./CommandItem";
 import { CommandList } from "./CommandList";
 import { CommandShortcut } from "./CommandShortcut";
 
-export type CommandPaletteItem = {
+export type CommandPaletteItemType = {
   /** Value returned by `CommandPalette.call()` when this entry is chosen. */
   value: string;
   label: ReactNode;
@@ -23,7 +23,7 @@ export type CommandPaletteItem = {
 };
 
 export type CommandPalettePropsType = {
-  items: CommandPaletteItem[];
+  items: CommandPaletteItemType[];
   placeholder?: string;
   emptyMessage?: ReactNode;
   className?: string;
@@ -32,8 +32,8 @@ export type CommandPalettePropsType = {
   description?: string;
 };
 
-const groupItems = (items: CommandPaletteItem[]) => {
-  const groups = new Map<string, CommandPaletteItem[]>();
+const groupItems = (items: CommandPaletteItemType[]) => {
+  const groups = new Map<string, CommandPaletteItemType[]>();
   for (const item of items) {
     const key = item.group ?? "";
     const bucket = groups.get(key);

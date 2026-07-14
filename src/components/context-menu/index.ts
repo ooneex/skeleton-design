@@ -1,6 +1,6 @@
 export {
   ContextMenu,
-  type ContextMenuItemModel,
+  type ContextMenuItemType,
   type ContextMenuPropsType,
   openContextMenu,
 } from "./ContextMenu";

@@ -2,10 +2,10 @@ import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 import { cn } from "@/utils/cn";
 import { ChartStyle } from "./ChartStyle";
-import { type ChartConfig, ChartContext } from "./chartContext";
+import { type ChartConfigType, ChartContext } from "./chartContext";
 
 type ChartContainerPropsType = React.ComponentProps<"div"> & {
-  config: ChartConfig;
+  config: ChartConfigType;
   children: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>["children"];
 };
 
