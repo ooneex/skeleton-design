@@ -1,42 +1,33 @@
 ---
 name: commit
-description: Commit staged changes grouped by logical change. Use when committing multiple independent changes separately, when you need to create atomic commits per logical unit of work, or after making a mix of changes across the codebase. Analyzes git status and creates properly formatted commits following the project's conventional-commit conventions.
+description: Create commit messages grouped by module. Analyzes git changes, groups files under modules/ by module name, and creates separate commits following the project's conventional-commit rules. Uses common scope for non-module changes.
+disable-model-invocation: true
+disallowed-tools: AskUserQuestion
 ---
 
-# Commit Per Change
+# Commit by Module
 
-Create separate commits for each logical change, following the project's conventional-commit conventions. A "logical change" is a coherent unit of work — one feature, one fix, one refactor — regardless of how many files or directories it touches.
+> **Run autonomously — do not ask the user questions.** When a choice arises, pick the recommended option and proceed.
 
-## Core Principle
+> **Module location:** a `<module>` usually resolves to `modules/<module>/`, but it can also live under `packages/<module>/` — e.g. once it's been extracted into a shared, publishable package. Check both roots before assuming a path doesn't exist; every `modules/<module>/...` path in this file applies equally under `packages/<module>/...` when that's where the module actually lives.
 
-**Group by intent, not by location.** A single feature that spans multiple directories is one commit. Two unrelated fixes in the same file are two commits.
+Create separate commits per modified module, following the project's conventional-commit rules.
 
-## Committer
+## Important
 
-Commit only as the project's git user. **Never** add a `Co-Authored-By: Claude` trailer, a "Generated with Claude Code" line, or any other AI attribution to the commit message.
+Always run all commands from the **root of the project** (the monorepo root), not from inside individual packages.
+
+Commit messages are linted by a git `commit-msg` hook (installed with `talos commitlint:init`, which runs `talos commitlint:check`). The available types, scopes, and other rules are described below.
 
 ## Workflow
 
-1. **Survey all changes**
-   - Run `git status --porcelain` to list modified files
-   - Run `git diff` (and `git diff --staged`) to understand what actually changed
-   - Read the diffs — don't rely on file paths alone to infer intent
-
-2. **Group files by logical change**
-   - Identify coherent units: each feature, fix, refactor, or concern is its own group
-   - A single group may span multiple directories (e.g., a component touching `components` + `hooks`)
-   - A single file may contribute to multiple groups (split it across commits)
-   - Unrelated changes must go in separate commits, even if they sit in the same file — use `git add -p` for hunk-level staging when needed
-
-3. **For each logical change**
-   - Stage only the files (or hunks) belonging to that change
-   - Choose the best-fitting `type` and `scope` based on the change itself
-   - Commit with proper format: `type(scope): Subject`
-   - Repeat until the working tree is clean (or only unrelated work remains)
-
-4. **Push**
-   - Once all commits are created, push to the remote: `git push`
-   - If the branch has no upstream yet, use `git push -u origin <branch>`
+1. **Analyze changes** — run `git status --porcelain`
+2. **Group by module** — files under `modules/<name>/` → scope is the module name; all other files → scope `common`
+3. **Screen for secrets** — before staging, skip anything that looks like a credential (`.env*`, `*.pem`, `*.key`, `*credentials*`, private keys, tokens). Do **not** commit these; surface them to the user instead.
+4. **For each group** — stage the files, pick the commit type, commit with `type(scope): Subject`
+5. **Push**
+   - Prefer the `gh` CLI: first run `gh auth switch --hostname github.com` (or the repo's host) to make sure the active account matches the current repo's remote, then push with `git push` (or `git push -u origin <branch>` if there's no upstream yet)
+   - If `gh auth switch` or the push through `gh` fails (not installed, no matching account, auth error), fall back to the normal SSH-based flow: plain `git commit` / `git push` using the repo's configured SSH remote
    - Never force-push (`--force`/`--force-with-lease`) unless the user explicitly asks for it
 
 ## Commit Message Format
@@ -46,175 +37,71 @@ type(scope): Subject line
 ```
 
 ### Valid Types
-- `feat`: New feature
-- `fix`: Bug fix
-- `refactor`: Code restructuring (no new feature, no bug fix)
-- `test`: Adding/updating tests
-- `chore`: Maintenance tasks (dependencies, configs)
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, whitespace)
-- `perf`: Performance improvements
-- `build`: Build system changes
-- `ci`: CI configuration changes
-- `revert`: Revert a previous commit
 
-### Valid Scopes
-Scopes follow the source layout under `src/` and the established git history:
-- `components`: UI components (`src/components`)
-- `icons`: Icon library, fill and outline (`src/icons`)
-- `hooks`: Shared React hooks (`src/hooks`)
-- `utils`: Utility helpers (`src/utils`)
-- `fonts`: Font families and assets (`src/fonts`)
-- `styles`: Global stylesheets and design tokens (`src/styles`)
-- `config`: Root-level tooling, dependencies, configs, and type declarations (`package.json`, `bun.lock`, `biome.jsonc`, `tsconfig.json`, `src/css.d.ts`)
+| Type | Use for |
+|------|---------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `refactor` | Code restructuring, renaming |
+| `test` | Tests only |
+| `chore` | Deps, configs, maintenance |
+| `docs` | Documentation |
+| `style` | Formatting only |
+| `perf` | Performance |
+| `build` | Build system |
+| `ci` | CI/CD |
+| `revert` | Revert previous commit |
 
-When a logical change spans multiple scopes, pick the scope that best represents the **primary** intent of the change. If truly split, prefer separate commits.
+### Scope Rules
+
+- Files under `modules/<name>/` → module name in lower-case (e.g., `user`, `product`)
+- All other files → `common`
+- Scope must never be empty
+- Any `modules/<name>` or `packages/<name>` directory name is automatically a valid scope — scopes are discovered at commit time, so there is no config to edit for a new module or package. If a meaningful scope cannot be determined, fall back to `common`
 
 ### Subject Rules
-- Use sentence-case, start-case, pascal-case, or upper-case
-- No period at the end
-- Maximum 100 characters for entire header
-- Use imperative mood ("Add feature" not "Added feature")
 
-## Choosing Commit Type
+- Sentence-case, no trailing period, max 100 chars total
+- Imperative mood ("Add" not "Added")
 
-Let the nature of the change — not the file type — decide:
+## Determining Commit Type
 
-| Change Pattern | Type |
-|---------------|------|
-| New user-facing capability | `feat` |
-| Corrects broken behavior | `fix` |
-| Restructure without behavior change | `refactor` |
-| Only test files changed | `test` |
-| Only documentation (`*.md`) | `docs` |
-| Dependencies, lockfiles | `chore` |
-| Build tooling, type declarations (`css.d.ts`) | `build` |
-| CI/CD workflows | `ci` |
-| Formatting, whitespace only | `style` |
-| Measurable performance work | `perf` |
-
-If a change mixes types, pick the one that reflects the primary intent and mention the rest in the subject or split the commit.
+| Change | Type |
+|--------|------|
+| New files with functionality | `feat` |
+| Bug fixes | `fix` |
+| Restructuring, renaming | `refactor` |
+| Only `*.spec.ts` files | `test` |
+| Only `*.md` files | `docs` |
+| Lock files, deps | `chore` |
+| Build configs, scripts | `build` |
+| CI/CD files | `ci` |
+| Formatting only | `style` |
 
 ## Examples
 
-### Example 1: Multiple Independent Changes
-
-Git status shows:
-```
-M src/components/tabs/Tabs.tsx
-M src/components/dialog/Dialog.tsx
-M src/hooks/useClickOutside.tsx
-M src/styles/app.css
-M bun.lock
-```
-
-After reading the diffs you discover:
-- `Tabs.tsx` + `Dialog.tsx` → new keyboard-navigation feature shared across both
-- `useClickOutside.tsx` → fixes a stale-listener bug
-- `app.css` → adds a new design token (separate concern)
-- `bun.lock` → unrelated dependency bump
-
-Commands to execute:
 ```bash
-# Feature: keyboard navigation spans two components
-git add src/components/tabs/Tabs.tsx src/components/dialog/Dialog.tsx
-git commit -m "feat(components): Add keyboard navigation to tabs and dialog"
+# Multiple module changes + non-module files
+git add modules/user/
+git commit -m "feat(user): Add AuthService and update UserService"
 
-# Fix: stale listener in hook
-git add src/hooks/useClickOutside.tsx
-git commit -m "fix(hooks): Remove stale listener in useClickOutside"
+git add modules/product/
+git commit -m "refactor(product): Update Product entity and repository"
 
-# Styles: new design token
-git add src/styles/app.css
-git commit -m "feat(styles): Add accent color design token"
-
-# Dependency bump
-git add bun.lock
-git commit -m "chore(config): Update dependencies"
-
-# Push all commits to the remote
-git push
+git add bun.lock packages/cache/
+git commit -m "chore(common): Update dependencies and cache package"
 ```
-
-### Example 2: Single Logical Change Spanning Directories
-
-Git status shows:
-```
-M src/components/upload/FileUpload.tsx
-M src/hooks/useControlledState.tsx
-M src/utils/cn.ts
-```
-
-All three files implement the same feature (drag-and-drop upload). This is **one** commit — pick the scope that represents the primary intent:
-```bash
-git add src/components/upload/FileUpload.tsx src/hooks/useControlledState.tsx src/utils/cn.ts
-git commit -m "feat(components): Add drag-and-drop upload support"
-```
-
-### Example 3: Multiple Changes in the Same File
-
-`git diff src/components/form/Form.tsx` reveals two unrelated edits:
-- A bug fix for validation on submit
-- A refactor renaming internal state variables
-
-Stage per-hunk to keep them atomic:
-```bash
-git add -p src/components/form/Form.tsx   # accept the fix hunks
-git commit -m "fix(components): Validate required fields on form submit"
-
-git add src/components/form/Form.tsx      # stage the rest
-git commit -m "refactor(components): Rename form state variables"
-```
-
-### Example 4: Refactor with Renames/Deletions
-
-Git status shows:
-```
-D src/components/error/ErrorPage.tsx
-A src/components/error/ErrorFallback.tsx
-M src/components/editor/Editor.tsx
-```
-
-All part of the same rewrite:
-```bash
-git add src/components/error/ErrorPage.tsx src/components/error/ErrorFallback.tsx src/components/editor/Editor.tsx
-git commit -m "refactor(components): Replace ErrorPage with ErrorFallback"
-```
-
-## Subject Line Guidelines
-
-Write clear, descriptive subjects:
-
-| Good | Bad |
-|------|-----|
-| `Add drag-and-drop upload support` | `upload` |
-| `Remove stale listener in useClickOutside` | `fix bug` |
-| `Replace ErrorPage with ErrorFallback` | `rename` |
-| `Remove deprecated icon variants` | `cleanup` |
-| `Add accent color design token` | `css change` |
-
-## Pre-commit Checklist
-
-Before each commit, verify:
-1. The staged files belong to **one** logical change
-2. No unrelated edits are sneaking in (run `git diff --staged` to confirm)
-3. No debug code, `console.log`, or temporary scaffolding left behind
-4. Subject line matches the format exactly and reflects the actual change
-5. No AI attribution or `Co-Authored-By: Claude` trailer in the message
 
 ## Handling Special Cases
 
-### A File Contains Multiple Logical Changes
-Use `git add -p` to stage hunks individually. Commit each logical change separately. Do not bundle unrelated edits just because they share a file.
+- **Mixed feat + fix in one module**: use `feat` if primary change is new functionality; `fix` if primary is a bug fix; split into multiple commits if truly independent
+- **Deleted files only**: use `refactor` (e.g., `refactor(user): Remove deprecated UserAdapter`)
+- **Renamed/moved files**: use `refactor` (e.g., `refactor(product): Reorganize service file structure`)
 
-### A Change Legitimately Touches Many Scopes
-Pick the scope that represents the primary intent (usually where the user-visible behavior lives). Mention the supporting changes in the subject if it helps clarity. Split only when the sub-changes are independently useful.
+## Commit Trailers
 
-### Formatting Noise Mixed With Real Changes
-Commit the real change first with its proper type/scope, then commit the formatting separately as `style(scope): …`. Never hide behavior changes behind a `style` commit.
+Do not add any `Co-Authored-By` trailer to commits.
 
-### Deletions or Renames
-Classify by intent, not by the `D`/`R` status:
-- Removing dead code → `refactor`
-- Removing a feature the user could see → `feat` (with a "Remove …" subject) or `refactor` if purely internal
-- Reorganizing files without behavior change → `refactor`
+## Coding Conventions
+
+Apply all coding conventions from the `optimize` skill.
