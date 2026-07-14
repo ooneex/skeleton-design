@@ -1,17 +1,25 @@
-import { cva } from "class-variance-authority";
-import type React from "react";
 import { Select } from "@/components/select";
 import { MonitorIcon } from "@/icons/outline/design-development/sm/MonitorIcon";
 import { SunIcon } from "@/icons/outline/energy-environment/sm/SunIcon";
 import { MoonIcon } from "@/icons/outline/weather/sm/MoonIcon";
 import { cn } from "@/utils/cn";
+import { cva } from "class-variance-authority";
+import type React from "react";
 
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+/** Whether the theme renders on a light or dark surface (its `color-scheme`). */
+export type ThemeSchemeType = "light" | "dark";
 
 type ThemeEntryType = {
   /** The `data-theme` value, matching the theme stylesheet in `styles/themes/`. */
   code: string;
   label: string;
+  /**
+   * The theme's `color-scheme`, mirroring its stylesheet in `styles/themes/`.
+   * Omitted for `system`, which follows the OS preference.
+   */
+  scheme?: ThemeSchemeType;
   /** Overrides the group icon for this theme (used by the base themes). */
   icon?: IconType;
 };
@@ -29,12 +37,12 @@ type ThemeGroupType = {
  */
 export const themeGroups = [
   {
-    label: "Base",
+    label: "Base Themes",
     icon: MonitorIcon,
     themes: [
       { code: "system", label: "System", icon: MonitorIcon },
-      { code: "light", label: "Light", icon: SunIcon },
-      { code: "dark", label: "Dark", icon: MoonIcon },
+      { code: "light", label: "Light", scheme: "light", icon: SunIcon },
+      { code: "dark", label: "Dark", scheme: "dark", icon: MoonIcon },
     ],
   },
 ] as const satisfies readonly ThemeGroupType[];
@@ -53,6 +61,19 @@ export const themeIcons = Object.fromEntries(
 export const themeLabels = Object.fromEntries(
   themeGroups.flatMap((group) => group.themes.map((theme): [ThemeType, string] => [theme.code, theme.label])),
 ) as Record<ThemeType, string>;
+
+/** Light/dark scheme for each theme (`undefined` for `system`, which follows the OS). */
+export const themeSchemes = Object.fromEntries(
+  themeGroups.flatMap((group) =>
+    group.themes.map((theme): [ThemeType, ThemeSchemeType | undefined] => [
+      theme.code,
+      "scheme" in theme ? theme.scheme : undefined,
+    ]),
+  ),
+) as Record<ThemeType, ThemeSchemeType | undefined>;
+
+/** The parenthesised scheme suffix shown next to a theme label, e.g. `(Dark)`. */
+const schemeSuffixes = { light: "(Light)", dark: "(Dark)" } as const satisfies Record<ThemeSchemeType, string>;
 
 const themeIconVariants = cva("shrink-0", {
   variants: {
@@ -74,6 +95,7 @@ export type ThemeSwitcherOptionPropsType = Omit<React.ComponentProps<typeof Sele
 
 export const ThemeSwitcherOption = ({ value, size = "sm", children, ...props }: ThemeSwitcherOptionPropsType) => {
   const Icon = themeIcons[value];
+  const scheme = themeSchemes[value];
 
   return (
     <Select.Item data-slot="theme-switcher-option" value={value} size={size} {...props}>
@@ -81,6 +103,7 @@ export const ThemeSwitcherOption = ({ value, size = "sm", children, ...props }: 
         <>
           <Icon className={cn(themeIconVariants({ size }))} />
           {themeLabels[value]}
+          {scheme ? <span className="text-muted-foreground">{schemeSuffixes[scheme]}</span> : null}
         </>
       )}
     </Select.Item>
