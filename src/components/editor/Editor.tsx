@@ -1,48 +1,41 @@
-import Blockquote from "@tiptap/extension-blockquote";
-import Bold from "@tiptap/extension-bold";
-import BulletList from "@tiptap/extension-bullet-list";
-import { Color } from "@tiptap/extension-color";
-import Document from "@tiptap/extension-document";
-import Dropcursor from "@tiptap/extension-dropcursor";
-import Gapcursor from "@tiptap/extension-gapcursor";
-import HardBreak from "@tiptap/extension-hard-break";
-import Heading from "@tiptap/extension-heading";
-import Highlight from "@tiptap/extension-highlight";
-import History from "@tiptap/extension-history";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import Image from "@tiptap/extension-image";
-import Italic from "@tiptap/extension-italic";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Paragraph from "@tiptap/extension-paragraph";
-import Placeholder from "@tiptap/extension-placeholder";
-import Strike from "@tiptap/extension-strike";
-import Subscript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
-import TaskItem from "@tiptap/extension-task-item";
-import TaskList from "@tiptap/extension-task-list";
-import Text from "@tiptap/extension-text";
-import TextAlign from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
-import Underline from "@tiptap/extension-underline";
-import Youtube from "@tiptap/extension-youtube";
-import { EditorContent, useEditor } from "@tiptap/react";
-import "./editor.css";
-import type { Editor as EditorType } from "@tiptap/react";
-import { useImperativeHandle } from "react";
-import { Markdown } from "tiptap-markdown";
+import { useCallback, useImperativeHandle, useRef } from "react";
 import { SimpleColorPicker } from "@/components/color/SimpleColorPicker";
 import { cn } from "@/utils/cn";
-import { EnterHandler } from "./extensions/EnterHandler";
+import { EditorContent } from "./EditorContent";
+import { EditorProvider } from "./EditorContext";
 import { FloatingToolbar } from "./FloatingToolbar";
 import { LinkDialog } from "./LinkDialog";
-import { LinkMark } from "./marks/Link";
 import { SlashMenu } from "./SlashMenu";
+import {
+  EditorAlign,
+  EditorBlockquote,
+  EditorBold,
+  EditorBulletList,
+  EditorColor,
+  EditorHeading,
+  EditorHighlight,
+  EditorItalic,
+  EditorLink,
+  EditorOrderedList,
+  EditorParagraph,
+  EditorRedo,
+  EditorStrike,
+  EditorSubscript,
+  EditorSuperscript,
+  EditorTaskList,
+  EditorToolbar,
+  EditorUnderline,
+  EditorUndo,
+  EditorYouTube,
+} from "./Toolbar";
+import type { EditorControllerType } from "./types";
 import { YouTubeDialog } from "./YouTubeDialog";
 
+/** Imperative handle exposed through the editor `ref`. */
 export type EditorRefType = {
   getContent: () => string;
-  getEditor: () => EditorType;
+  getEditor: () => EditorControllerType | null;
+  getSelection: () => string;
   setContent: (content: string) => void;
   insertContent: (content: string) => void;
   insertContentAt: (position: number, content: string) => void;
@@ -55,7 +48,7 @@ export type EditorPropsType = {
   placeholder?: string;
   content?: string;
   onContentChange?: (content: string) => void;
-  onSelectionChange?: (data: { content: string; editor: EditorType }) => void;
+  onSelectionChange?: (data: { content: string; editor: EditorControllerType }) => void;
   onSubmit?: () => void;
   editable?: boolean;
   ref?: React.RefObject<EditorRefType | null>;
@@ -68,125 +61,26 @@ export type EditorPropsType = {
   plainText?: boolean;
 };
 
-type EditorExtensionsOptionsType = {
-  placeholder: string;
-  showHeadings?: boolean;
-  showHistory?: boolean;
-  showMedia?: boolean;
-  showSlashMenu?: boolean;
-  plainText?: boolean;
-};
+/** Read the currently selected text from an editor controller. */
+export const getSelectionText = (editor: EditorControllerType): string => editor.getSelectionText();
 
-export const getEditorExtensions = ({
-  placeholder,
-  showHeadings = true,
-  showHistory = true,
-  showMedia = true,
-  showSlashMenu = true,
-  plainText = false,
-}: EditorExtensionsOptionsType) => {
-  if (plainText) {
-    return [
-      Document,
-      Paragraph,
-      Text,
-      HardBreak,
-      Placeholder.configure({ placeholder }),
-      ...(showHistory ? [History] : []),
-      EnterHandler,
-    ];
-  }
-  return [
-    Document,
-    Paragraph,
-    Text,
-    TextStyle,
-    Color,
-    Bold.configure({ HTMLAttributes: { class: "font-semibold" } }),
-    Italic.configure({ HTMLAttributes: { class: "italic" } }),
-    Strike,
-    Subscript,
-    Superscript,
-    Underline,
-    LinkMark,
-    Highlight.configure({ multicolor: true }),
-    History,
-    Blockquote.configure({
-      HTMLAttributes: { class: "border-l-2 border-primary pl-4" },
-    }),
-    TextAlign.configure({
-      types: showHeadings ? ["heading", "paragraph"] : ["paragraph"],
-      defaultAlignment: "left",
-    }),
-    ...(showMedia
-      ? [
-          Image.configure({
-            inline: true,
-            allowBase64: false,
-          }),
-        ]
-      : []),
-    Gapcursor,
-    Dropcursor,
-    HardBreak,
-    Placeholder.configure({
-      placeholder: placeholder,
-    }),
-    BulletList,
-    OrderedList,
-    ListItem.configure({
-      HTMLAttributes: { class: "ml-4" },
-    }),
-    ...(showHeadings
-      ? [
-          Heading.configure({
-            levels: [1, 2, 3],
-          }),
-        ]
-      : []),
-    HorizontalRule,
-    TaskList,
-    TaskItem.configure({
-      nested: true,
-    }),
-    ...(showMedia
-      ? [
-          Youtube.configure({
-            controls: true,
-            nocookie: true,
-          }),
-        ]
-      : []),
-    // ImageResize.configure({
-    // inline: false,
-    // }),
-    EnterHandler,
-    Markdown.configure({
-      html: true,
-      transformPastedText: true,
-      transformCopiedText: true,
-    }),
-    ...(showSlashMenu
-      ? [
-          SlashMenu.configure({
-            showHeadings,
-            showHistory,
-            showMedia,
-          }),
-        ]
-      : []),
-  ];
-};
-
-export const getSelectionText = (editor: EditorType): string => {
-  const { view, state } = editor;
-  const { from, to } = view.state.selection;
-  const text = state.doc.textBetween(from, to, "").trim();
-
-  return text;
-};
-
-export const Editor = ({
+/**
+ * A rich-text editor built directly on the browser's `contentEditable`, with no
+ * third-party editor engine and no external stylesheet — all styling is
+ * Tailwind. This is the convenience wrapper: pass props and it composes the
+ * provider, content surface, floating toolbar, slash menu, and dialogs for you.
+ *
+ * For custom layouts, use the attached compound parts instead:
+ *
+ * ```tsx
+ * <Editor.Root content={html} onContentChange={setHtml}>
+ *   <Editor.Toolbar />
+ *   <Editor.Content className="min-h-40 rounded ring ring-border p-2" />
+ *   <Editor.SlashMenu />
+ * </Editor.Root>
+ * ```
+ */
+const EditorRoot = ({
   content,
   placeholder,
   editable = true,
@@ -202,81 +96,91 @@ export const Editor = ({
   showToolbar = true,
   plainText = false,
 }: EditorPropsType) => {
-  const resolvedPlaceholder = placeholder ?? (showSlashMenu ? "Type something or '/' to start" : "Type something...");
+  const controllerRef = useRef<EditorControllerType | null>(null);
 
-  const editor = useEditor({
-    immediatelyRender: true,
-    extensions: getEditorExtensions({
-      placeholder: resolvedPlaceholder,
-      showHeadings,
-      showHistory,
-      showMedia,
-      showSlashMenu,
-      plainText,
+  const resolvedPlaceholder =
+    placeholder ?? (showSlashMenu && !plainText ? "Type something or '/' to start" : "Type something...");
+
+  const captureController = useCallback((controller: EditorControllerType) => {
+    controllerRef.current = controller;
+  }, []);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getContent: () => controllerRef.current?.getHTML() ?? "",
+      getEditor: () => controllerRef.current,
+      getSelection: () => controllerRef.current?.getSelectionText() ?? "",
+      setContent: (value) => controllerRef.current?.setContent(value),
+      insertContent: (value) => controllerRef.current?.insertContent(value),
+      insertContentAt: (position, value) => controllerRef.current?.insertContentAt(position, value),
+      deleteSelection: () => controllerRef.current?.deleteSelection(),
+      focus: () => controllerRef.current?.focus(),
+      blur: () => controllerRef.current?.blur(),
     }),
-    content: content || "",
-    onSelectionUpdate({ editor }) {
-      onSelectionChange?.({ editor, content: getSelectionText(editor) });
-    },
-    onUpdate({ editor }) {
-      onContentChange?.(editor.getHTML().trim());
-    },
-    editorProps: {
-      attributes: {
-        class: "border-none outline-none px-0",
-      },
-      handleKeyDown: (_view, event) => {
-        if (event.key === "Enter" && !event.shiftKey && onSubmit) {
-          event.preventDefault();
-          onSubmit();
-          return true;
-        }
-        return false;
-      },
-    },
-    editable,
-  });
+    [],
+  );
 
-  useImperativeHandle(ref, () => {
-    return {
-      setContent(content: string) {
-        editor.commands.setContent(content);
-      },
-      insertContent(content: string) {
-        editor.commands.insertContent(content);
-      },
-      insertContentAt(position: number, content: string) {
-        editor.commands.insertContentAt(position, content);
-      },
-      getSelection() {
-        return getSelectionText(editor);
-      },
-      deleteSelection() {
-        editor.commands.deleteSelection();
-      },
-      focus() {
-        editor.commands.focus();
-      },
-      blur() {
-        editor.commands.blur();
-      },
-      getContent() {
-        return editor.getHTML().trim();
-      },
-      getEditor() {
-        return editor;
-      },
-    };
-  }, [editor]);
+  const showFloatingToolbar = editable && showToolbar && !plainText;
+  const showSlash = showSlashMenu && !plainText;
+  const showMediaDialogs = showMedia && !plainText;
 
   return (
-    <>
-      {editor && editable && showToolbar ? <FloatingToolbar editor={editor} /> : null}
-      {/* react-call Roots for the toolbar's imperative color picker and link dialog (single mount per editor). */}
-      {editor && editable && showToolbar ? <SimpleColorPicker /> : null}
-      {editor && editable && showToolbar ? <LinkDialog /> : null}
-      <EditorContent editor={editor} className={cn("h-full w-full p-0 m-0", className)} />
-      {showMedia ? <YouTubeDialog /> : null}
-    </>
+    <EditorProvider
+      content={content}
+      editable={editable}
+      plainText={plainText}
+      placeholder={resolvedPlaceholder}
+      showHeadings={showHeadings}
+      showHistory={showHistory}
+      showMedia={showMedia}
+      showSlashMenu={showSlash}
+      onContentChange={onContentChange}
+      onSelectionChange={onSelectionChange}
+      onSubmit={onSubmit}
+      controllerRef={captureController}
+    >
+      {showFloatingToolbar ? <FloatingToolbar /> : null}
+      {/* react-call roots for the toolbar's imperative color picker and link dialog. */}
+      {showFloatingToolbar ? <SimpleColorPicker /> : null}
+      {showFloatingToolbar ? <LinkDialog /> : null}
+      {showMediaDialogs ? <YouTubeDialog /> : null}
+      <EditorContent className={cn("h-full w-full", className)} />
+      {showSlash ? <SlashMenu /> : null}
+    </EditorProvider>
   );
 };
+
+/**
+ * Compound component. The sub-parts are attached to `Editor` so a single import
+ * exposes the whole API. `Editor` itself is the ready-made, prop-driven editor;
+ * `Editor.Root` + the parts let you build a custom layout.
+ */
+export const Editor = Object.assign(EditorRoot, {
+  Root: EditorProvider,
+  Content: EditorContent,
+  Toolbar: EditorToolbar,
+  FloatingToolbar,
+  SlashMenu,
+  LinkDialog,
+  YouTubeDialog,
+  Bold: EditorBold,
+  Italic: EditorItalic,
+  Underline: EditorUnderline,
+  Strike: EditorStrike,
+  Subscript: EditorSubscript,
+  Superscript: EditorSuperscript,
+  Paragraph: EditorParagraph,
+  Heading: EditorHeading,
+  Blockquote: EditorBlockquote,
+  BulletList: EditorBulletList,
+  OrderedList: EditorOrderedList,
+  TaskList: EditorTaskList,
+  Align: EditorAlign,
+  Color: EditorColor,
+  Highlight: EditorHighlight,
+  Link: EditorLink,
+  YouTube: EditorYouTube,
+  Undo: EditorUndo,
+  Redo: EditorRedo,
+});

@@ -1,4 +1,3 @@
-import type { Editor } from "@tiptap/core";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/button/Button";
 import { createDialog } from "@/components/dialog/Dialog";
@@ -9,20 +8,23 @@ import { DialogTitle } from "@/components/dialog/DialogTitle";
 import { Input } from "@/components/input/Input";
 
 type LinkDialogPropsType = {
-  editor: Editor;
+  initialHref: string;
+  isActive: boolean;
 };
 
+/** The link chosen in the dialog: apply an href, remove the link, or cancel. */
+export type LinkDialogResultType = { href: string } | { remove: true } | null;
+
 /**
- * Imperative "add link" dialog. Mount `<LinkDialog />` once inside the editor,
- * then trigger it with {@link openLinkDialog}. Resolves when closed (the link
- * is applied to or removed from the editor as a side effect).
+ * Imperative "add/edit link" dialog. Mount `<LinkDialog />` once, then open it
+ * with {@link openLinkDialog}. Resolves with the chosen action so the caller can
+ * apply it to the editor after restoring the text selection.
  */
-export const LinkDialog = createDialog<LinkDialogPropsType, void>(
-  ({ call, editor }) => {
-    const [url, setUrl] = useState<string>(editor.getAttributes("link").href ?? "");
+export const LinkDialog = createDialog<LinkDialogPropsType, LinkDialogResultType>(
+  ({ call, initialHref, isActive }) => {
+    const [url, setUrl] = useState(initialHref);
     const [error, setError] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
-    const isLinkActive = editor.isActive("link");
 
     useEffect(() => {
       requestAnimationFrame(() => inputRef.current?.focus());
@@ -33,14 +35,13 @@ export const LinkDialog = createDialog<LinkDialogPropsType, void>(
         setError("Please enter a valid URL");
         return;
       }
-      editor.chain().focus().setLink({ href: url, target: "_blank" }).run();
-      call.end();
+      call.end({ href: url });
     };
 
     return (
       <>
         <DialogHeader>
-          <DialogTitle>{isLinkActive ? "Edit Link" : "Add Link"}</DialogTitle>
+          <DialogTitle>{isActive ? "Edit Link" : "Add Link"}</DialogTitle>
           <DialogDescription>Enter the URL you want to link to.</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2">
@@ -48,43 +49,36 @@ export const LinkDialog = createDialog<LinkDialogPropsType, void>(
             ref={inputRef}
             placeholder="https://www.google.com"
             value={url}
-            onChange={(e) => {
-              setUrl(e.target.value);
+            onChange={(event) => {
+              setUrl(event.target.value);
               setError("");
             }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
                 handleSubmit();
               }
             }}
           />
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
         <DialogFooter>
-          {isLinkActive ? (
-            <Button
-              variant="destructive"
-              className="mr-auto"
-              onClick={() => {
-                editor.chain().focus().unsetLink().run();
-                call.end();
-              }}
-            >
+          {isActive ? (
+            <Button variant="destructive" className="mr-auto" onClick={() => call.end({ remove: true })}>
               Remove
             </Button>
           ) : null}
-          <Button variant="outline" onClick={() => call.end()}>
+          <Button variant="outline" onClick={() => call.end(null)}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>{isLinkActive ? "Save" : "Add"}</Button>
+          <Button onClick={handleSubmit}>{isActive ? "Save" : "Add"}</Button>
         </DialogFooter>
       </>
     );
   },
-  { className: "ring ring-border p-4", showCloseButton: false },
+  { className: "ring ring-border p-4", showCloseButton: false, dismissValue: null },
 );
 LinkDialog.displayName = "LinkDialog";
 
-/** Open the link dialog for the given editor. */
-export const openLinkDialog = (editor: Editor) => LinkDialog.call({ editor });
+/** Open the link dialog and resolve with the chosen action. */
+export const openLinkDialog = (props: LinkDialogPropsType) => LinkDialog.call(props);

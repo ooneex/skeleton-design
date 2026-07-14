@@ -1,60 +1,96 @@
-import type { Editor } from "@tiptap/react";
-import { useEditorState } from "@tiptap/react";
-import { BubbleMenu } from "@tiptap/react/menus";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
-import { Blockquote } from "./toolbar/Blockquote";
-import { Bold } from "./toolbar/Bold";
-import { Highlight } from "./toolbar/Highlight";
-import { Italic } from "./toolbar/Italic";
-import { Link } from "./toolbar/Link";
-import { Paragraph } from "./toolbar/Paragraph";
-import { Strike } from "./toolbar/Strike";
-import { Subscript } from "./toolbar/Subscript";
-import { Superscript } from "./toolbar/Superscript";
-import { TextStyle } from "./toolbar/TextStyle";
-import { Underline } from "./toolbar/Underline";
+import { getSelectionRect } from "./commands";
+import { useEditorContext } from "./EditorContext";
+import {
+  EditorBlockquote,
+  EditorBold,
+  EditorColor,
+  EditorHighlight,
+  EditorItalic,
+  EditorLink,
+  EditorParagraph,
+  EditorStrike,
+  EditorSubscript,
+  EditorSuperscript,
+  EditorUnderline,
+} from "./Toolbar";
 
-type FloatingToolbarPropsType = {
-  editor: Editor;
+type FloatingPositionType = { top: number; left: number };
+
+export type FloatingToolbarPropsType = {
   className?: string;
 };
 
-export const FloatingToolbar = ({ editor, className }: FloatingToolbarPropsType) => {
-  const state = useEditorState({
-    editor,
-    selector: (ctx) => ({
-      isParagraph: ctx.editor.isActive("paragraph"),
-      isBold: ctx.editor.isActive("bold"),
-      isItalic: ctx.editor.isActive("italic"),
-      isUnderline: ctx.editor.isActive("underline"),
-      isStrike: ctx.editor.isActive("strike"),
-      isSubscript: ctx.editor.isActive("subscript"),
-      isSuperscript: ctx.editor.isActive("superscript"),
-      isBlockquote: ctx.editor.isActive("blockquote"),
-      color: ctx.editor.getAttributes("textStyle").color,
-      highlight: ctx.editor.getAttributes("highlight").color,
-    }),
-  });
+/**
+ * Bubble menu that floats above the current text selection. Appears only while
+ * a non-empty range is selected inside an editable editor. Rendered into a
+ * portal and positioned with fixed viewport coordinates — no CSS file required.
+ */
+export const FloatingToolbar = ({ className }: FloatingToolbarPropsType) => {
+  const { editor, editable } = useEditorContext();
+  const [position, setPosition] = useState<FloatingPositionType | null>(null);
 
-  return (
-    <BubbleMenu
-      editor={editor}
-      options={{
-        placement: "top",
-      }}
-      className={cn("flex items-center gap-1 p-1 bg-popover text-popover-foreground rounded shadow-md", className)}
+  useEffect(() => {
+    const update = () => {
+      const element = editor.element;
+      const selection = window.getSelection();
+      if (
+        !editable ||
+        !element ||
+        !selection ||
+        selection.rangeCount === 0 ||
+        selection.isCollapsed ||
+        !element.contains(selection.anchorNode)
+      ) {
+        setPosition(null);
+        return;
+      }
+      const rect = getSelectionRect();
+      if (!rect) {
+        setPosition(null);
+        return;
+      }
+      setPosition({ top: rect.top, left: rect.left + rect.width / 2 });
+    };
+
+    document.addEventListener("selectionchange", update);
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      document.removeEventListener("selectionchange", update);
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [editor, editable]);
+
+  if (!position || typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      data-slot="editor-floating-toolbar"
+      onMouseDown={(event) => event.preventDefault()}
+      style={{ top: position.top, left: position.left, transform: "translate(-50%, calc(-100% - 8px))" }}
+      className={cn(
+        "fixed z-50 flex items-center gap-1 rounded bg-popover p-1 text-popover-foreground shadow-md",
+        className,
+      )}
     >
-      <Paragraph editor={editor} pressed={state.isParagraph} />
-      <Bold editor={editor} pressed={state.isBold} />
-      <Italic editor={editor} pressed={state.isItalic} />
-      <Underline editor={editor} pressed={state.isUnderline} />
-      <Strike editor={editor} pressed={state.isStrike} />
-      <Subscript editor={editor} pressed={state.isSubscript} />
-      <Superscript editor={editor} pressed={state.isSuperscript} />
-      <TextStyle editor={editor} state={{ color: state.color }} />
-      <Highlight editor={editor} state={{ highlight: state.highlight }} />
-      <Blockquote editor={editor} pressed={state.isBlockquote} />
-      <Link editor={editor} />
-    </BubbleMenu>
+      <EditorParagraph />
+      <EditorBold />
+      <EditorItalic />
+      <EditorUnderline />
+      <EditorStrike />
+      <EditorSubscript />
+      <EditorSuperscript />
+      <EditorColor />
+      <EditorHighlight />
+      <EditorBlockquote />
+      <EditorLink />
+    </div>,
+    document.body,
   );
 };

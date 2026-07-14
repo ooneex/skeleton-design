@@ -1,20 +1,5 @@
-import type { Editor, Range } from "@tiptap/core";
-import { Extension } from "@tiptap/core";
-import { PluginKey } from "@tiptap/pm/state";
-import { ReactRenderer } from "@tiptap/react";
-import type { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
-import Suggestion from "@tiptap/suggestion";
-import {
-  type FC,
-  forwardRef,
-  type SVGProps,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import tippy, { type Instance } from "tippy.js";
+import { type ComponentType, type SVGProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/button/Button";
 import { RedoIcon } from "@/icons/outline/arrows/sm/RedoIcon";
 import { UndoIcon } from "@/icons/outline/arrows/sm/UndoIcon";
@@ -31,35 +16,37 @@ import { TextUnderlineIcon } from "@/icons/outline/design-development/sm/TextUnd
 import { BlockquoteIcon } from "@/icons/outline/editing/sm/BlockquoteIcon";
 import { OrderedListIcon } from "@/icons/outline/editing/sm/OrderedListIcon";
 import { ParagraphIcon } from "@/icons/outline/editing/sm/ParagraphIcon";
-import { SubscriptIcon as TextSubscriptIcon } from "@/icons/outline/editing/sm/SubscriptIcon";
-import { SuperscriptIcon as TextSuperscriptIcon } from "@/icons/outline/editing/sm/SuperscriptIcon";
+import { SubscriptIcon } from "@/icons/outline/editing/sm/SubscriptIcon";
+import { SuperscriptIcon } from "@/icons/outline/editing/sm/SuperscriptIcon";
 import { TextBoldIcon } from "@/icons/outline/editing/sm/TextBoldIcon";
-import { VideoIcon as YoutubeIcon } from "@/icons/outline/photography-video/sm/VideoIcon";
+import { VideoIcon } from "@/icons/outline/photography-video/sm/VideoIcon";
 import { BulletListIcon } from "@/icons/outline/ui-layout/sm/BulletListIcon";
-import { CircleCheckIcon as CompletedIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
+import { CheckListIcon } from "@/icons/outline/ui-layout/sm/CheckListIcon";
 import { cn } from "@/utils/cn";
+import { restoreSelection, saveSelection } from "./commands";
+import { useEditorContext } from "./EditorContext";
+import type { EditorControllerType } from "./types";
 import { openYouTubeDialog } from "./YouTubeDialog";
+
+type SlashGroupType = "Headings" | "Text Formatting" | "Alignment" | "Lists" | "Blocks" | "Media" | "History";
 
 type SlashMenuItemType = {
   title: string;
   description: string;
-  icon: FC<SVGProps<SVGSVGElement>>;
-  group: string;
-  command: (props: { editor: Editor; range: Range }) => void;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  group: SlashGroupType;
   aliases?: string[];
+  command: (editor: EditorControllerType) => void | Promise<void>;
 };
 
 const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
-  // Headings group
   {
     title: "Heading 1",
     description: "Large section heading",
     icon: Heading1Icon,
     group: "Headings",
     aliases: ["h1", "heading1"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setNode("heading", { level: 1 }).run();
-    },
+    command: (editor) => editor.toggleHeading(1),
   },
   {
     title: "Heading 2",
@@ -67,9 +54,7 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: Heading2Icon,
     group: "Headings",
     aliases: ["h2", "heading2"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setNode("heading", { level: 2 }).run();
-    },
+    command: (editor) => editor.toggleHeading(2),
   },
   {
     title: "Heading 3",
@@ -77,21 +62,15 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: Heading3Icon,
     group: "Headings",
     aliases: ["h3", "heading3"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run();
-    },
+    command: (editor) => editor.toggleHeading(3),
   },
-
-  // Text formatting group
   {
     title: "Bold",
     description: "Make text bold",
     icon: TextBoldIcon,
     group: "Text Formatting",
     aliases: ["strong"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("bold").run();
-    },
+    command: (editor) => editor.toggleBold(),
   },
   {
     title: "Italic",
@@ -99,18 +78,14 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: TextItalicIcon,
     group: "Text Formatting",
     aliases: ["em", "emphasis"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("italic").run();
-    },
+    command: (editor) => editor.toggleItalic(),
   },
   {
     title: "Underline",
     description: "Underline text",
     icon: TextUnderlineIcon,
     group: "Text Formatting",
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("underline").run();
-    },
+    command: (editor) => editor.toggleUnderline(),
   },
   {
     title: "Strikethrough",
@@ -118,41 +93,31 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: TextStrikethroughIcon,
     group: "Text Formatting",
     aliases: ["strike", "del"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("strike").run();
-    },
+    command: (editor) => editor.toggleStrike(),
   },
   {
     title: "Subscript",
     description: "Make text subscript",
-    icon: TextSubscriptIcon,
+    icon: SubscriptIcon,
     group: "Text Formatting",
     aliases: ["sub"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("subscript").run();
-    },
+    command: (editor) => editor.toggleSubscript(),
   },
   {
     title: "Superscript",
     description: "Make text superscript",
-    icon: TextSuperscriptIcon,
+    icon: SuperscriptIcon,
     group: "Text Formatting",
     aliases: ["sup"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark("superscript").run();
-    },
+    command: (editor) => editor.toggleSuperscript(),
   },
-
-  // Text alignment group
   {
     title: "Align Left",
     description: "Align text to the left",
     icon: TextAlignLeftIcon,
     group: "Alignment",
     aliases: ["left"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setTextAlign("left").run();
-    },
+    command: (editor) => editor.setTextAlign("left"),
   },
   {
     title: "Align Center",
@@ -160,9 +125,7 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: TextAlignCenterIcon,
     group: "Alignment",
     aliases: ["center"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setTextAlign("center").run();
-    },
+    command: (editor) => editor.setTextAlign("center"),
   },
   {
     title: "Align Right",
@@ -170,9 +133,7 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: TextAlignRightIcon,
     group: "Alignment",
     aliases: ["right"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setTextAlign("right").run();
-    },
+    command: (editor) => editor.setTextAlign("right"),
   },
   {
     title: "Justify",
@@ -180,21 +141,15 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: TextAlignJustifyIcon,
     group: "Alignment",
     aliases: ["justified"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setTextAlign("justify").run();
-    },
+    command: (editor) => editor.setTextAlign("justify"),
   },
-
-  // Lists group
   {
     title: "Bullet List",
     description: "Create a bullet list",
     icon: BulletListIcon,
     group: "Lists",
     aliases: ["ul", "unordered"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleBulletList().run();
-    },
+    command: (editor) => editor.toggleBulletList(),
   },
   {
     title: "Numbered List",
@@ -202,31 +157,23 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: OrderedListIcon,
     group: "Lists",
     aliases: ["ol", "ordered"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleOrderedList().run();
-    },
+    command: (editor) => editor.toggleOrderedList(),
   },
   {
     title: "Task List",
     description: "Create a task list with checkboxes",
-    icon: CompletedIcon,
+    icon: CheckListIcon,
     group: "Lists",
     aliases: ["todo", "checklist"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleTaskList().run();
-    },
+    command: (editor) => editor.toggleTaskList(),
   },
-
-  // Blocks group
   {
     title: "Paragraph",
     description: "Convert to paragraph",
     icon: ParagraphIcon,
     group: "Blocks",
     aliases: ["p", "text", "normal"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setParagraph().run();
-    },
+    command: (editor) => editor.setParagraph(),
   },
   {
     title: "Blockquote",
@@ -234,34 +181,30 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: BlockquoteIcon,
     group: "Blocks",
     aliases: ["quote"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleBlockquote().run();
-    },
+    command: (editor) => editor.toggleBlockquote(),
   },
-
-  // Media group
   {
     title: "YouTube",
     description: "Embed a YouTube video",
-    icon: YoutubeIcon,
+    icon: VideoIcon,
     group: "Media",
     aliases: ["video", "embed"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).run();
-      openYouTubeDialog(editor);
+    command: async (editor) => {
+      const saved = saveSelection(editor.element);
+      const url = await openYouTubeDialog();
+      restoreSelection(saved);
+      if (url) {
+        editor.insertYouTube(url);
+      }
     },
   },
-
-  // History group
   {
     title: "Undo",
     description: "Undo the last action",
     icon: UndoIcon,
     group: "History",
     aliases: ["back", "revert"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).undo().run();
-    },
+    command: (editor) => editor.undo(),
   },
   {
     title: "Redo",
@@ -269,280 +212,242 @@ const SLASH_MENU_ITEMS: SlashMenuItemType[] = [
     icon: RedoIcon,
     group: "History",
     aliases: ["forward", "repeat"],
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).redo().run();
-    },
+    command: (editor) => editor.redo(),
   },
 ];
 
-type SlashMenuListRefType = {
-  onKeyDown: (props: { event: KeyboardEvent }) => boolean;
+type SlashTriggerType = { node: Text; from: number; to: number };
+
+/**
+ * Detect a slash-command trigger at the collapsed caret: a `/` at the start of
+ * the block or after whitespace, optionally followed by a query with no spaces.
+ */
+const detectSlashTrigger = (root: HTMLElement): { query: string; trigger: SlashTriggerType } | null => {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0 || !selection.isCollapsed || !root.contains(selection.anchorNode)) {
+    return null;
+  }
+  const node = selection.anchorNode;
+  if (!node || node.nodeType !== Node.TEXT_NODE) {
+    return null;
+  }
+  const offset = selection.anchorOffset;
+  const before = (node.textContent ?? "").slice(0, offset);
+  const match = before.match(/(?:^|\s)\/([^\s/]*)$/);
+  if (!match) {
+    return null;
+  }
+  const query = match[1] ?? "";
+  return { query, trigger: { node: node as Text, from: offset - query.length - 1, to: offset } };
 };
 
-type SlashMenuListPropsType = {
-  items: SlashMenuItemType[];
-  command: (item: SlashMenuItemType) => void;
-};
-
-const SlashMenuList = forwardRef<SlashMenuListRefType, SlashMenuListPropsType>(({ items, command }, ref) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const itemRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
-
-  const selectItem = useCallback(
-    (index: number) => {
-      const item = items[index];
-      if (item) {
-        command(item);
-      }
-    },
-    [items, command],
-  );
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: trust me
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [items]);
-
-  // Scroll selected item into view when navigating with keyboard
-  useEffect(() => {
-    const selectedElement = itemRefs.current.get(selectedIndex);
-    if (selectedElement) {
-      selectedElement.scrollIntoView({ block: "nearest", behavior: "instant" });
-    }
-  }, [selectedIndex]);
-
-  useImperativeHandle(ref, () => ({
-    onKeyDown: ({ event }) => {
-      if (event.key === "ArrowUp") {
-        setSelectedIndex((prev) => (prev + items.length - 1) % items.length);
-        return true;
-      }
-
-      if (event.key === "ArrowDown") {
-        setSelectedIndex((prev) => (prev + 1) % items.length);
-        return true;
-      }
-
-      if (event.key === "Enter") {
-        selectItem(selectedIndex);
-        return true;
-      }
-
-      return false;
-    },
-  }));
-
-  if (items.length === 0) {
-    return <div className="bg-popover text-popover-foreground rounded shadow-md p-2 text-sm">No results found</div>;
-  }
-
-  // Group items by their group property
-  const groupedItems = items.reduce<Record<string, SlashMenuItemType[]>>((acc, item) => {
-    const group = acc[item.group] ?? [];
-    group.push(item);
-    acc[item.group] = group;
-    return acc;
-  }, {});
-
-  // Calculate flat index for each item
-  let flatIndex = 0;
-  const itemsWithIndex: { item: SlashMenuItemType; index: number }[] = [];
-  for (const group of Object.keys(groupedItems)) {
-    for (const item of groupedItems[group] ?? []) {
-      itemsWithIndex.push({ item, index: flatIndex });
-      flatIndex++;
-    }
-  }
-
-  // Group the items with their indices
-  const groupedItemsWithIndex = itemsWithIndex.reduce<Record<string, { item: SlashMenuItemType; index: number }[]>>(
-    (acc, { item, index }) => {
-      const group = acc[item.group] ?? [];
-      group.push({ item, index });
-      acc[item.group] = group;
-      return acc;
-    },
-    {},
-  );
-
-  return (
-    <div className="bg-popover text-popover-foreground rounded shadow-none ring ring-ring-active p-1">
-      <div className="overflow-y-auto max-h-80 min-w-64">
-        {Object.entries(groupedItemsWithIndex).map(([group, groupItems]) => (
-          <div key={group} className="p-1 flex flex-col gap-2">
-            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-muted/50">
-              {group}
-            </div>
-            {groupItems.map(({ item, index }) => (
-              <Button
-                key={item.title}
-                ref={(el) => {
-                  if (el) {
-                    itemRefs.current.set(index, el);
-                  } else {
-                    itemRefs.current.delete(index);
-                  }
-                }}
-                variant="ghost"
-                className={cn(
-                  "flex items-center gap-3 w-full h-auto px-0 py-2 justify-start rounded",
-                  index === selectedIndex && "bg-accent text-accent-foreground",
-                )}
-                onClick={() => selectItem(index)}
-              >
-                <div className="flex items-center justify-center w-8 h-8 rounded bg-muted">
-                  {(() => {
-                    const Icon = item.icon;
-                    return <Icon />;
-                  })()}
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-sm font-medium">{item.title}</span>
-                  <span className="text-xs text-muted-foreground">{item.description}</span>
-                </div>
-              </Button>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-});
-
-SlashMenuList.displayName = "SlashMenuList";
-
-const getSuggestionItems = ({
-  query,
-  showHeadings = true,
-  showHistory = true,
-  showMedia = true,
-}: {
-  query: string;
-  showHeadings?: boolean;
-  showHistory?: boolean;
-  showMedia?: boolean;
-}): SlashMenuItemType[] => {
-  const lowerQuery = query.toLowerCase();
-
+const filterItems = (
+  query: string,
+  gates: { showHeadings: boolean; showHistory: boolean; showMedia: boolean },
+): SlashMenuItemType[] => {
+  const lower = query.toLowerCase();
   return SLASH_MENU_ITEMS.filter((item) => {
-    if (!showHeadings && item.group === "Headings") {
-      return false;
-    }
-
-    if (!showHistory && item.group === "History") {
-      return false;
-    }
-
-    if (!showMedia && item.group === "Media") {
-      return false;
-    }
-
-    const matchTitle = item.title.toLowerCase().includes(lowerQuery);
-    const matchDescription = item.description.toLowerCase().includes(lowerQuery);
-    const matchAliases = item.aliases?.some((alias) => alias.toLowerCase().includes(lowerQuery));
-
-    return matchTitle || matchDescription || matchAliases;
+    if (!gates.showHeadings && item.group === "Headings") return false;
+    if (!gates.showHistory && item.group === "History") return false;
+    if (!gates.showMedia && item.group === "Media") return false;
+    if (!lower) return true;
+    return (
+      item.title.toLowerCase().includes(lower) ||
+      item.description.toLowerCase().includes(lower) ||
+      (item.aliases?.some((alias) => alias.toLowerCase().includes(lower)) ?? false)
+    );
   });
 };
 
-const renderSuggestion = (): Omit<
-  SuggestionOptions<SlashMenuItemType>["render"],
-  "onBeforeStart" | "onBeforeUpdate"
-> => {
-  let component: ReactRenderer<SlashMenuListRefType> | null = null;
-  let popup: Instance[] | null = null;
-
-  return {
-    onStart: (props: SuggestionProps<SlashMenuItemType>) => {
-      component = new ReactRenderer(SlashMenuList, {
-        props,
-        editor: props.editor,
-      });
-
-      if (!props.clientRect) {
-        return;
-      }
-
-      const editorElement = props.editor.view.dom;
-      const appendTarget = editorElement.closest("[data-slot='drawer-content']") ?? document.body;
-
-      popup = tippy("body", {
-        getReferenceClientRect: props.clientRect as () => DOMRect,
-        appendTo: () => appendTarget,
-        content: component.element,
-        showOnCreate: true,
-        interactive: true,
-        trigger: "manual",
-        placement: "bottom-start",
-      });
-    },
-
-    onUpdate: (props: SuggestionProps<SlashMenuItemType>) => {
-      component?.updateProps(props);
-
-      if (!props.clientRect) {
-        return;
-      }
-
-      popup?.[0]?.setProps({
-        getReferenceClientRect: props.clientRect as () => DOMRect,
-      });
-    },
-
-    onKeyDown: (props: { event: KeyboardEvent }) => {
-      if (props.event.key === "Escape") {
-        popup?.[0]?.hide();
-        return true;
-      }
-
-      return component?.ref?.onKeyDown(props) ?? false;
-    },
-
-    onExit: () => {
-      popup?.[0]?.destroy();
-      component?.destroy();
-    },
-  };
+export type SlashMenuPropsType = {
+  className?: string;
 };
 
-type SlashMenuOptionsType = {
-  showHeadings?: boolean;
-  showHistory?: boolean;
-  showMedia?: boolean;
-  suggestion?: {
-    char: string;
-    command: (props: { editor: Editor; range: Range; props: SlashMenuItemType }) => void;
-  };
-};
+/**
+ * Slash-command menu. Watches the editor for a `/` trigger, shows a filterable,
+ * keyboard-navigable list of block/format commands, and applies the chosen one
+ * by first removing the typed `/query`. Self-contained: it wires its own
+ * listeners to the editor element from context.
+ */
+export const SlashMenu = ({ className }: SlashMenuPropsType) => {
+  const { editor, showHeadings, showHistory, showMedia, showSlashMenu } = useEditorContext();
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
+  const triggerRef = useRef<SlashTriggerType | null>(null);
+  const itemRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
-export const SlashMenu = Extension.create<SlashMenuOptionsType>({
-  name: "slashMenu",
+  const items = useMemo(
+    () => (open ? filterItems(query, { showHeadings, showHistory, showMedia }) : []),
+    [open, query, showHeadings, showHistory, showMedia],
+  );
 
-  addOptions() {
-    return {
-      showHeadings: true,
-      showHistory: true,
-      showMedia: true,
-      suggestion: {
-        char: "/",
-        command: ({ editor, range, props }: { editor: Editor; range: Range; props: SlashMenuItemType }) => {
-          props.command({ editor, range });
-        },
-      },
+  const close = useCallback(() => {
+    setOpen(false);
+    setQuery("");
+    setActiveIndex(0);
+    triggerRef.current = null;
+    setPosition(null);
+  }, []);
+
+  const applyItem = useCallback(
+    (item: SlashMenuItemType | undefined) => {
+      if (!item) return;
+      const trigger = triggerRef.current;
+      if (trigger) {
+        const range = document.createRange();
+        try {
+          range.setStart(trigger.node, trigger.from);
+          range.setEnd(trigger.node, trigger.to);
+          const selection = window.getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          range.deleteContents();
+        } catch {
+          // The trigger range may be stale; fall through and run the command.
+        }
+      }
+      close();
+      void item.command(editor);
+    },
+    [close, editor],
+  );
+
+  // Detect / re-evaluate the trigger whenever the content or selection changes.
+  useEffect(() => {
+    const element = editor.element;
+    if (!element || !showSlashMenu) return;
+
+    const evaluate = () => {
+      const result = detectSlashTrigger(element);
+      if (!result) {
+        setOpen(false);
+        triggerRef.current = null;
+        setPosition(null);
+        return;
+      }
+      triggerRef.current = result.trigger;
+      setQuery(result.query);
+      setOpen(true);
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const rect = selection.getRangeAt(0).getBoundingClientRect();
+        setPosition({ top: rect.bottom + 4, left: rect.left });
+      }
     };
-  },
 
-  addProseMirrorPlugins() {
-    const { showHeadings, showHistory, showMedia } = this.options;
+    element.addEventListener("input", evaluate);
+    document.addEventListener("selectionchange", evaluate);
+    return () => {
+      element.removeEventListener("input", evaluate);
+      document.removeEventListener("selectionchange", evaluate);
+    };
+  }, [editor, showSlashMenu]);
 
-    return [
-      Suggestion({
-        pluginKey: new PluginKey("slashMenu"),
-        editor: this.editor,
-        ...this.options.suggestion,
-        items: ({ query }: { query: string }) => getSuggestionItems({ query, showHeadings, showHistory, showMedia }),
-        render: renderSuggestion,
-      }),
-    ];
-  },
-});
+  // Keyboard navigation while the menu is open (capture phase to pre-empt submit).
+  useEffect(() => {
+    const element = editor.element;
+    if (!element) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!open || items.length === 0) return;
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        event.stopPropagation();
+        setActiveIndex((index) => (index + 1) % items.length);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        event.stopPropagation();
+        setActiveIndex((index) => (index + items.length - 1) % items.length);
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        event.stopPropagation();
+        applyItem(items[activeIndex]);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        close();
+      }
+    };
+
+    element.addEventListener("keydown", onKeyDown, true);
+    return () => element.removeEventListener("keydown", onKeyDown, true);
+  }, [editor, open, items, activeIndex, applyItem, close]);
+
+  // Reset the highlighted item whenever the result set changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset on new results
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query]);
+
+  // Keep the highlighted item scrolled into view.
+  useEffect(() => {
+    itemRefs.current.get(activeIndex)?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
+  if (!open || !position || items.length === 0 || typeof document === "undefined") {
+    return null;
+  }
+
+  let flatIndex = -1;
+  const groups = items.reduce<Record<string, { item: SlashMenuItemType; index: number }[]>>((accumulator, item) => {
+    flatIndex += 1;
+    const list = accumulator[item.group] ?? [];
+    list.push({ item, index: flatIndex });
+    accumulator[item.group] = list;
+    return accumulator;
+  }, {});
+
+  return createPortal(
+    <div
+      data-slot="editor-slash-menu"
+      onMouseDown={(event) => event.preventDefault()}
+      style={{ top: position.top, left: position.left }}
+      className={cn(
+        "fixed z-50 rounded bg-popover p-1 text-popover-foreground shadow-none ring ring-ring-active",
+        className,
+      )}
+    >
+      <div className="max-h-80 min-w-64 overflow-y-auto">
+        {Object.entries(groups).map(([group, groupItems]) => (
+          <div key={group} className="flex flex-col gap-1 p-1">
+            <div className="bg-muted/50 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {group}
+            </div>
+            {groupItems.map(({ item, index }) => {
+              const Icon = item.icon;
+              return (
+                <Button
+                  key={item.title}
+                  ref={(node) => {
+                    if (node) {
+                      itemRefs.current.set(index, node);
+                    } else {
+                      itemRefs.current.delete(index);
+                    }
+                  }}
+                  variant="ghost"
+                  className={cn(
+                    "flex h-auto w-full items-center justify-start gap-3 rounded px-2 py-2",
+                    index === activeIndex && "bg-accent text-accent-foreground",
+                  )}
+                  onClick={() => applyItem(item)}
+                >
+                  <div className="flex size-8 items-center justify-center rounded bg-muted">
+                    <Icon className="size-4" />
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm font-medium">{item.title}</span>
+                    <span className="text-xs text-muted-foreground">{item.description}</span>
+                  </div>
+                </Button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>,
+    document.body,
+  );
+};
