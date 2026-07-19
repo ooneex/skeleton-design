@@ -7,7 +7,7 @@ export const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-transparent gap-0.5 border border-border",
+        default: "bg-transparent gap-0.5 ring ring-border",
         line: "gap-1 bg-transparent rounded-none",
       },
       size: {

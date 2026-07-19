@@ -49,7 +49,7 @@
   --destructive: oklch(0.453 0.198 15.2);
   --destructive-foreground: var(--light);
 
-  --border: oklch(0.906 0.026 296.7);
+  --border: var(--ring);
   --ring: oklch(0.8724 0.071 296.583);
   --ring-active: var(--primary-400);
 }

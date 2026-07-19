@@ -48,7 +48,7 @@
   --destructive: oklch(0.638 0.213 15.2);
   --destructive-foreground: var(--light);
 
-  --border: oklch(0.3092 0.048 297.1);
+  --border: var(--ring);
   --ring: oklch(0.3921 0.09 296.8);
   --ring-active: var(--primary-600);
 }
