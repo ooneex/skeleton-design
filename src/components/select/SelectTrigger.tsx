@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@/icons/outline/arrows/sm/ChevronDownIcon";
 import { cn } from "@/utils/cn";
 
 const selectTriggerVariants = cva(
-  "ring-input text-foreground data-placeholder:text-muted-foreground hover:ring-ring-active hover:ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 gap-1.5 rounded ring bg-transparent py-2 pr-2 pl-2.5 text-sm transition-[color,box-shadow] focus-visible:ring aria-invalid:ring *:data-[slot=select-value]:flex *:data-[slot=select-value]:flex-1 *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
+  "ring-border text-foreground data-placeholder:text-muted-foreground hover:ring-ring-active hover:ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 gap-1.5 rounded ring bg-transparent py-2 pr-2 pl-2.5 text-sm transition-[color,box-shadow] focus-visible:ring aria-invalid:ring *:data-[slot=select-value]:flex *:data-[slot=select-value]:flex-1 *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0 cursor-pointer",
   {
     variants: {
       size: {

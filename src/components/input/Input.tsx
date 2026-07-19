@@ -1,10 +1,9 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import { cva, type VariantProps } from "class-variance-authority";
-import { useState } from "react";
 import { cn } from "@/utils/cn";
 
 const inputVariants = cva(
-  "ring-ring-active ring focus-visible:ring-ring-active aria-invalid:ring-destructive/20 aria-invalid:ring-destructive rounded bg-transparent transition-[color,box-shadow] file:text-foreground placeholder:text-muted-foreground/60 w-full min-w-0 outline-none file:inline-flex file:ring-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 leading-relaxed",
+  "ring-ring hover:ring-ring-active hover:ring focus-visible:ring-ring-active aria-invalid:ring-destructive/20 rounded ring bg-transparent transition-[color,box-shadow] focus-visible:ring aria-invalid:ring file:text-foreground placeholder:text-muted-foreground/60 w-full min-w-0 outline-none file:inline-flex file:ring-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 leading-relaxed",
   {
     variants: {
       size: {
@@ -22,23 +21,12 @@ const inputVariants = cva(
 
 type InputPropsType = Omit<React.ComponentProps<"input">, "size"> & VariantProps<typeof inputVariants>;
 
-export const Input = ({ className, type, size = "sm", value, defaultValue, onChange, ...props }: InputPropsType) => {
-  const isControlled = value !== undefined;
-  const [uncontrolledHasValue, setUncontrolledHasValue] = useState(!!String(defaultValue ?? "").trim());
-
-  const hasValue = isControlled ? !!String(value).trim() : uncontrolledHasValue;
-
+export const Input = ({ className, type, size = "sm", ...props }: InputPropsType) => {
   return (
     <InputPrimitive
       type={type}
       data-slot="input"
-      value={value}
-      defaultValue={defaultValue}
-      onChange={(e) => {
-        if (!isControlled) setUncontrolledHasValue(!!e.target.value.trim());
-        onChange?.(e);
-      }}
-      className={cn(inputVariants({ size }), hasValue && "ring-ring-active", className)}
+      className={cn(inputVariants({ size }), className)}
       {...props}
     />
   );

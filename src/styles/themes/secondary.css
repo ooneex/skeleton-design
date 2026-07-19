@@ -49,7 +49,6 @@
   --destructive-foreground: var(--light);
 
   --border: oklch(0.906 0.026 35.27);
-  --input: var(--border);
   --ring: oklch(0.8572 0.102 35.27);
   --ring-active: var(--primary-400);
 }

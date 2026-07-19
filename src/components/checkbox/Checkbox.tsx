@@ -4,7 +4,7 @@ import { CheckIcon } from "@/icons/outline/ui-layout/sm/CheckIcon";
 import { cn } from "@/utils/cn";
 
 const checkboxVariants = cva(
-  "border-input data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 flex items-center justify-center rounded border group-has-disabled/field:opacity-50 focus-visible:ring-[3px] aria-invalid:ring-[3px] peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+  "border-border data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 flex items-center justify-center rounded border group-has-disabled/field:opacity-50 focus-visible:ring-[3px] aria-invalid:ring-[3px] peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: { size: { xs: "size-3.5", sm: "size-4", md: "size-[1.125rem]", lg: "size-5" } },
     defaultVariants: { size: "sm" },

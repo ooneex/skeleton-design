@@ -14,7 +14,7 @@ const BLOCK_TAGS = new Set(["P", "H1", "H2", "H3", "H4", "H5", "H6", "BLOCKQUOTE
 export const TASK_LIST_CLASS = "m-0 flex list-none flex-col gap-1 !p-0";
 export const TASK_ITEM_CLASS = "flex items-start gap-2";
 export const TASK_CHECKBOX_CLASS =
-  "mt-1 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-input text-[10px] leading-none select-none";
+  "mt-1 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-border text-[10px] leading-none select-none";
 export const TASK_CHECKBOX_CHECKED_CLASS = "border-primary bg-primary text-primary-foreground";
 export const YOUTUBE_CLASS = "my-4 aspect-video w-full max-w-md overflow-hidden rounded";
 

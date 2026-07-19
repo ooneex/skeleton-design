@@ -7,7 +7,7 @@ import { Input } from "@/components/input/Input";
 import { cn } from "@/utils/cn";
 
 const inputNumericContainerVariants = cva(
-  "flex items-center rounded border border-input transition-[color,box-shadow]",
+  "flex items-center rounded border border-border transition-[color,box-shadow]",
   {
     variants: {
       size: {
