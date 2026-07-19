@@ -4,7 +4,7 @@ import { CheckIcon } from "@/icons/outline/ui-layout/sm/CheckIcon";
 import { cn } from "@/utils/cn";
 
 const selectItemVariants = cva(
-  "focus:bg-accent text-foreground gap-2 rounded py-1.5 pr-8 pl-2 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 relative flex w-full cursor-pointer items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "focus:bg-accent text-foreground gap-2 rounded py-1 pr-8 pl-2 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 relative flex w-full cursor-pointer items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       size: {
@@ -45,9 +45,7 @@ export const SelectItem = ({ className, size = "sm", children, ...props }: Selec
       className={cn(selectItemVariants({ size }), className)}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex items-center flex-1 gap-2 min-w-0 truncate">
-        {children}
-      </SelectPrimitive.ItemText>
+      {children}
       <SelectPrimitive.ItemIndicator
         render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />}
       >
