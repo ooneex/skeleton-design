@@ -6,10 +6,10 @@ import { cn } from "@/utils/cn";
 const breadcrumbSeparatorVariants = cva("", {
   variants: {
     size: {
-      xs: "[&>svg]:size-3",
-      sm: "[&>svg]:size-3.5",
-      md: "[&>svg]:size-4",
-      lg: "[&>svg]:size-4.5",
+      xs: "[&>svg]:size-2.5",
+      sm: "[&>svg]:size-3",
+      md: "[&>svg]:size-3.5",
+      lg: "[&>svg]:size-4",
     },
   },
   defaultVariants: { size: "sm" },
