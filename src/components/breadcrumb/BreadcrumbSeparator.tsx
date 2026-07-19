@@ -1,17 +1,34 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { ChevronRightIcon } from "@/icons/outline/arrows/sm/ChevronRightIcon";
 import { cn } from "@/utils/cn";
 
-export const BreadcrumbSeparator = ({ children, className, ...props }: ComponentProps<"li">) => {
+const breadcrumbSeparatorVariants = cva("", {
+  variants: {
+    size: {
+      xs: "[&>svg]:size-3",
+      sm: "[&>svg]:size-3.5",
+      md: "[&>svg]:size-4",
+      lg: "[&>svg]:size-4.5",
+    },
+  },
+  defaultVariants: { size: "sm" },
+});
+
+type BreadcrumbSeparatorPropsType = ComponentProps<"li"> & VariantProps<typeof breadcrumbSeparatorVariants>;
+
+export const BreadcrumbSeparator = ({ children, className, size = "sm", ...props }: BreadcrumbSeparatorPropsType) => {
   return (
     <li
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      className={cn("[&>svg]:size-3.5", className)}
+      className={cn(breadcrumbSeparatorVariants({ size, className }))}
       {...props}
     >
       {children ?? <ChevronRightIcon />}
     </li>
   );
 };
+
+export { breadcrumbSeparatorVariants };
