@@ -19,7 +19,10 @@ export const ComboboxInput = ({
 }: ComboboxInputPropsType) => {
   return (
     <InputGroup className={cn("w-auto", className)}>
-      <ComboboxPrimitive.Input render={<InputGroup.Input disabled={disabled} />} {...props} />
+      <ComboboxPrimitive.Input
+        render={<InputGroup.Input disabled={disabled} className="hover:ring-0" />}
+        {...props}
+      />
       <InputGroup.Addon align="inline-end">
         {showTrigger && (
           <InputGroup.Button

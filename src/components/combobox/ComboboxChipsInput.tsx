@@ -5,7 +5,7 @@ export const ComboboxChipsInput = ({ className, ...props }: ComboboxPrimitive.In
   return (
     <ComboboxPrimitive.Input
       data-slot="combobox-chip-input"
-      className={cn("min-w-16 flex-1 outline-none", className)}
+      className={cn("min-w-16 flex-1 outline-none hover:ring-0", className)}
       {...props}
     />
   );
