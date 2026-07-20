@@ -1,5 +1,5 @@
-import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { Badge } from "@/components/badge/Badge";
+import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusDeleteBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusDeleteBadge = ({ children, ...props }: StatusBadgePropsType) 
     </Badge>
   );
 };
+
+StatusDeleteBadge.displayName = "StatusDeleteBadge";

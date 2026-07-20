@@ -41,3 +41,5 @@ export const InputGroupButton = ({
 };
 
 export { inputGroupButtonVariants };
+
+InputGroupButton.displayName = "InputGroup.Button";

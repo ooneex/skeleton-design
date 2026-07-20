@@ -1,5 +1,5 @@
-import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { Badge } from "@/components/badge/Badge";
+import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusFailedBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusFailedBadge = ({ children, ...props }: StatusBadgePropsType) 
     </Badge>
   );
 };
+
+StatusFailedBadge.displayName = "StatusFailedBadge";

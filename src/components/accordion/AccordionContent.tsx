@@ -19,3 +19,5 @@ export const AccordionContent = ({ className, children, ...props }: AccordionPri
     </AccordionPrimitive.Panel>
   );
 };
+
+AccordionContent.displayName = "Accordion.Content";

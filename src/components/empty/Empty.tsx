@@ -31,3 +31,5 @@ export const Empty = Object.assign(EmptyRoot, {
   Description: EmptyDescription,
   Content: EmptyContent,
 });
+
+EmptyRoot.displayName = "Empty";

@@ -10,3 +10,5 @@ export const TabsContent = ({ className, ...props }: TabsPrimitive.Panel.Props) 
     />
   );
 };
+
+TabsContent.displayName = "Tabs.Content";

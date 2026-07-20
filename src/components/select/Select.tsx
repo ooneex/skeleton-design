@@ -9,6 +9,7 @@ import { SelectValue } from "./SelectValue";
 
 /** Compound select component. Root is the base-ui primitive with parts attached. */
 export const Select = Object.assign(SelectPrimitive.Root, {
+  displayName: "Select",
   Group: SelectGroup,
   Value: SelectValue,
   Trigger: SelectTrigger,

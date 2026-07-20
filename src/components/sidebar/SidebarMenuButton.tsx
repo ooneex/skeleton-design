@@ -87,3 +87,4 @@ export const SidebarMenuButton = ({
     </Tooltip>
   );
 };
+SidebarMenuButton.displayName = "Sidebar.MenuButton";

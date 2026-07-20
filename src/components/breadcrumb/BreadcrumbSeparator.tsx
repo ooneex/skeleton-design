@@ -32,3 +32,5 @@ export const BreadcrumbSeparator = ({ children, className, size = "sm", ...props
 };
 
 export { breadcrumbSeparatorVariants };
+
+BreadcrumbSeparator.displayName = "Breadcrumb.Separator";

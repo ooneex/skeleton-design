@@ -20,3 +20,5 @@ export const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Prop
     </RadioPrimitive.Root>
   );
 };
+
+RadioGroupItem.displayName = "RadioGroup.Item";

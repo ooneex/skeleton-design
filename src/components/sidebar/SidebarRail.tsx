@@ -29,3 +29,4 @@ export const SidebarRail = ({ className, ...props }: SidebarRailPropsType) => {
     />
   );
 };
+SidebarRail.displayName = "Sidebar.Rail";

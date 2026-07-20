@@ -17,3 +17,5 @@ export const InputGroupInput = ({ className, size = "sm", ...props }: InputGroup
     />
   );
 };
+
+InputGroupInput.displayName = "InputGroup.Input";

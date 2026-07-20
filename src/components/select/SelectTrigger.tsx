@@ -52,3 +52,5 @@ export const SelectTrigger = ({ className, size = "sm", children, ...props }: Se
 };
 
 export { selectTriggerVariants };
+
+SelectTrigger.displayName = "Select.Trigger";

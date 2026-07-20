@@ -91,3 +91,5 @@ export const DropdownMenuSubContent = ({
     document.body,
   );
 };
+
+DropdownMenuSubContent.displayName = "DropdownMenu.SubContent";

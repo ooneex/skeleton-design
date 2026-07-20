@@ -16,3 +16,4 @@ export const SidebarMenuSub = ({ className, ...props }: SidebarMenuSubPropsType)
     />
   );
 };
+SidebarMenuSub.displayName = "Sidebar.MenuSub";

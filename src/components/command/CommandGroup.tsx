@@ -15,3 +15,4 @@ export const CommandGroup = ({ className, ...props }: ComponentProps<typeof Comm
     />
   );
 };
+CommandGroup.displayName = "Command.Group";

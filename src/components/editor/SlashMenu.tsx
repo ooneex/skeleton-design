@@ -451,3 +451,5 @@ export const SlashMenu = ({ className }: SlashMenuPropsType) => {
     document.body,
   );
 };
+
+SlashMenu.displayName = "SlashMenu";

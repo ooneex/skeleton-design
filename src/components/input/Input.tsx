@@ -22,14 +22,9 @@ const inputVariants = cva(
 type InputPropsType = Omit<React.ComponentProps<"input">, "size"> & VariantProps<typeof inputVariants>;
 
 export const Input = ({ className, type, size = "sm", ...props }: InputPropsType) => {
-  return (
-    <InputPrimitive
-      type={type}
-      data-slot="input"
-      className={cn(inputVariants({ size }), className)}
-      {...props}
-    />
-  );
+  return <InputPrimitive type={type} data-slot="input" className={cn(inputVariants({ size }), className)} {...props} />;
 };
 
 export { inputVariants };
+
+Input.displayName = "Input";

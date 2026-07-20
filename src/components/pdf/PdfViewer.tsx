@@ -215,3 +215,4 @@ export const PdfViewer = ({
     </div>
   );
 };
+PdfViewer.displayName = "PdfViewer";

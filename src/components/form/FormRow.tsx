@@ -25,3 +25,5 @@ export const FormRow = ({ icon, label, children, className }: FormRowPropsType) 
     </div>
   </div>
 );
+
+FormRow.displayName = "FormRow";

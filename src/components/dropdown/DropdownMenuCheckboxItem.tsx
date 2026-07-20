@@ -65,3 +65,5 @@ export const DropdownMenuCheckboxItem = ({
     </div>
   );
 };
+
+DropdownMenuCheckboxItem.displayName = "DropdownMenu.CheckboxItem";

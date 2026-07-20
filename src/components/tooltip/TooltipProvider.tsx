@@ -11,3 +11,5 @@ export const TooltipProvider = ({ delay = 0, children }: TooltipProviderPropsTyp
   const value = useMemo(() => ({ delay }), [delay]);
   return <TooltipProviderContext.Provider value={value}>{children}</TooltipProviderContext.Provider>;
 };
+
+TooltipProvider.displayName = "Tooltip.Provider";

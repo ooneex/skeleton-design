@@ -37,3 +37,5 @@ export const TabsList = ({
     />
   );
 };
+
+TabsList.displayName = "Tabs.List";

@@ -59,3 +59,5 @@ export const InputGroup = Object.assign(InputGroupRoot, {
 });
 
 export { inputGroupVariants };
+
+InputGroupRoot.displayName = "InputGroup";

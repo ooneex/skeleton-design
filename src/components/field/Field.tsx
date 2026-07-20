@@ -53,3 +53,5 @@ export const Field = Object.assign(FieldRoot, {
   Separator: FieldSeparator,
   Error: FieldError,
 });
+
+FieldRoot.displayName = "Field";

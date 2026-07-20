@@ -13,3 +13,4 @@ export const AlertDialogHeader = ({ className, ...props }: React.ComponentProps<
     />
   );
 };
+AlertDialogHeader.displayName = "AlertDialogHeader";

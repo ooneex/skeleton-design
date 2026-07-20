@@ -4,3 +4,4 @@ import { cn } from "@/utils/cn";
 export const ComboboxGroup = ({ className, ...props }: ComboboxPrimitive.Group.Props) => {
   return <ComboboxPrimitive.Group data-slot="combobox-group" className={cn(className)} {...props} />;
 };
+ComboboxGroup.displayName = "Combobox.Group";

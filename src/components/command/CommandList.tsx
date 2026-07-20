@@ -12,3 +12,4 @@ export const CommandList = ({ className, ...props }: ComponentProps<typeof Comma
     />
   );
 };
+CommandList.displayName = "Command.List";

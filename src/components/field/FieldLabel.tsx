@@ -26,3 +26,5 @@ export const FieldLabel = ({
     </Label>
   );
 };
+
+FieldLabel.displayName = "Field.Label";

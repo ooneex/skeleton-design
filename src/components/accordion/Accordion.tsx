@@ -29,3 +29,5 @@ export const Accordion = Object.assign(AccordionRoot, {
   Trigger: AccordionTrigger,
   Content: AccordionContent,
 });
+
+AccordionRoot.displayName = "Accordion";

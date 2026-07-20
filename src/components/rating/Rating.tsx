@@ -508,3 +508,4 @@ const Sparkles = ({ position, onComplete }: SparklesPropsType) => {
     </div>
   );
 };
+Rating.displayName = "Rating";

@@ -31,3 +31,4 @@ export const SidebarMenuSkeleton = ({ className, showIcon = false, ...props }: S
     </div>
   );
 };
+SidebarMenuSkeleton.displayName = "Sidebar.MenuSkeleton";

@@ -37,9 +37,7 @@ export type StatusPickerPropsType = {
  */
 export const StatusPicker = createDialog<StatusPickerPropsType, StatusType | null>(
   ({ call, value, statuses, title }) => {
-    const items = statuses
-      ? statusBadgeMap.filter(({ status }) => statuses.includes(status))
-      : statusBadgeMap;
+    const items = statuses ? statusBadgeMap.filter(({ status }) => statuses.includes(status)) : statusBadgeMap;
 
     return (
       <>

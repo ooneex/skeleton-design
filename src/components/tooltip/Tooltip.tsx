@@ -73,3 +73,5 @@ export const Tooltip = Object.assign(TooltipRoot, {
   Trigger: TooltipTrigger,
   Content: TooltipContent,
 });
+
+TooltipRoot.displayName = "Tooltip";

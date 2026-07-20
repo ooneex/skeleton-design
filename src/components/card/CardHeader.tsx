@@ -13,3 +13,5 @@ export const CardHeader = ({ className, ...props }: React.ComponentProps<"div">)
     />
   );
 };
+
+CardHeader.displayName = "Card.Header";

@@ -1,5 +1,5 @@
-import { CircleCheckIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
 import { Badge } from "@/components/badge/Badge";
+import { CircleCheckIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusApprovedBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusApprovedBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusApprovedBadge.displayName = "StatusApprovedBadge";

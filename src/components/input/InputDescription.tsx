@@ -28,3 +28,5 @@ export const InputDescription = ({
     />
   );
 };
+
+InputDescription.displayName = "InputDescription";

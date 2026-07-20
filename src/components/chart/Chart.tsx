@@ -13,6 +13,7 @@ import { ChartTooltipContent } from "./ChartTooltipContent";
  * `Chart.LegendContent`.
  */
 export const Chart = Object.assign(ChartContainer, {
+  displayName: "Chart",
   Style: ChartStyle,
   Tooltip: ChartTooltip,
   TooltipContent: ChartTooltipContent,

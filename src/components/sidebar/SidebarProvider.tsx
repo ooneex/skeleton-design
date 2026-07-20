@@ -105,3 +105,4 @@ export const SidebarProvider = ({
     </SidebarContext.Provider>
   );
 };
+SidebarProvider.displayName = "Sidebar.Provider";

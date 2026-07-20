@@ -25,3 +25,5 @@ export const Checkbox = ({ className, size = "sm", ...props }: CheckboxPropsType
   );
 };
 export { checkboxVariants };
+
+Checkbox.displayName = "Checkbox";

@@ -13,3 +13,4 @@ export const AlertDialogFooter = ({ className, ...props }: React.ComponentProps<
     />
   );
 };
+AlertDialogFooter.displayName = "AlertDialogFooter";

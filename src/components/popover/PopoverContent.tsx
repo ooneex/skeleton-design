@@ -95,3 +95,5 @@ export const PopoverContent = ({
     resolvedContainer ?? document.body,
   );
 };
+
+PopoverContent.displayName = "Popover.Content";

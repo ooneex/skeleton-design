@@ -26,3 +26,5 @@ export const Progress = Object.assign(ProgressRoot, {
   Label: ProgressLabel,
   Value: ProgressValue,
 });
+
+ProgressRoot.displayName = "Progress";

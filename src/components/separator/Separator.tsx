@@ -16,3 +16,5 @@ export const Separator = ({ className, orientation = "horizontal", ...props }: S
     />
   );
 };
+
+Separator.displayName = "Separator";

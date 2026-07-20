@@ -8,3 +8,5 @@ export const ProgressTrack = ({ className, ...props }: ProgressPrimitive.Track.P
     {...props}
   />
 );
+
+ProgressTrack.displayName = "Progress.Track";

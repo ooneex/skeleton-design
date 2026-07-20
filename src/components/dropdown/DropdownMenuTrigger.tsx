@@ -48,3 +48,5 @@ export const DropdownMenuTrigger = ({
     </button>
   );
 };
+
+DropdownMenuTrigger.displayName = "DropdownMenu.Trigger";

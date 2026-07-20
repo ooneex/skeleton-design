@@ -121,3 +121,5 @@ export const MultiStepForm = ({
     </MotionConfig>
   );
 };
+
+MultiStepForm.displayName = "MultiStepForm";

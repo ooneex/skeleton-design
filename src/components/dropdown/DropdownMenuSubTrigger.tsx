@@ -66,3 +66,5 @@ export const DropdownMenuSubTrigger = ({
     </div>
   );
 };
+
+DropdownMenuSubTrigger.displayName = "DropdownMenu.SubTrigger";

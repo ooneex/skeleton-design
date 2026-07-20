@@ -85,3 +85,4 @@ export const DialogContent = ({
     </DialogPortal>
   );
 };
+DialogContent.displayName = "DialogContent";

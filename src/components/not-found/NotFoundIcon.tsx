@@ -100,3 +100,4 @@ export const NotFoundIcon = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+NotFoundIcon.displayName = "NotFoundIcon";

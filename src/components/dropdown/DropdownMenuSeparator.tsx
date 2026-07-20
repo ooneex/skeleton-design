@@ -11,3 +11,5 @@ export const DropdownMenuSeparator = ({ className, ...props }: DropdownMenuSepar
     />
   );
 };
+
+DropdownMenuSeparator.displayName = "DropdownMenu.Separator";

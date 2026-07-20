@@ -53,3 +53,4 @@ export const ChartLegendContent = ({
     </div>
   );
 };
+ChartLegendContent.displayName = "Chart.LegendContent";

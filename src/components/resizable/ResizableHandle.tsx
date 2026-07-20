@@ -20,3 +20,5 @@ export const ResizableHandle = ({
     </ResizablePrimitiveSeparator>
   );
 };
+
+ResizableHandle.displayName = "ResizablePanelGroup.Handle";

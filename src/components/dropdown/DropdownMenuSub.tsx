@@ -44,3 +44,5 @@ export const DropdownMenuSub = ({
 
   return <DropdownMenuSubContext.Provider value={value}>{children}</DropdownMenuSubContext.Provider>;
 };
+
+DropdownMenuSub.displayName = "DropdownMenu.Sub";

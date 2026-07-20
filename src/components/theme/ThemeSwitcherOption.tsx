@@ -1,10 +1,10 @@
+import { cva } from "class-variance-authority";
+import type React from "react";
 import { Select } from "@/components/select";
 import { MonitorIcon } from "@/icons/outline/design-development/sm/MonitorIcon";
 import { SunIcon } from "@/icons/outline/energy-environment/sm/SunIcon";
 import { MoonIcon } from "@/icons/outline/weather/sm/MoonIcon";
 import { cn } from "@/utils/cn";
-import { cva } from "class-variance-authority";
-import type React from "react";
 
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
@@ -109,3 +109,4 @@ export const ThemeSwitcherOption = ({ value, size = "sm", children, ...props }: 
     </Select.Item>
   );
 };
+ThemeSwitcherOption.displayName = "ThemeSwitcherOption";

@@ -1,11 +1,11 @@
 import { SIMPLE_COLOR_NAMES, SIMPLE_COLORS, type SimpleColorType } from "@ooneex/color";
 import type { ReactNode } from "react";
-import { CircleMinusIcon as RemoveIcon } from "@/icons/outline/ui-layout/sm/CircleMinusIcon";
-import { CheckIcon } from "@/icons/outline/ui-layout/sm/CheckIcon";
 import { Button } from "@/components/button/Button";
 import { createDialog } from "@/components/dialog/Dialog";
 import { DialogHeader } from "@/components/dialog/DialogHeader";
 import { DialogTitle } from "@/components/dialog/DialogTitle";
+import { CheckIcon } from "@/icons/outline/ui-layout/sm/CheckIcon";
+import { CircleMinusIcon as RemoveIcon } from "@/icons/outline/ui-layout/sm/CircleMinusIcon";
 import { cn } from "@/utils/cn";
 
 export type SimpleColorPickerPropsType = {

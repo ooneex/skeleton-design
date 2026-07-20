@@ -48,3 +48,5 @@ export const InputOTPSlot = ({ index, size = "sm", className, ...props }: InputO
     </div>
   );
 };
+
+InputOTPSlot.displayName = "InputOTP.Slot";

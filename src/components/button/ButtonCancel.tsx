@@ -11,3 +11,5 @@ export const ButtonCancel = ({ children, ...props }: ButtonCancelPropsType) => {
     </Button>
   );
 };
+
+ButtonCancel.displayName = "ButtonCancel";

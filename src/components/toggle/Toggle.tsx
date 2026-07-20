@@ -31,3 +31,4 @@ export const Toggle = ({ className, variant = "default", size = "sm", ...props }
 };
 
 export { toggleVariants };
+Toggle.displayName = "Toggle";

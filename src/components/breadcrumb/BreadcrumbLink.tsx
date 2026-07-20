@@ -10,3 +10,5 @@ export const BreadcrumbLink = ({ className, render, ...props }: useRender.Compon
     state: { slot: "breadcrumb-link" },
   });
 };
+
+BreadcrumbLink.displayName = "Breadcrumb.Link";

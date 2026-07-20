@@ -1,5 +1,5 @@
-import { HourglassIcon } from "@/icons/outline/time/sm/HourglassIcon";
 import { Badge } from "@/components/badge/Badge";
+import { HourglassIcon } from "@/icons/outline/time/sm/HourglassIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusQueuedBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusQueuedBadge = ({ children, ...props }: StatusBadgePropsType) 
     </Badge>
   );
 };
+
+StatusQueuedBadge.displayName = "StatusQueuedBadge";

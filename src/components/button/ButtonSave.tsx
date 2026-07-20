@@ -11,3 +11,5 @@ export const ButtonSave = ({ children, ...props }: ButtonSavePropsType) => {
     </Button>
   );
 };
+
+ButtonSave.displayName = "ButtonSave";

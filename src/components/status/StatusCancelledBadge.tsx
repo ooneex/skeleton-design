@@ -1,5 +1,5 @@
-import { CircleMinusIcon } from "@/icons/outline/ui-layout/sm/CircleMinusIcon";
 import { Badge } from "@/components/badge/Badge";
+import { CircleMinusIcon } from "@/icons/outline/ui-layout/sm/CircleMinusIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusCancelledBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusCancelledBadge = ({ children, ...props }: StatusBadgePropsTyp
     </Badge>
   );
 };
+
+StatusCancelledBadge.displayName = "StatusCancelledBadge";

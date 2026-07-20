@@ -11,3 +11,5 @@ export const AvatarImage = ({ className, ...props }: AvatarImagePropsType) => {
     />
   );
 };
+
+AvatarImage.displayName = "Avatar.Image";

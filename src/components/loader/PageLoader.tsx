@@ -12,3 +12,4 @@ export const PageLoader = ({ className, ...props }: ComponentProps<"div">) => {
     </div>
   );
 };
+PageLoader.displayName = "PageLoader";

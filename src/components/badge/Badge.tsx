@@ -41,3 +41,5 @@ export const Badge = ({ className, variant = "default", size = "xs", render, ...
   });
 };
 export { badgeVariants };
+
+Badge.displayName = "Badge";

@@ -11,3 +11,5 @@ const RadioGroupRoot = ({ className, ...props }: RadioGroupPrimitive.Props) => {
  * Compose with `RadioGroup.Item` for each selectable option.
  */
 export const RadioGroup = Object.assign(RadioGroupRoot, { Item: RadioGroupItem });
+
+RadioGroupRoot.displayName = "RadioGroup";

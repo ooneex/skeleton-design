@@ -21,3 +21,5 @@ export const SelectScrollUpButton = ({
     </SelectPrimitive.ScrollUpArrow>
   );
 };
+
+SelectScrollUpButton.displayName = "SelectScrollUpButton";

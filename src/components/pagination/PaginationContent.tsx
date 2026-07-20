@@ -14,3 +14,5 @@ export const PaginationContent = ({ className, ...props }: React.ComponentProps<
     />
   );
 };
+
+PaginationContent.displayName = "Pagination.Content";

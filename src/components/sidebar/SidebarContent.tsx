@@ -16,3 +16,4 @@ export const SidebarContent = ({ className, ...props }: SidebarContentPropsType)
     />
   );
 };
+SidebarContent.displayName = "Sidebar.Content";

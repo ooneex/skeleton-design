@@ -19,3 +19,5 @@ export const EnglishFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+EnglishFlag.displayName = "EnglishFlag";

@@ -14,3 +14,5 @@ export const FieldGroup = ({ className, ...props }: React.ComponentProps<"div">)
     />
   );
 };
+
+FieldGroup.displayName = "Field.Group";

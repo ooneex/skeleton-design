@@ -36,3 +36,5 @@ export const Pagination = Object.assign(PaginationRoot, {
   Next: PaginationNext,
   Ellipsis: PaginationEllipsis,
 });
+
+PaginationRoot.displayName = "Pagination";

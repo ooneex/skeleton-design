@@ -1,7 +1,5 @@
 import { useDebouncedValue } from "@tanstack/react-pacer";
 import { type ReactNode, useMemo, useState } from "react";
-import { TagIcon } from "@/icons/outline/shopping/sm/TagIcon";
-import { PlusIcon as AddIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { Button } from "@/components/button/Button";
 import { Combobox } from "@/components/combobox/Combobox";
 import { ComboboxChip } from "@/components/combobox/ComboboxChip";
@@ -16,6 +14,8 @@ import { useComboboxAnchor } from "@/components/combobox/useComboboxAnchor";
 import { createDialog } from "@/components/dialog/Dialog";
 import { DialogHeader } from "@/components/dialog/DialogHeader";
 import { DialogTitle } from "@/components/dialog/DialogTitle";
+import { TagIcon } from "@/icons/outline/shopping/sm/TagIcon";
+import { PlusIcon as AddIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { cn } from "@/utils/cn";
 
 export type TagPickerPropsType = {

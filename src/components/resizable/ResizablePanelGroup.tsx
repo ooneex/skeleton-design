@@ -23,3 +23,5 @@ export const ResizablePanelGroup = Object.assign(ResizablePanelGroupRoot, {
   Panel: ResizablePanel,
   Handle: ResizableHandle,
 });
+
+ResizablePanelGroupRoot.displayName = "ResizablePanelGroup";

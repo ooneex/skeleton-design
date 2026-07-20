@@ -27,3 +27,5 @@ export const FieldSeparator = ({
     </div>
   );
 };
+
+FieldSeparator.displayName = "Field.Separator";

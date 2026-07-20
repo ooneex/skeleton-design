@@ -142,3 +142,4 @@ export const ChartTooltipContent = ({
     </div>
   );
 };
+ChartTooltipContent.displayName = "Chart.TooltipContent";

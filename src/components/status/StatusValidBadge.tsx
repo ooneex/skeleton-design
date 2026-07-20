@@ -1,5 +1,5 @@
-import { ShieldCheckIcon } from "@/icons/outline/security/sm/ShieldCheckIcon";
 import { Badge } from "@/components/badge/Badge";
+import { ShieldCheckIcon } from "@/icons/outline/security/sm/ShieldCheckIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusValidBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusValidBadge = ({ children, ...props }: StatusBadgePropsType) =
     </Badge>
   );
 };
+
+StatusValidBadge.displayName = "StatusValidBadge";

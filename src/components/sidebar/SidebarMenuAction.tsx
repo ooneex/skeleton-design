@@ -36,3 +36,4 @@ export const SidebarMenuAction = ({
     </button>
   );
 };
+SidebarMenuAction.displayName = "Sidebar.MenuAction";

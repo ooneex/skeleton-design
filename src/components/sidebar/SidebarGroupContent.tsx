@@ -13,3 +13,4 @@ export const SidebarGroupContent = ({ className, ...props }: SidebarGroupContent
     />
   );
 };
+SidebarGroupContent.displayName = "Sidebar.GroupContent";

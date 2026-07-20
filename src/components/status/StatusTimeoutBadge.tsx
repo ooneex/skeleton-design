@@ -1,5 +1,5 @@
-import { StopwatchIcon } from "@/icons/outline/time/sm/StopwatchIcon";
 import { Badge } from "@/components/badge/Badge";
+import { StopwatchIcon } from "@/icons/outline/time/sm/StopwatchIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusTimeoutBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusTimeoutBadge = ({ children, ...props }: StatusBadgePropsType)
     </Badge>
   );
 };
+
+StatusTimeoutBadge.displayName = "StatusTimeoutBadge";

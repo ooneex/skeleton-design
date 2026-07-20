@@ -53,3 +53,10 @@ export const TableCell = ({ className, ...props }: TableCellPropsType) => {
     />
   );
 };
+
+Table.displayName = "Table";
+TableHeader.displayName = "TableHeader";
+TableBody.displayName = "TableBody";
+TableRow.displayName = "TableRow";
+TableHead.displayName = "TableHead";
+TableCell.displayName = "TableCell";

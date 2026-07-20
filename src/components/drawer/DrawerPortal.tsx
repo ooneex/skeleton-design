@@ -9,3 +9,4 @@ type DrawerPortalPropsType = {
 export const DrawerPortal = ({ children, container }: DrawerPortalPropsType) => {
   return createPortal(children, container ?? document.body);
 };
+DrawerPortal.displayName = "DrawerPortal";

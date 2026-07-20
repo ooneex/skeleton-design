@@ -11,3 +11,5 @@ export const FieldContent = ({ className, ...props }: React.ComponentProps<"div"
     />
   );
 };
+
+FieldContent.displayName = "Field.Content";

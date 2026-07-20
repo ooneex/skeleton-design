@@ -13,3 +13,5 @@ export const EmptyDescription = ({ className, ...props }: React.ComponentProps<"
     />
   );
 };
+
+EmptyDescription.displayName = "Empty.Description";

@@ -67,3 +67,4 @@ export const LanguageSwitcherOption = ({ value, size = "sm", children, ...props 
     </Select.Item>
   );
 };
+LanguageSwitcherOption.displayName = "LanguageSwitcherOption";

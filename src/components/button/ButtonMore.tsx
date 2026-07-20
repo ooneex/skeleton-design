@@ -11,3 +11,5 @@ export const ButtonMore = ({ className, ...props }: ButtonMorePropsType) => {
     </Button>
   );
 };
+
+ButtonMore.displayName = "ButtonMore";

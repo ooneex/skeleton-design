@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
-import { LinkIcon as LinkUrlIcon } from "@/icons/outline/editing/sm/LinkIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { LinkIcon as LinkUrlIcon } from "@/icons/outline/editing/sm/LinkIcon";
 import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
@@ -34,3 +34,5 @@ export const InputUrl = ({
     </InputGroup>
   );
 };
+
+InputUrl.displayName = "InputUrl";

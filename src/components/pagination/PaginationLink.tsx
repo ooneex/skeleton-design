@@ -22,3 +22,5 @@ export const PaginationLink = ({ className, isActive, size, ...props }: Paginati
     />
   );
 };
+
+PaginationLink.displayName = "Pagination.Link";

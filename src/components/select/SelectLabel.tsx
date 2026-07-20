@@ -11,3 +11,5 @@ export const SelectLabel = ({ className, ...props }: SelectPrimitive.GroupLabel.
     />
   );
 };
+
+SelectLabel.displayName = "Select.Label";

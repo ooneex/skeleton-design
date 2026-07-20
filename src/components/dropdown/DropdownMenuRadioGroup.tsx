@@ -18,3 +18,5 @@ export const DropdownMenuRadioGroup = ({ value, onValueChange, ...props }: Dropd
     </DropdownMenuRadioGroupContext.Provider>
   );
 };
+
+DropdownMenuRadioGroup.displayName = "DropdownMenu.RadioGroup";

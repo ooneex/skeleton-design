@@ -42,3 +42,5 @@ export const InputGroupAddon = ({ className, align = "inline-start", ...props }:
 };
 
 export { inputGroupAddonVariants };
+
+InputGroupAddon.displayName = "InputGroup.Addon";

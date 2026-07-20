@@ -1,5 +1,5 @@
-import { CircleMediaStopIcon } from "@/icons/outline/photography-video/sm/CircleMediaStopIcon";
 import { Badge } from "@/components/badge/Badge";
+import { CircleMediaStopIcon } from "@/icons/outline/photography-video/sm/CircleMediaStopIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusInactiveBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusInactiveBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusInactiveBadge.displayName = "StatusInactiveBadge";

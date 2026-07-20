@@ -68,3 +68,5 @@ export const InputPrice = ({
     </InputGroup>
   );
 };
+
+InputPrice.displayName = "InputPrice";

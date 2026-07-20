@@ -25,3 +25,5 @@ export const TabsIndicator = ({ className, ...props }: TabsPrimitive.Indicator.P
     />
   );
 };
+
+TabsIndicator.displayName = "Tabs.Indicator";

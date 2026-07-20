@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
-import { CreditCardIcon as PaymentIcon } from "@/icons/outline/business-finance/sm/CreditCardIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { CreditCardIcon as PaymentIcon } from "@/icons/outline/business-finance/sm/CreditCardIcon";
 import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
@@ -21,10 +21,17 @@ export const InputCreditCard = ({
 }: InputVariantPropsType) => {
   return (
     <InputGroup size={size} className={groupClassName}>
-      <InputGroupInput placeholder={placeholder} size={size} className={cn("placeholder:text-sm", className)} {...props} />
+      <InputGroupInput
+        placeholder={placeholder}
+        size={size}
+        className={cn("placeholder:text-sm", className)}
+        {...props}
+      />
       <InputGroupAddon align="inline-start">
         <PaymentIcon className={iconClassName} />
       </InputGroupAddon>
     </InputGroup>
   );
 };
+
+InputCreditCard.displayName = "InputCreditCard";

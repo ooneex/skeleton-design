@@ -13,3 +13,4 @@ export const SidebarSeparator = ({ className, ...props }: SidebarSeparatorPropsT
     />
   );
 };
+SidebarSeparator.displayName = "Sidebar.Separator";

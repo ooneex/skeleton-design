@@ -14,3 +14,5 @@ export const FieldSet = ({ className, ...props }: React.ComponentProps<"fieldset
     />
   );
 };
+
+FieldSet.displayName = "Field.Set";

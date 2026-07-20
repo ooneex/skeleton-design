@@ -6,3 +6,4 @@ export const SheetTitle = ({ className, ...props }: SheetPrimitive.Title.Props) 
     <SheetPrimitive.Title data-slot="sheet-title" className={cn("text-foreground font-medium", className)} {...props} />
   );
 };
+SheetTitle.displayName = "SheetTitle";

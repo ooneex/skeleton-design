@@ -16,3 +16,4 @@ export const SidebarInput = ({ className, ...props }: SidebarInputPropsType) => 
     />
   );
 };
+SidebarInput.displayName = "Sidebar.Input";

@@ -22,3 +22,4 @@ export const ComboboxItem = ({ className, children, ...props }: ComboboxPrimitiv
     </ComboboxPrimitive.Item>
   );
 };
+ComboboxItem.displayName = "Combobox.Item";

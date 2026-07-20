@@ -35,3 +35,5 @@ export const PopoverTrigger = ({ render, children, ref, onClick, ...props }: Pop
     </button>
   );
 };
+
+PopoverTrigger.displayName = "Popover.Trigger";

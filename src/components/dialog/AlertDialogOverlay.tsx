@@ -17,3 +17,4 @@ export const AlertDialogOverlay = ({ className, open = true, ...props }: AlertDi
     />
   );
 };
+AlertDialogOverlay.displayName = "AlertDialogOverlay";

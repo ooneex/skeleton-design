@@ -11,3 +11,5 @@ export const ButtonBack = ({ children, ...props }: ButtonBackPropsType) => {
     </Button>
   );
 };
+
+ButtonBack.displayName = "ButtonBack";

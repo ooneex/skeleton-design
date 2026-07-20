@@ -12,3 +12,4 @@ export const ImageZoom = ({ src, alt, className }: ImageZoomPropsType) => {
     </div>
   );
 };
+ImageZoom.displayName = "ImageZoom";

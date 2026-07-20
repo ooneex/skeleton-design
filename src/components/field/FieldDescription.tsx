@@ -16,3 +16,5 @@ export const FieldDescription = ({ className, ...props }: React.ComponentProps<"
     />
   );
 };
+
+FieldDescription.displayName = "Field.Description";

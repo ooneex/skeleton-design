@@ -1,6 +1,6 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { InputGroup } from "@/components/input/InputGroup";
+import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { cn } from "@/utils/cn";
 
 export const ComboboxClear = ({ className, ...props }: ComboboxPrimitive.Clear.Props) => {
@@ -15,3 +15,4 @@ export const ComboboxClear = ({ className, ...props }: ComboboxPrimitive.Clear.P
     </ComboboxPrimitive.Clear>
   );
 };
+ComboboxClear.displayName = "Combobox.Clear";

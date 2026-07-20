@@ -48,3 +48,10 @@ type H6PropsType = ComponentProps<"h6">;
 export const H6 = ({ className, ...props }: H6PropsType) => {
   return <h6 className={cn("scroll-m-20 text-base font-medium leading-[1.4]", className)} {...props} />;
 };
+
+H1.displayName = "H1";
+H2.displayName = "H2";
+H3.displayName = "H3";
+H4.displayName = "H4";
+H5.displayName = "H5";
+H6.displayName = "H6";

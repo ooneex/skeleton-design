@@ -1,5 +1,5 @@
-import { CalendarIcon } from "@/icons/outline/time/sm/CalendarIcon";
 import { Badge } from "@/components/badge/Badge";
+import { CalendarIcon } from "@/icons/outline/time/sm/CalendarIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusScheduledBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusScheduledBadge = ({ children, ...props }: StatusBadgePropsTyp
     </Badge>
   );
 };
+
+StatusScheduledBadge.displayName = "StatusScheduledBadge";

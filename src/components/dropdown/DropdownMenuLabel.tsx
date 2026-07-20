@@ -14,3 +14,5 @@ export const DropdownMenuLabel = ({ className, inset, ...props }: DropdownMenuLa
     />
   );
 };
+
+DropdownMenuLabel.displayName = "DropdownMenu.Label";

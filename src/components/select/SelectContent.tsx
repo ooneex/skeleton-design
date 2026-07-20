@@ -51,3 +51,5 @@ export const SelectContent = ({
     </SelectPrimitive.Portal>
   );
 };
+
+SelectContent.displayName = "Select.Content";

@@ -1,5 +1,5 @@
-import { CheckboxCheckedIcon } from "@/icons/outline/ui-layout/sm/CheckboxCheckedIcon";
 import { Badge } from "@/components/badge/Badge";
+import { CheckboxCheckedIcon } from "@/icons/outline/ui-layout/sm/CheckboxCheckedIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusReviewedBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusReviewedBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusReviewedBadge.displayName = "StatusReviewedBadge";

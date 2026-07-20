@@ -128,3 +128,4 @@ export const ThemeSwitcher = ({
     </Select>
   );
 };
+ThemeSwitcher.displayName = "ThemeSwitcher";

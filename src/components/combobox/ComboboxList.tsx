@@ -13,3 +13,4 @@ export const ComboboxList = ({ className, ...props }: ComboboxPrimitive.List.Pro
     />
   );
 };
+ComboboxList.displayName = "Combobox.List";

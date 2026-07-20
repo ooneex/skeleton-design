@@ -1,7 +1,7 @@
 import type * as React from "react";
 import { useContext } from "react";
-import { ChevronLeftIcon } from "@/icons/outline/arrows/sm/ChevronLeftIcon";
 import { Button } from "@/components/button/Button";
+import { ChevronLeftIcon } from "@/icons/outline/arrows/sm/ChevronLeftIcon";
 import { cn } from "@/utils/cn";
 import { linkIconSizeVariants, PaginationContext } from "./paginationContext";
 
@@ -23,3 +23,5 @@ export const PaginationPrevious = ({ className, ...props }: React.ComponentProps
     />
   );
 };
+
+PaginationPrevious.displayName = "Pagination.Previous";

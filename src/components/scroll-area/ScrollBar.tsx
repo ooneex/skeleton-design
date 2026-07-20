@@ -17,3 +17,5 @@ export const ScrollBar = ({ className, orientation = "vertical", ...props }: Scr
     </ScrollAreaPrimitive.Scrollbar>
   );
 };
+
+ScrollBar.displayName = "ScrollArea.Bar";

@@ -10,3 +10,4 @@ export const ComboboxChipsInput = ({ className, ...props }: ComboboxPrimitive.In
     />
   );
 };
+ComboboxChipsInput.displayName = "Combobox.ChipsInput";

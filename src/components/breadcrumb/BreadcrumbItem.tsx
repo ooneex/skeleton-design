@@ -21,3 +21,5 @@ export const BreadcrumbItem = ({ className, size = "sm", ...props }: BreadcrumbI
 };
 
 export { breadcrumbItemVariants };
+
+BreadcrumbItem.displayName = "Breadcrumb.Item";

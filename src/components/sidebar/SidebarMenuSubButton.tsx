@@ -34,3 +34,4 @@ export const SidebarMenuSubButton = ({
   }
   return <a {...buttonProps}>{children}</a>;
 };
+SidebarMenuSubButton.displayName = "Sidebar.MenuSubButton";

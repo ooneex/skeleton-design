@@ -6,3 +6,5 @@ export const EmptyHeader = ({ className, ...props }: React.ComponentProps<"div">
     <div data-slot="empty-header" className={cn("gap-2 flex max-w-sm flex-col items-center", className)} {...props} />
   );
 };
+
+EmptyHeader.displayName = "Empty.Header";

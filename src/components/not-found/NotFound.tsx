@@ -32,3 +32,4 @@ export const NotFound = ({ className, ...props }: ComponentProps<"div">) => {
     </div>
   );
 };
+NotFound.displayName = "NotFound";

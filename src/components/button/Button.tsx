@@ -39,3 +39,5 @@ type ButtonPropsType = ButtonPrimitive.Props & VariantProps<typeof buttonVariant
 export const Button = ({ className, variant = "default", size = "sm", ...props }: ButtonPropsType) => {
   return <ButtonPrimitive data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 };
+
+Button.displayName = "Button";

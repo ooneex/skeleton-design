@@ -43,3 +43,5 @@ export const Label = ({ className, size = "xs", required, children, ...props }: 
 };
 
 export { labelVariants };
+
+Label.displayName = "Label";

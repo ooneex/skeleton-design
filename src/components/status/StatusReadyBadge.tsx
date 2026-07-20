@@ -1,5 +1,5 @@
-import { BadgeCheckIcon } from "@/icons/outline/ui-layout/sm/BadgeCheckIcon";
 import { Badge } from "@/components/badge/Badge";
+import { BadgeCheckIcon } from "@/icons/outline/ui-layout/sm/BadgeCheckIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusReadyBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusReadyBadge = ({ children, ...props }: StatusBadgePropsType) =
     </Badge>
   );
 };
+
+StatusReadyBadge.displayName = "StatusReadyBadge";

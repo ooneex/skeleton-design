@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { useState } from "react";
-import { MinusIcon } from "@/icons/outline/ui-layout/sm/MinusIcon";
-import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { Button } from "@/components/button/Button";
 import { Input } from "@/components/input/Input";
+import { MinusIcon } from "@/icons/outline/ui-layout/sm/MinusIcon";
+import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { cn } from "@/utils/cn";
 
 const inputNumericContainerVariants = cva(
@@ -174,3 +174,5 @@ export const InputNumeric = ({
     </div>
   );
 };
+
+InputNumeric.displayName = "InputNumeric";

@@ -15,3 +15,4 @@ export const AlertDialogTitle = ({ className, id, ...props }: React.ComponentPro
     />
   );
 };
+AlertDialogTitle.displayName = "AlertDialogTitle";

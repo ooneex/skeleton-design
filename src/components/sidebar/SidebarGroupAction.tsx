@@ -27,3 +27,4 @@ export const SidebarGroupAction = ({ className, render, children, ...props }: Si
     </button>
   );
 };
+SidebarGroupAction.displayName = "Sidebar.GroupAction";

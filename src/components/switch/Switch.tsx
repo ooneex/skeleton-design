@@ -52,3 +52,5 @@ export const Switch = ({ className, size = "md", ...props }: SwitchPropsType) =>
 };
 
 export { switchVariants };
+
+Switch.displayName = "Switch";

@@ -11,3 +11,5 @@ export const InlineCode = ({ className, ...props }: InlineCodePropsType) => {
     />
   );
 };
+
+InlineCode.displayName = "InlineCode";

@@ -12,3 +12,5 @@ export const PopoverDescription = ({ className, id, ...props }: React.ComponentP
     />
   );
 };
+
+PopoverDescription.displayName = "Popover.Description";

@@ -13,3 +13,4 @@ export const ComboboxEmpty = ({ className, ...props }: ComboboxPrimitive.Empty.P
     />
   );
 };
+ComboboxEmpty.displayName = "Combobox.Empty";

@@ -184,3 +184,5 @@ export const Editor = Object.assign(EditorRoot, {
   Undo: EditorUndo,
   Redo: EditorRedo,
 });
+
+EditorRoot.displayName = "Editor";

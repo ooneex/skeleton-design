@@ -10,3 +10,4 @@ export const ComboboxLabel = ({ className, ...props }: ComboboxPrimitive.GroupLa
     />
   );
 };
+ComboboxLabel.displayName = "Combobox.Label";

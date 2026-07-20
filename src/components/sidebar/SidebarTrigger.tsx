@@ -35,3 +35,4 @@ export const SidebarTrigger = ({ className, onClick, ...props }: SidebarTriggerP
     </Button>
   );
 };
+SidebarTrigger.displayName = "Sidebar.Trigger";

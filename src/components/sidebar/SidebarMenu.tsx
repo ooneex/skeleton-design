@@ -13,3 +13,4 @@ export const SidebarMenu = ({ className, ...props }: SidebarMenuPropsType) => {
     />
   );
 };
+SidebarMenu.displayName = "Sidebar.Menu";

@@ -44,3 +44,5 @@ export const FieldError = ({
     </div>
   );
 };
+
+FieldError.displayName = "Field.Error";

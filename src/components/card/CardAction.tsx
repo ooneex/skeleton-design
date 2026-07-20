@@ -10,3 +10,5 @@ export const CardAction = ({ className, ...props }: React.ComponentProps<"div">)
     />
   );
 };
+
+CardAction.displayName = "Card.Action";

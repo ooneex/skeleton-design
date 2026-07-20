@@ -96,23 +96,26 @@ export type SheetPropsType = {
  * per call. For sheets that return a value or hold internal form state, use
  * {@link createSheet} instead.
  */
-export const Sheet = createCallable<SheetPropsType, void>(({ call, title, description, children, side = "right" }) => (
-  <SheetPrimitive.Root
-    data-slot="sheet"
-    open={!call.ended}
-    onOpenChange={(open) => {
-      if (!open) call.end();
-    }}
-  >
-    <SheetContent side={side}>
-      {title || description ? (
-        <SheetHeader>
-          {title ? <SheetTitle>{title}</SheetTitle> : null}
-          {description ? <SheetDescription>{description}</SheetDescription> : null}
-        </SheetHeader>
-      ) : null}
-      {children}
-    </SheetContent>
-  </SheetPrimitive.Root>
-), UNMOUNTING_DELAY);
+export const Sheet = createCallable<SheetPropsType, void>(
+  ({ call, title, description, children, side = "right" }) => (
+    <SheetPrimitive.Root
+      data-slot="sheet"
+      open={!call.ended}
+      onOpenChange={(open) => {
+        if (!open) call.end();
+      }}
+    >
+      <SheetContent side={side}>
+        {title || description ? (
+          <SheetHeader>
+            {title ? <SheetTitle>{title}</SheetTitle> : null}
+            {description ? <SheetDescription>{description}</SheetDescription> : null}
+          </SheetHeader>
+        ) : null}
+        {children}
+      </SheetContent>
+    </SheetPrimitive.Root>
+  ),
+  UNMOUNTING_DELAY,
+);
 Sheet.displayName = "Sheet";

@@ -10,3 +10,5 @@ export const EmptyContent = ({ className, ...props }: React.ComponentProps<"div"
     />
   );
 };
+
+EmptyContent.displayName = "Empty.Content";

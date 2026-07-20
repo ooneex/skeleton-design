@@ -21,3 +21,5 @@ export const SelectScrollDownButton = ({
     </SelectPrimitive.ScrollDownArrow>
   );
 };
+
+SelectScrollDownButton.displayName = "SelectScrollDownButton";

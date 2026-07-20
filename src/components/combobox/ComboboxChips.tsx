@@ -17,3 +17,4 @@ export const ComboboxChips = ({ className, ...props }: ComboboxChipsPropsType) =
     />
   );
 };
+ComboboxChips.displayName = "Combobox.Chips";

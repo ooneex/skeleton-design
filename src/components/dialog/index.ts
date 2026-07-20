@@ -1,2 +1,2 @@
-export { alert, AlertDialog, type AlertDialogPropsType, confirm } from "./AlertDialog";
+export { AlertDialog, type AlertDialogPropsType, alert, confirm } from "./AlertDialog";
 export { Dialog } from "./Dialog";

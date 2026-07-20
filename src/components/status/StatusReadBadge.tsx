@@ -1,5 +1,5 @@
-import { EnvelopeOpenIcon } from "@/icons/outline/communication/sm/EnvelopeOpenIcon";
 import { Badge } from "@/components/badge/Badge";
+import { EnvelopeOpenIcon } from "@/icons/outline/communication/sm/EnvelopeOpenIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusReadBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusReadBadge = ({ children, ...props }: StatusBadgePropsType) =>
     </Badge>
   );
 };
+
+StatusReadBadge.displayName = "StatusReadBadge";

@@ -16,3 +16,4 @@ export const SidebarMenuBadge = ({ className, ...props }: SidebarMenuBadgePropsT
     />
   );
 };
+SidebarMenuBadge.displayName = "Sidebar.MenuBadge";

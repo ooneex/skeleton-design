@@ -30,3 +30,9 @@ type MutedPropsType = ComponentProps<"p">;
 export const Muted = ({ className, ...props }: MutedPropsType) => {
   return <p className={cn("text-muted-foreground", className)} {...props} />;
 };
+
+P.displayName = "P";
+Lead.displayName = "Lead";
+Large.displayName = "Large";
+Small.displayName = "Small";
+Muted.displayName = "Muted";

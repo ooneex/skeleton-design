@@ -14,3 +14,5 @@ export const FieldTitle = ({ className, ...props }: React.ComponentProps<"div">)
     />
   );
 };
+
+FieldTitle.displayName = "Field.Title";

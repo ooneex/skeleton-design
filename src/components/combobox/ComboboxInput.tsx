@@ -37,3 +37,4 @@ export const ComboboxInput = ({
     </InputGroup>
   );
 };
+ComboboxInput.displayName = "Combobox.Input";

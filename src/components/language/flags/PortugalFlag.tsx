@@ -12,3 +12,5 @@ export const PortugalFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+PortugalFlag.displayName = "PortugalFlag";

@@ -69,3 +69,4 @@ export const VideoPlayer = ({ src, youtubeId, title, autoPlay = false, className
     </div>
   );
 };
+VideoPlayer.displayName = "VideoPlayer";

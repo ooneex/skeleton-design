@@ -13,3 +13,4 @@ export const SheetOverlay = ({ className, ...props }: SheetPrimitive.Backdrop.Pr
     />
   );
 };
+SheetOverlay.displayName = "SheetOverlay";

@@ -1,5 +1,5 @@
-import { ArchiveIcon } from "@/icons/outline/files-folders/sm/ArchiveIcon";
 import { Badge } from "@/components/badge/Badge";
+import { ArchiveIcon } from "@/icons/outline/files-folders/sm/ArchiveIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusArchivedBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusArchivedBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusArchivedBadge.displayName = "StatusArchivedBadge";

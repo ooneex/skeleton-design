@@ -11,3 +11,5 @@ export const SelectValue = ({ className, ...props }: SelectPrimitive.Value.Props
     />
   );
 };
+
+SelectValue.displayName = "Select.Value";

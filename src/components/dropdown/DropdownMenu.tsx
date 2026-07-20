@@ -80,3 +80,5 @@ export const DropdownMenu = Object.assign(DropdownMenuRoot, {
   Separator: DropdownMenuSeparator,
   Shortcut: DropdownMenuShortcut,
 });
+
+DropdownMenuRoot.displayName = "DropdownMenu";

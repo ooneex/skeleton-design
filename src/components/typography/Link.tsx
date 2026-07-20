@@ -21,3 +21,5 @@ type LinkPropsType = ComponentProps<"a"> & VariantProps<typeof linkVariants>;
 export const Link = ({ className, size = "sm", ...props }: LinkPropsType) => {
   return <a className={cn(linkVariants({ size, className }))} {...props} />;
 };
+
+Link.displayName = "Link";

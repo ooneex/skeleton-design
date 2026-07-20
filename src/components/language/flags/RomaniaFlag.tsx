@@ -12,3 +12,5 @@ export const RomaniaFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+RomaniaFlag.displayName = "RomaniaFlag";

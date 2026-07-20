@@ -10,3 +10,5 @@ export const CardTitle = ({ className, ...props }: React.ComponentProps<"div">) 
     />
   );
 };
+
+CardTitle.displayName = "Card.Title";

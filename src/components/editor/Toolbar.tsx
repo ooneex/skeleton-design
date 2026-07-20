@@ -370,3 +370,24 @@ export const EditorToolbar = ({ className, children }: EditorToolbarPropsType) =
     </div>
   );
 };
+
+EditorBold.displayName = "EditorBold";
+EditorItalic.displayName = "EditorItalic";
+EditorUnderline.displayName = "EditorUnderline";
+EditorStrike.displayName = "EditorStrike";
+EditorSubscript.displayName = "EditorSubscript";
+EditorSuperscript.displayName = "EditorSuperscript";
+EditorParagraph.displayName = "EditorParagraph";
+EditorBlockquote.displayName = "EditorBlockquote";
+EditorHeading.displayName = "EditorHeading";
+EditorBulletList.displayName = "EditorBulletList";
+EditorOrderedList.displayName = "EditorOrderedList";
+EditorTaskList.displayName = "EditorTaskList";
+EditorAlign.displayName = "EditorAlign";
+EditorColor.displayName = "EditorColor";
+EditorHighlight.displayName = "EditorHighlight";
+EditorLink.displayName = "EditorLink";
+EditorYouTube.displayName = "EditorYouTube";
+EditorUndo.displayName = "EditorUndo";
+EditorRedo.displayName = "EditorRedo";
+EditorToolbar.displayName = "EditorToolbar";

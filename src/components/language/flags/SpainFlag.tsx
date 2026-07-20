@@ -16,3 +16,5 @@ export const SpainFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+SpainFlag.displayName = "SpainFlag";

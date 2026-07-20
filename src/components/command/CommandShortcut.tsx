@@ -14,3 +14,4 @@ export const CommandShortcut = ({ className, ...props }: ComponentProps<"span">)
     />
   );
 };
+CommandShortcut.displayName = "Command.Shortcut";

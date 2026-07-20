@@ -1,7 +1,7 @@
 import { Command as CommandPrimitive } from "cmdk";
 import type { ComponentProps } from "react";
-import { MagnifierIcon } from "@/icons/outline/filtering-sorting/sm/MagnifierIcon";
 import { InputGroup } from "@/components/input/InputGroup";
+import { MagnifierIcon } from "@/icons/outline/filtering-sorting/sm/MagnifierIcon";
 import { cn } from "@/utils/cn";
 
 /** Search field for the command palette with an inline magnifier addon. */
@@ -24,3 +24,4 @@ export const CommandInput = ({ className, ...props }: ComponentProps<typeof Comm
     </div>
   );
 };
+CommandInput.displayName = "Command.Input";

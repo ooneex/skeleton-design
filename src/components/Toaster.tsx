@@ -1,12 +1,12 @@
 import { type ReactNode, useEffect } from "react";
 import { createCallable } from "react-call";
+import { Button } from "@/components/button/Button";
 import { SpinnerLoaderIcon } from "@/icons/outline/loaders/sm/SpinnerLoaderIcon";
 import { CircleInfoIcon } from "@/icons/outline/travel/sm/CircleInfoIcon";
 import { CircleCheckIcon } from "@/icons/outline/ui-layout/sm/CircleCheckIcon";
 import { CircleXmarkIcon } from "@/icons/outline/ui-layout/sm/CircleXmarkIcon";
 import { TriangleWarningIcon } from "@/icons/outline/ui-layout/sm/TriangleWarningIcon";
 import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
-import { Button } from "@/components/button/Button";
 import { cn } from "@/utils/cn";
 import "./toaster.css";
 
@@ -121,8 +121,10 @@ Toast.displayName = "Toaster";
 /** Handle returned by every toaster call — pass it to `toaster.dismiss(handle)`. */
 export type ToastHandleType = Promise<void>;
 
-const emit = (state: ToastStateType) => (title: string, options: ToastOptionsType = {}): ToastHandleType =>
-  Toast.call({ state, title, description: options.description, duration: options.duration });
+const emit =
+  (state: ToastStateType) =>
+  (title: string, options: ToastOptionsType = {}): ToastHandleType =>
+    Toast.call({ state, title, description: options.description, duration: options.duration });
 
 type PromiseMessagesType<T> = {
   loading: string;

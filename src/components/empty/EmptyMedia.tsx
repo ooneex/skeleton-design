@@ -29,3 +29,5 @@ export const EmptyMedia = ({
     />
   );
 };
+
+EmptyMedia.displayName = "Empty.Media";

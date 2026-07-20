@@ -65,3 +65,5 @@ export const TooltipContent = ({
     document.body,
   );
 };
+
+TooltipContent.displayName = "Tooltip.Content";

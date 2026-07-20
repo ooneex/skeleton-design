@@ -1,5 +1,5 @@
-import { MediaPlayIcon } from "@/icons/outline/photography-video/sm/MediaPlayIcon";
 import { Badge } from "@/components/badge/Badge";
+import { MediaPlayIcon } from "@/icons/outline/photography-video/sm/MediaPlayIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusEnabledBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusEnabledBadge = ({ children, ...props }: StatusBadgePropsType)
     </Badge>
   );
 };
+
+StatusEnabledBadge.displayName = "StatusEnabledBadge";

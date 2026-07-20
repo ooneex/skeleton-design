@@ -16,3 +16,5 @@ export const FieldLegend = ({
     />
   );
 };
+
+FieldLegend.displayName = "Field.Legend";

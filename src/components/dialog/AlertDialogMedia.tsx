@@ -13,3 +13,4 @@ export const AlertDialogMedia = ({ className, ...props }: React.ComponentProps<"
     />
   );
 };
+AlertDialogMedia.displayName = "AlertDialogMedia";

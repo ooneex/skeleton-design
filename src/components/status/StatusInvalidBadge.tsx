@@ -1,5 +1,5 @@
-import { TriangleWarningIcon } from "@/icons/outline/ui-layout/sm/TriangleWarningIcon";
 import { Badge } from "@/components/badge/Badge";
+import { TriangleWarningIcon } from "@/icons/outline/ui-layout/sm/TriangleWarningIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusInvalidBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusInvalidBadge = ({ children, ...props }: StatusBadgePropsType)
     </Badge>
   );
 };
+
+StatusInvalidBadge.displayName = "StatusInvalidBadge";

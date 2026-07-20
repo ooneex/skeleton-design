@@ -37,3 +37,5 @@ export const Popover = Object.assign(PopoverRoot, {
   Title: PopoverTitle,
   Description: PopoverDescription,
 });
+
+PopoverRoot.displayName = "Popover";

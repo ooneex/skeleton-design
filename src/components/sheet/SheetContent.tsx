@@ -1,6 +1,6 @@
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
-import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { Button } from "@/components/button/Button";
+import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { cn } from "@/utils/cn";
 import { SheetOverlay } from "./SheetOverlay";
 import { SheetPortal } from "./SheetPortal";
@@ -43,3 +43,4 @@ export const SheetContent = ({
     </SheetPortal>
   );
 };
+SheetContent.displayName = "SheetContent";

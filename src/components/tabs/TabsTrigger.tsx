@@ -21,3 +21,5 @@ export const TabsTrigger = ({ className, ...props }: TabsPrimitive.Tab.Props) =>
     />
   );
 };
+
+TabsTrigger.displayName = "Tabs.Trigger";

@@ -10,3 +10,4 @@ export const ComboboxSeparator = ({ className, ...props }: ComboboxPrimitive.Sep
     />
   );
 };
+ComboboxSeparator.displayName = "Combobox.Separator";

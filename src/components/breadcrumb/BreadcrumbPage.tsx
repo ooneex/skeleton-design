@@ -11,3 +11,5 @@ export const BreadcrumbPage = ({ className, ...props }: ComponentProps<"span">) 
     />
   );
 };
+
+BreadcrumbPage.displayName = "Breadcrumb.Page";

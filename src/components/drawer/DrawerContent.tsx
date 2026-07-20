@@ -79,3 +79,4 @@ export const DrawerContent = ({
     </DrawerPortal>
   );
 };
+DrawerContent.displayName = "DrawerContent";

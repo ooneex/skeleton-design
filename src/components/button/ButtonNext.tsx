@@ -11,3 +11,5 @@ export const ButtonNext = ({ children, ...props }: ButtonNextPropsType) => {
     </Button>
   );
 };
+
+ButtonNext.displayName = "ButtonNext";

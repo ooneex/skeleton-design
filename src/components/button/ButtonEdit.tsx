@@ -11,3 +11,5 @@ export const ButtonEdit = ({ children, ...props }: ButtonEditPropsType) => {
     </Button>
   );
 };
+
+ButtonEdit.displayName = "ButtonEdit";

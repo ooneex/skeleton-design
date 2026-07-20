@@ -12,3 +12,4 @@ export const DrawerDescription = ({ className, id, ...props }: React.ComponentPr
     />
   );
 };
+DrawerDescription.displayName = "DrawerDescription";

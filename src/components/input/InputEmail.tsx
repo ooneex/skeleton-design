@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
-import { EnvelopeIcon as EmailIcon } from "@/icons/outline/communication/sm/EnvelopeIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { EnvelopeIcon as EmailIcon } from "@/icons/outline/communication/sm/EnvelopeIcon";
 import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
@@ -34,3 +34,5 @@ export const InputEmail = ({
     </InputGroup>
   );
 };
+
+InputEmail.displayName = "InputEmail";

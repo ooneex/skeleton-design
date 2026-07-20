@@ -14,3 +14,5 @@ export const InputGroupText = ({ className, ...props }: InputGroupTextPropsType)
     />
   );
 };
+
+InputGroupText.displayName = "InputGroup.Text";

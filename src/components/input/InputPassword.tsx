@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
-import { LockPasswordIcon as PasswordIcon } from "@/icons/outline/design-development/sm/LockPasswordIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { LockPasswordIcon as PasswordIcon } from "@/icons/outline/design-development/sm/LockPasswordIcon";
 import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
@@ -34,3 +34,5 @@ export const InputPassword = ({
     </InputGroup>
   );
 };
+
+InputPassword.displayName = "InputPassword";

@@ -1,6 +1,6 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { Button } from "@/components/button/Button";
+import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { cn } from "@/utils/cn";
 
 type ComboboxChipPropsType = ComboboxPrimitive.Chip.Props & {
@@ -30,3 +30,4 @@ export const ComboboxChip = ({ className, children, showRemove = true, ...props 
     </ComboboxPrimitive.Chip>
   );
 };
+ComboboxChip.displayName = "Combobox.Chip";

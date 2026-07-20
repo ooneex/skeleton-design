@@ -29,3 +29,5 @@ export const HighlightText = ({ text, query, className }: HighlightTextPropsType
     </>
   );
 };
+
+HighlightText.displayName = "HighlightText";

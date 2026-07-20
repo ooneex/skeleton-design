@@ -15,3 +15,4 @@ export const DialogDescription = ({ className, id, ...props }: React.ComponentPr
     />
   );
 };
+DialogDescription.displayName = "DialogDescription";

@@ -33,3 +33,5 @@ export const BreadcrumbEllipsis = ({ className, size = "sm", ...props }: Breadcr
 };
 
 export { breadcrumbEllipsisVariants };
+
+BreadcrumbEllipsis.displayName = "Breadcrumb.Ellipsis";

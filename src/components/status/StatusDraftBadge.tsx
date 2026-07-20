@@ -1,5 +1,5 @@
-import { PenIcon } from "@/icons/outline/communication/sm/PenIcon";
 import { Badge } from "@/components/badge/Badge";
+import { PenIcon } from "@/icons/outline/communication/sm/PenIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusDraftBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusDraftBadge = ({ children, ...props }: StatusBadgePropsType) =
     </Badge>
   );
 };
+
+StatusDraftBadge.displayName = "StatusDraftBadge";

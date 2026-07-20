@@ -1,5 +1,5 @@
-import { EyeIcon } from "@/icons/outline/ui-layout/sm/EyeIcon";
 import { Badge } from "@/components/badge/Badge";
+import { EyeIcon } from "@/icons/outline/ui-layout/sm/EyeIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusInReviewBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusInReviewBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusInReviewBadge.displayName = "StatusInReviewBadge";

@@ -1,5 +1,5 @@
-import { BanIcon } from "@/icons/outline/ui-layout/sm/BanIcon";
 import { Badge } from "@/components/badge/Badge";
+import { BanIcon } from "@/icons/outline/ui-layout/sm/BanIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusDisabledBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusDisabledBadge = ({ children, ...props }: StatusBadgePropsType
     </Badge>
   );
 };
+
+StatusDisabledBadge.displayName = "StatusDisabledBadge";

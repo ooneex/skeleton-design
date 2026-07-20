@@ -22,3 +22,5 @@ export const PaginationEllipsis = ({ className, ...props }: React.ComponentProps
     </span>
   );
 };
+
+PaginationEllipsis.displayName = "Pagination.Ellipsis";

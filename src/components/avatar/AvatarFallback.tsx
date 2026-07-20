@@ -7,10 +7,12 @@ export const AvatarFallback = ({ className, ...props }: AvatarFallbackPropsType)
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "bg-muted text-muted-foreground rounded-full flex size-full items-center justify-center text-sm group-data-[size=xs]/avatar:text-xs group-data-[size=lg]/avatar:text-2xl",
+        "bg-muted text-muted-foreground rounded-full flex size-full items-center justify-center text-sm",
         className,
       )}
       {...props}
     />
   );
 };
+
+AvatarFallback.displayName = "Avatar.Fallback";

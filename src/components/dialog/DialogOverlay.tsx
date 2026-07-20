@@ -37,3 +37,4 @@ export const DialogOverlay = ({
     />
   );
 };
+DialogOverlay.displayName = "DialogOverlay";

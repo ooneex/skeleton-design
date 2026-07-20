@@ -99,3 +99,5 @@ export const EditorContent = ({ className }: EditorContentPropsType) => {
     />
   );
 };
+
+EditorContent.displayName = "EditorContent";

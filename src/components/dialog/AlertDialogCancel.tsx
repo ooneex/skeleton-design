@@ -27,3 +27,4 @@ export const AlertDialogCancel = ({
     />
   );
 };
+AlertDialogCancel.displayName = "AlertDialogCancel";

@@ -57,3 +57,5 @@ export const DropdownMenuRadioItem = ({
     </div>
   );
 };
+
+DropdownMenuRadioItem.displayName = "DropdownMenu.RadioItem";

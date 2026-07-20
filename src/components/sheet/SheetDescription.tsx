@@ -10,3 +10,4 @@ export const SheetDescription = ({ className, ...props }: SheetPrimitive.Descrip
     />
   );
 };
+SheetDescription.displayName = "SheetDescription";

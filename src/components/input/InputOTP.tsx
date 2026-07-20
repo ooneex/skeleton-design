@@ -29,3 +29,5 @@ export const InputOTP = Object.assign(InputOTPRoot, {
   Slot: InputOTPSlot,
   Separator: InputOTPSeparator,
 });
+
+InputOTPRoot.displayName = "InputOTP";

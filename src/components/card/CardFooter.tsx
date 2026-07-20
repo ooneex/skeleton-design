@@ -6,3 +6,5 @@ export const CardFooter = ({ className, ...props }: React.ComponentProps<"div">)
     <div data-slot="card-footer" className={cn("px-4 [.border-t]:pt-4 flex items-center", className)} {...props} />
   );
 };
+
+CardFooter.displayName = "Card.Footer";

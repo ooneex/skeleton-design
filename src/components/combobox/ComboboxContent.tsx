@@ -40,3 +40,4 @@ export const ComboboxContent = ({
     </ComboboxPrimitive.Portal>
   );
 };
+ComboboxContent.displayName = "Combobox.Content";

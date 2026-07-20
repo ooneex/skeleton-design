@@ -224,3 +224,4 @@ export const Sidebar = Object.assign(SidebarRoot, {
   MenuSubItem: SidebarMenuSubItem,
   MenuSubButton: SidebarMenuSubButton,
 });
+SidebarRoot.displayName = "Sidebar";

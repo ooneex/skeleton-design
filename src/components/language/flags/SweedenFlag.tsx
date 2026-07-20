@@ -14,3 +14,5 @@ export const SweedenFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+SweedenFlag.displayName = "SweedenFlag";

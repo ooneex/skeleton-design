@@ -14,3 +14,5 @@ export const InputOTPSeparator = ({ className, ...props }: ComponentProps<"div">
     </div>
   );
 };
+
+InputOTPSeparator.displayName = "InputOTP.Separator";

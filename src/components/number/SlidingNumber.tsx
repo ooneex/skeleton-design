@@ -98,3 +98,4 @@ export const SlidingNumber = ({
     </div>
   );
 };
+SlidingNumber.displayName = "SlidingNumber";

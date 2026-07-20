@@ -19,3 +19,4 @@ export const CommandItem = ({ className, children, ...props }: ComponentProps<ty
     </CommandPrimitive.Item>
   );
 };
+CommandItem.displayName = "Command.Item";

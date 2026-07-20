@@ -18,3 +18,5 @@ const KbdRoot = ({ className, ...props }: React.ComponentProps<"kbd">) => (
  * Use `Kbd` for a single key and `Kbd.Group` to cluster multiple keys.
  */
 export const Kbd = Object.assign(KbdRoot, { Group: KbdGroup });
+
+KbdRoot.displayName = "Kbd";

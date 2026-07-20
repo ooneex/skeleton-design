@@ -56,3 +56,5 @@ export const SelectItem = ({ className, size = "sm", children, ...props }: Selec
 };
 
 export { selectItemVariants };
+
+SelectItem.displayName = "Select.Item";

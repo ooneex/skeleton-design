@@ -26,6 +26,7 @@ import { ComboboxValue } from "./ComboboxValue";
  * `Combobox.Separator`, `Combobox.Chips`, `Combobox.Chip`, `Combobox.ChipsInput`.
  */
 export const Combobox = Object.assign(ComboboxPrimitive.Root, {
+  displayName: "Combobox",
   Value: ComboboxValue,
   Trigger: ComboboxTrigger,
   Clear: ComboboxClear,

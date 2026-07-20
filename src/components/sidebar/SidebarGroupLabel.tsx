@@ -23,3 +23,4 @@ export const SidebarGroupLabel = ({ className, render, children, ...props }: Sid
   }
   return <div {...labelProps}>{children}</div>;
 };
+SidebarGroupLabel.displayName = "Sidebar.GroupLabel";

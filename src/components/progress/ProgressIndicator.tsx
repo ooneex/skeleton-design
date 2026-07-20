@@ -8,3 +8,5 @@ export const ProgressIndicator = ({ className, ...props }: ProgressPrimitive.Ind
     {...props}
   />
 );
+
+ProgressIndicator.displayName = "Progress.Indicator";

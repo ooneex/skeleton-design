@@ -12,3 +12,4 @@ export const CommandSeparator = ({ className, ...props }: ComponentProps<typeof 
     />
   );
 };
+CommandSeparator.displayName = "Command.Separator";

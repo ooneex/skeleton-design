@@ -15,3 +15,4 @@ export const SidebarInset = ({ className, ...props }: SidebarInsetPropsType) => 
     />
   );
 };
+SidebarInset.displayName = "Sidebar.Inset";

@@ -9,3 +9,4 @@ type AlertDialogPortalPropsType = {
 export const AlertDialogPortal = ({ children, container }: AlertDialogPortalPropsType) => {
   return createPortal(children, container ?? document.body);
 };
+AlertDialogPortal.displayName = "AlertDialogPortal";

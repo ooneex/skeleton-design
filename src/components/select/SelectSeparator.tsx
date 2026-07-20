@@ -11,3 +11,5 @@ export const SelectSeparator = ({ className, ...props }: SelectPrimitive.Separat
     />
   );
 };
+
+SelectSeparator.displayName = "Select.Separator";

@@ -1,8 +1,8 @@
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeftIcon } from "@/icons/outline/arrows/sm/ArrowLeftIcon";
 import { Button, buttonVariants } from "@/components/button/Button";
+import { ArrowLeftIcon } from "@/icons/outline/arrows/sm/ArrowLeftIcon";
 import { cn } from "@/utils/cn";
 import { isStaleChunkError, reloadIfStaleChunkError } from "@/utils/staleChunk";
 import { ErrorFallbackIcon } from "./ErrorFallbackIcon";
@@ -181,3 +181,4 @@ export const ErrorFallback = ({ error, reset }: ErrorComponentProps) => {
     </div>
   );
 };
+ErrorFallback.displayName = "ErrorFallback";

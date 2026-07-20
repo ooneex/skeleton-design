@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
-import { MagnifierIcon as SearchIcon } from "@/icons/outline/filtering-sorting/sm/MagnifierIcon";
 import { InputGroup } from "@/components/input/InputGroup";
 import { InputGroupAddon } from "@/components/input/InputGroupAddon";
 import { InputGroupInput } from "@/components/input/InputGroupInput";
+import { MagnifierIcon as SearchIcon } from "@/icons/outline/filtering-sorting/sm/MagnifierIcon";
 import { cn } from "@/utils/cn";
 
 type InputVariantPropsType = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
@@ -33,3 +33,5 @@ export const InputSearchLight = ({
     </InputGroup>
   );
 };
+
+InputSearchLight.displayName = "InputSearchLight";

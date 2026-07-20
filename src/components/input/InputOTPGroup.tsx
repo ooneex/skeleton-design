@@ -13,3 +13,5 @@ export const InputOTPGroup = ({ className, ...props }: ComponentProps<"div">) =>
     />
   );
 };
+
+InputOTPGroup.displayName = "InputOTP.Group";

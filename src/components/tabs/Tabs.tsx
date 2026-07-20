@@ -41,3 +41,5 @@ export const Tabs = Object.assign(TabsRoot, {
   Indicator: TabsIndicator,
   Content: TabsContent,
 });
+
+TabsRoot.displayName = "Tabs";

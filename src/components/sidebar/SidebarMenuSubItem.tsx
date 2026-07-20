@@ -13,3 +13,4 @@ export const SidebarMenuSubItem = ({ className, ...props }: SidebarMenuSubItemPr
     />
   );
 };
+SidebarMenuSubItem.displayName = "Sidebar.MenuSubItem";

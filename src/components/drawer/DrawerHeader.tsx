@@ -13,3 +13,4 @@ export const DrawerHeader = ({ className, ...props }: React.ComponentProps<"div"
     />
   );
 };
+DrawerHeader.displayName = "DrawerHeader";

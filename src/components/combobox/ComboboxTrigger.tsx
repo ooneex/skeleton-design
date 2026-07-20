@@ -14,3 +14,4 @@ export const ComboboxTrigger = ({ className, children, ...props }: ComboboxPrimi
     </ComboboxPrimitive.Trigger>
   );
 };
+ComboboxTrigger.displayName = "Combobox.Trigger";

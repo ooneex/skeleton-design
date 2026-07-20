@@ -94,3 +94,5 @@ export const FloatingToolbar = ({ className }: FloatingToolbarPropsType) => {
     document.body,
   );
 };
+
+FloatingToolbar.displayName = "FloatingToolbar";

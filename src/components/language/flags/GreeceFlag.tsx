@@ -20,3 +20,5 @@ export const GreeceFlag = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+GreeceFlag.displayName = "GreeceFlag";

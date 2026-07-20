@@ -42,3 +42,5 @@ export const Card = Object.assign(CardRoot, {
   Content: CardContent,
   Footer: CardFooter,
 });
+
+CardRoot.displayName = "Card";

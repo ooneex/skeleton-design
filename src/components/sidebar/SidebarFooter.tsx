@@ -13,3 +13,4 @@ export const SidebarFooter = ({ className, ...props }: SidebarFooterPropsType) =
     />
   );
 };
+SidebarFooter.displayName = "Sidebar.Footer";

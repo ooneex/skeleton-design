@@ -15,7 +15,10 @@ const avatarVariants = cva(
         xs: "size-6",
         sm: "size-8",
         md: "size-10",
-        lg: "size-28",
+        lg: "size-12",
+        xl: "size-16",
+        "2xl": "size-20",
+        "3xl": "size-28",
       },
     },
     defaultVariants: {
@@ -50,3 +53,5 @@ export const Avatar = Object.assign(AvatarRoot, {
 });
 
 export { avatarVariants };
+
+AvatarRoot.displayName = "Avatar";

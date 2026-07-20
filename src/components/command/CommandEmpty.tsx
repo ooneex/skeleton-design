@@ -12,3 +12,4 @@ export const CommandEmpty = ({ className, ...props }: ComponentProps<typeof Comm
     />
   );
 };
+CommandEmpty.displayName = "Command.Empty";

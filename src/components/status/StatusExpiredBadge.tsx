@@ -1,5 +1,5 @@
-import { EyeSlashIcon } from "@/icons/outline/ui-layout/sm/EyeSlashIcon";
 import { Badge } from "@/components/badge/Badge";
+import { EyeSlashIcon } from "@/icons/outline/ui-layout/sm/EyeSlashIcon";
 import type { StatusBadgePropsType } from "./types";
 
 export const StatusExpiredBadge = ({ children, ...props }: StatusBadgePropsType) => {
@@ -10,3 +10,5 @@ export const StatusExpiredBadge = ({ children, ...props }: StatusBadgePropsType)
     </Badge>
   );
 };
+
+StatusExpiredBadge.displayName = "StatusExpiredBadge";

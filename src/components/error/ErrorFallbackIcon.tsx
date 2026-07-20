@@ -159,3 +159,4 @@ export const ErrorFallbackIcon = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+ErrorFallbackIcon.displayName = "ErrorFallbackIcon";

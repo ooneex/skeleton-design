@@ -28,3 +28,5 @@ export const AccordionTrigger = ({ className, children, ...props }: AccordionPri
     </AccordionPrimitive.Header>
   );
 };
+
+AccordionTrigger.displayName = "Accordion.Trigger";

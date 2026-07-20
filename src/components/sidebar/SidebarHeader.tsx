@@ -13,3 +13,4 @@ export const SidebarHeader = ({ className, ...props }: SidebarHeaderPropsType) =
     />
   );
 };
+SidebarHeader.displayName = "Sidebar.Header";

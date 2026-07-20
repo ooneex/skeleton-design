@@ -26,3 +26,5 @@ export const Breadcrumb = Object.assign(BreadcrumbRoot, {
   Separator: BreadcrumbSeparator,
   Ellipsis: BreadcrumbEllipsis,
 });
+
+BreadcrumbRoot.displayName = "Breadcrumb";

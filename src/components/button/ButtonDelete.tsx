@@ -11,3 +11,5 @@ export const ButtonDelete = ({ children, ...props }: ButtonDeletePropsType) => {
     </Button>
   );
 };
+
+ButtonDelete.displayName = "ButtonDelete";

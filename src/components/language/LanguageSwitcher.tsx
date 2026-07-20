@@ -90,3 +90,4 @@ export const LanguageSwitcher = ({
     </Select>
   );
 };
+LanguageSwitcher.displayName = "LanguageSwitcher";

@@ -46,3 +46,5 @@ export const TooltipTrigger = ({
   }
   return <span {...triggerProps}>{children}</span>;
 };
+
+TooltipTrigger.displayName = "Tooltip.Trigger";

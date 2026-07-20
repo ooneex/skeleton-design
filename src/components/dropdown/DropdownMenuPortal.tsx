@@ -9,3 +9,5 @@ type DropdownMenuPortalPropsType = {
 export const DropdownMenuPortal = ({ children, container }: DropdownMenuPortalPropsType) => {
   return createPortal(children, container ?? document.body);
 };
+
+DropdownMenuPortal.displayName = "DropdownMenu.Portal";

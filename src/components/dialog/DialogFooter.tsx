@@ -24,3 +24,4 @@ export const DialogFooter = ({ className, showCloseButton = false, children, ...
     </div>
   );
 };
+DialogFooter.displayName = "DialogFooter";

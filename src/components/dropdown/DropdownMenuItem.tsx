@@ -45,3 +45,5 @@ export const DropdownMenuItem = ({
     />
   );
 };
+
+DropdownMenuItem.displayName = "DropdownMenu.Item";

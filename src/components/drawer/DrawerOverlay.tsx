@@ -37,3 +37,4 @@ export const DrawerOverlay = ({
     />
   );
 };
+DrawerOverlay.displayName = "DrawerOverlay";

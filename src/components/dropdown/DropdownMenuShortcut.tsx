@@ -13,3 +13,5 @@ export const DropdownMenuShortcut = ({ className, ...props }: React.ComponentPro
     />
   );
 };
+
+DropdownMenuShortcut.displayName = "DropdownMenu.Shortcut";

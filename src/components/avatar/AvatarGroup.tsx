@@ -14,3 +14,5 @@ export const AvatarGroup = ({ className, ...props }: AvatarGroupPropsType) => {
     />
   );
 };
+
+AvatarGroup.displayName = "Avatar.Group";

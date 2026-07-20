@@ -16,3 +16,5 @@ export const InputGroupTextarea = ({ className, ...props }: InputGroupTextareaPr
     />
   );
 };
+
+InputGroupTextarea.displayName = "InputGroup.Textarea";
