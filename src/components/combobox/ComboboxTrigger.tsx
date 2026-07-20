@@ -10,7 +10,7 @@ export const ComboboxTrigger = ({ className, children, ...props }: ComboboxPrimi
       {...props}
     >
       {children}
-      <ChevronDownIcon className="size-4 text-muted-foreground pointer-events-none" />
+      <ChevronDownIcon className="size-3 text-primary pointer-events-none" />
     </ComboboxPrimitive.Trigger>
   );
 };

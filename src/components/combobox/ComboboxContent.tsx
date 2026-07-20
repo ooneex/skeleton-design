@@ -1,5 +1,6 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import type * as React from "react";
+import { ScrollArea } from "@/components/scroll-area";
 import { cn } from "@/utils/cn";
 
 type ComboboxContentPropsType = ComboboxPrimitive.Popup.Props &
@@ -9,6 +10,7 @@ type ComboboxContentPropsType = ComboboxPrimitive.Popup.Props &
 
 export const ComboboxContent = ({
   className,
+  children,
   side = "bottom",
   sideOffset = 6,
   align = "start",
@@ -35,7 +37,9 @@ export const ComboboxContent = ({
             className,
           )}
           {...props}
-        />
+        >
+          <ScrollArea viewportClassName="h-auto max-h-(--available-height)">{children}</ScrollArea>
+        </ComboboxPrimitive.Popup>
       </ComboboxPrimitive.Positioner>
     </ComboboxPrimitive.Portal>
   );
