@@ -5,7 +5,9 @@ import { AccordionItem } from "./AccordionItem";
 import { AccordionTrigger } from "./AccordionTrigger";
 
 const AccordionRoot = ({ className, ...props }: AccordionPrimitive.Root.Props) => {
-  return <AccordionPrimitive.Root data-slot="accordion" className={cn("flex w-full flex-col", className)} {...props} />;
+  return (
+    <AccordionPrimitive.Root data-slot="accordion" className={cn("flex w-full flex-col gap-3", className)} {...props} />
+  );
 };
 
 /**
