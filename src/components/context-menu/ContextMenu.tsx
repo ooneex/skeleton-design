@@ -101,13 +101,14 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
 
     case "label":
       return (
-        <MenuPrimitive.GroupLabel
-          key={`label-${index}`}
-          data-slot="context-menu-label"
-          className="text-muted-foreground px-2 py-1.5 text-xs font-medium"
-        >
-          {item.label}
-        </MenuPrimitive.GroupLabel>
+        <MenuPrimitive.Group key={`label-${index}`}>
+          <MenuPrimitive.GroupLabel
+            data-slot="context-menu-label"
+            className="text-muted-foreground px-2 py-1.5 text-xs font-medium"
+          >
+            {item.label}
+          </MenuPrimitive.GroupLabel>
+        </MenuPrimitive.Group>
       );
 
     case "checkbox":
@@ -126,7 +127,7 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
             data-slot="context-menu-checkbox-item-indicator"
           >
             <MenuPrimitive.CheckboxItemIndicator>
-              <CheckIcon className="size-4" />
+              <CheckIcon className="size-3" />
             </MenuPrimitive.CheckboxItemIndicator>
           </span>
           {item.label}
@@ -171,7 +172,7 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
           >
             {item.icon}
             {item.label}
-            <ChevronRightIcon className="ml-auto size-3.5" />
+            <ChevronRightIcon className="ml-auto size-3" />
           </MenuPrimitive.SubmenuTrigger>
           <MenuPrimitive.Portal>
             <MenuPrimitive.Positioner className="isolate z-50 outline-none" align="start" side="right" sideOffset={0}>
