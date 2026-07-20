@@ -6,7 +6,10 @@ export const ComboboxTrigger = ({ className, children, ...props }: ComboboxPrimi
   return (
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
-      className={cn("[&_svg:not([class*='size-'])]:size-4", className)}
+      className={cn(
+        "[&_svg:not([class*='size-'])]:size-3 [[data-slot=input-group]:has(&:focus-visible)]:border-ring-active",
+        className,
+      )}
       {...props}
     >
       {children}
