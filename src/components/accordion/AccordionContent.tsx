@@ -5,7 +5,7 @@ export const AccordionContent = ({ className, children, ...props }: AccordionPri
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="data-open:animate-accordion-down overflow-hidden text-base"
+      className="data-open:animate-accordion-down data-closed:animate-accordion-up overflow-hidden text-base"
       {...props}
     >
       <div
