@@ -29,7 +29,7 @@ export const DrawerOverlay = ({
         pointerDownOnOverlay.current = false;
       }}
       className={cn(
-        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-200 supports-backdrop-filter:backdrop-blur-none fixed inset-0 z-50",
+        "data-open:animate-in data-closed:animate-out data-closed:fill-mode-forwards data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-200 supports-backdrop-filter:backdrop-blur-none fixed inset-0 z-50",
         !blocking && "pointer-events-none",
         className,
       )}
