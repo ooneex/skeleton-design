@@ -1,4 +1,4 @@
-import { Menu as MenuPrimitive } from "@base-ui/react/menu";
+import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu";
 import type { ReactNode } from "react";
 import { createCallable } from "react-call";
 import { ChevronRightIcon } from "@/icons/outline/arrows/sm/ChevronRightIcon";
@@ -92,7 +92,7 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
   switch (item.type) {
     case "separator":
       return (
-        <MenuPrimitive.Separator
+        <ContextMenuPrimitive.Separator
           key={`separator-${index}`}
           data-slot="context-menu-separator"
           className="bg-ring -mx-1 my-1 h-[0.4px]"
@@ -101,19 +101,19 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
 
     case "label":
       return (
-        <MenuPrimitive.Group key={`label-${index}`}>
-          <MenuPrimitive.GroupLabel
+        <ContextMenuPrimitive.Group key={`label-${index}`}>
+          <ContextMenuPrimitive.GroupLabel
             data-slot="context-menu-label"
             className="text-muted-foreground px-2 py-1.5 text-xs font-medium"
           >
             {item.label}
-          </MenuPrimitive.GroupLabel>
-        </MenuPrimitive.Group>
+          </ContextMenuPrimitive.GroupLabel>
+        </ContextMenuPrimitive.Group>
       );
 
     case "checkbox":
       return (
-        <MenuPrimitive.CheckboxItem
+        <ContextMenuPrimitive.CheckboxItem
           key={item.value}
           data-slot="context-menu-checkbox-item"
           className={INDICATOR_ITEM_CLASS}
@@ -126,20 +126,20 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
             className="pointer-events-none absolute right-2 flex items-center justify-center"
             data-slot="context-menu-checkbox-item-indicator"
           >
-            <MenuPrimitive.CheckboxItemIndicator>
+            <ContextMenuPrimitive.CheckboxItemIndicator>
               <CheckIcon className="size-3" />
-            </MenuPrimitive.CheckboxItemIndicator>
+            </ContextMenuPrimitive.CheckboxItemIndicator>
           </span>
           {item.label}
-        </MenuPrimitive.CheckboxItem>
+        </ContextMenuPrimitive.CheckboxItem>
       );
 
     case "radio":
       // `Menu.RadioItem` must live inside a `Menu.RadioGroup`. Each row gets its
       // own single-option group whose selected value reflects the `checked` flag.
       return (
-        <MenuPrimitive.RadioGroup key={item.value} value={item.checked ? item.value : undefined}>
-          <MenuPrimitive.RadioItem
+        <ContextMenuPrimitive.RadioGroup key={item.value} value={item.checked ? item.value : undefined}>
+          <ContextMenuPrimitive.RadioItem
             data-slot="context-menu-radio-item"
             className={INDICATOR_ITEM_CLASS}
             value={item.value}
@@ -151,21 +151,21 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
               className="pointer-events-none absolute right-2 flex items-center justify-center"
               data-slot="context-menu-radio-item-indicator"
             >
-              <MenuPrimitive.RadioItemIndicator>
+              <ContextMenuPrimitive.RadioItemIndicator>
                 <svg className="size-2 fill-current" viewBox="0 0 8 8" aria-hidden="true">
                   <circle cx="4" cy="4" r="2.5" />
                 </svg>
-              </MenuPrimitive.RadioItemIndicator>
+              </ContextMenuPrimitive.RadioItemIndicator>
             </span>
             {item.label}
-          </MenuPrimitive.RadioItem>
-        </MenuPrimitive.RadioGroup>
+          </ContextMenuPrimitive.RadioItem>
+        </ContextMenuPrimitive.RadioGroup>
       );
 
     case "sub":
       return (
-        <MenuPrimitive.SubmenuRoot key={`sub-${index}`}>
-          <MenuPrimitive.SubmenuTrigger
+        <ContextMenuPrimitive.SubmenuRoot key={`sub-${index}`}>
+          <ContextMenuPrimitive.SubmenuTrigger
             data-slot="context-menu-sub-trigger"
             className={cn(ITEM_CLASS, "data-open:bg-accent data-open:text-accent-foreground")}
             disabled={item.disabled}
@@ -173,20 +173,25 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
             {item.icon}
             {item.label}
             <ChevronRightIcon className="ml-auto size-3" />
-          </MenuPrimitive.SubmenuTrigger>
-          <MenuPrimitive.Portal>
-            <MenuPrimitive.Positioner className="isolate z-50 outline-none" align="start" side="right" sideOffset={0}>
-              <MenuPrimitive.Popup data-slot="context-menu-sub-content" className={POPUP_CLASS}>
+          </ContextMenuPrimitive.SubmenuTrigger>
+          <ContextMenuPrimitive.Portal>
+            <ContextMenuPrimitive.Positioner
+              className="isolate z-50 outline-none"
+              align="start"
+              side="right"
+              sideOffset={0}
+            >
+              <ContextMenuPrimitive.Popup data-slot="context-menu-sub-content" className={POPUP_CLASS}>
                 {item.items.map((child, childIndex) => renderItem(child, childIndex, end))}
-              </MenuPrimitive.Popup>
-            </MenuPrimitive.Positioner>
-          </MenuPrimitive.Portal>
-        </MenuPrimitive.SubmenuRoot>
+              </ContextMenuPrimitive.Popup>
+            </ContextMenuPrimitive.Positioner>
+          </ContextMenuPrimitive.Portal>
+        </ContextMenuPrimitive.SubmenuRoot>
       );
 
     default:
       return (
-        <MenuPrimitive.Item
+        <ContextMenuPrimitive.Item
           key={item.value}
           data-slot="context-menu-item"
           data-variant={item.destructive ? "destructive" : "default"}
@@ -202,15 +207,15 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
               {item.shortcut}
             </span>
           ) : null}
-        </MenuPrimitive.Item>
+        </ContextMenuPrimitive.Item>
       );
   }
 };
 
 /**
- * Imperative context menu built on `react-call` and the `@base-ui/react` Menu
- * primitive. The menu has no DOM trigger; it is anchored to a virtual element
- * placed at the pointer coordinates passed into the call.
+ * Imperative context menu built on `react-call` and the `@base-ui/react`
+ * ContextMenu primitive. The menu has no DOM trigger; it is anchored to a
+ * virtual element placed at the pointer coordinates passed into the call.
  *
  * Mount the Root once near the top of your app:
  *
@@ -236,26 +241,31 @@ const renderItem = (item: ContextMenuItemType, index: number, end: (value: strin
  */
 export const ContextMenu = createCallable<ContextMenuPropsType, string | null>(({ call, x, y, items }) => {
   return (
-    <MenuPrimitive.Root
+    <ContextMenuPrimitive.Root
       open={!call.ended}
-      onOpenChange={(open) => {
-        if (!open) call.end(null);
+      onOpenChange={(open, eventDetails) => {
+        // `sibling-open` is fired on the root when one of its submenus opens —
+        // an internal signal, not a dismissal — so ignore it. Otherwise hovering
+        // a submenu trigger would tear the whole menu down.
+        if (!open && eventDetails.reason !== "sibling-open") {
+          call.end(null);
+        }
       }}
     >
-      <MenuPrimitive.Portal>
-        <MenuPrimitive.Positioner
+      <ContextMenuPrimitive.Portal>
+        <ContextMenuPrimitive.Positioner
           className="isolate z-50 outline-none"
           anchor={virtualAnchor(x, y)}
           align="start"
           side="bottom"
           sideOffset={2}
         >
-          <MenuPrimitive.Popup data-slot="context-menu-content" className={POPUP_CLASS}>
+          <ContextMenuPrimitive.Popup data-slot="context-menu-content" className={POPUP_CLASS}>
             {items.map((item, index) => renderItem(item, index, call.end))}
-          </MenuPrimitive.Popup>
-        </MenuPrimitive.Positioner>
-      </MenuPrimitive.Portal>
-    </MenuPrimitive.Root>
+          </ContextMenuPrimitive.Popup>
+        </ContextMenuPrimitive.Positioner>
+      </ContextMenuPrimitive.Portal>
+    </ContextMenuPrimitive.Root>
   );
 }, UNMOUNTING_DELAY);
 ContextMenu.displayName = "ContextMenu";
