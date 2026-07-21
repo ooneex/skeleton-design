@@ -23,7 +23,6 @@ import { EmptyMedia } from "@/components/empty/EmptyMedia";
 import { EmptyTitle } from "@/components/empty/EmptyTitle";
 import { BookIcon } from "@/icons/outline/school-education/sm/BookIcon";
 import { cn } from "@/utils/cn";
-import "./pdfViewer.css";
 
 const renderError = () => {
   return (
