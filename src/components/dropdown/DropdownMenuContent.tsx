@@ -83,7 +83,7 @@ export const DropdownMenuContent = ({
           if (handleMenuNavigation(popup, event)) event.preventDefault();
         })}
         className={cn(
-          "bg-dropdown text-dropdown-foreground min-w-32 rounded p-1 z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none shadow-none ring-[0.4px] ring-ring-active",
+          "bg-popover text-popover-foreground min-w-32 rounded p-1 z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none shadow-none ring-[0.4px] ring-ring-active",
           className,
         )}
         {...props}
