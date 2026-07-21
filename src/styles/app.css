@@ -38,6 +38,21 @@
     @apply bg-primary rounded-full border border-solid border-transparent;
   }
 
+  @keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+      opacity: 1;
+    }
+    20%,
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .input-otp-caret {
+    animation: caret-blink 1.25s ease-out infinite;
+  }
 
   .pdf-toolbar {
     --rpv-core__minimal-button-color: var(--color-primary-900);

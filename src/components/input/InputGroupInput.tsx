@@ -10,7 +10,7 @@ export const InputGroupInput = ({ className, size = "sm", ...props }: InputGroup
       size={size}
       data-slot="input-group-control"
       className={cn(
-        "rounded-none border-0 bg-transparent ring-0 focus-visible:ring-0 aria-invalid:ring-0 flex-1",
+        "rounded-none border-0 bg-transparent ring-0 hover:ring-0 focus-visible:ring-0 aria-invalid:ring-0 flex-1",
         className,
       )}
       {...props}

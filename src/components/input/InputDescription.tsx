@@ -19,7 +19,10 @@ export const InputDescription = ({
       content={content}
       placeholder={placeholder}
       onContentChange={(value) => onContentChange?.(value || undefined)}
-      className={cn("min-h-20 ring ring-ring-active focus-within:ring-ring-active rounded p-2", className)}
+      className={cn(
+        "min-h-20 rounded border border-border p-2 transition-[color,box-shadow] hover:border-ring-active focus-within:border-ring-active",
+        className,
+      )}
       showSlashMenu={false}
       showHeadings={false}
       showHistory={false}

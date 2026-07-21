@@ -2,12 +2,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { useState } from "react";
 import { Button } from "@/components/button/Button";
 import { Input } from "@/components/input/Input";
-import { MinusIcon } from "@/icons/outline/ui-layout/sm/MinusIcon";
-import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
+import { MinusIcon as MinusIconLg } from "@/icons/outline/ui-layout/lg/MinusIcon";
+import { PlusIcon as PlusIconLg } from "@/icons/outline/ui-layout/lg/PlusIcon";
+import { MinusIcon as MinusIconMd } from "@/icons/outline/ui-layout/md/MinusIcon";
+import { PlusIcon as PlusIconMd } from "@/icons/outline/ui-layout/md/PlusIcon";
+import { MinusIcon as MinusIconSm } from "@/icons/outline/ui-layout/sm/MinusIcon";
+import { PlusIcon as PlusIconSm } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { cn } from "@/utils/cn";
 
 const inputNumericContainerVariants = cva(
-  "flex items-center rounded border border-border transition-[color,box-shadow]",
+  "border-border hover:border-ring-active focus-within:border-ring-active flex items-center rounded border transition-[color,box-shadow]",
   {
     variants: {
       size: {
@@ -49,19 +53,32 @@ const inputNumericIconVariants = cva("", {
   },
 });
 
-const inputNumericInputVariants = cva("border-none bg-transparent text-center shadow-none", {
-  variants: {
-    size: {
-      xs: "text-xs",
-      sm: "text-base",
-      md: "text-base",
-      lg: "text-lg",
+const inputNumericIconMap: Record<
+  NonNullable<VariantProps<typeof inputNumericContainerVariants>["size"]>,
+  { MinusIcon: typeof MinusIconSm; PlusIcon: typeof PlusIconSm }
+> = {
+  xs: { MinusIcon: MinusIconSm, PlusIcon: PlusIconSm },
+  sm: { MinusIcon: MinusIconSm, PlusIcon: PlusIconSm },
+  md: { MinusIcon: MinusIconMd, PlusIcon: PlusIconMd },
+  lg: { MinusIcon: MinusIconLg, PlusIcon: PlusIconLg },
+};
+
+const inputNumericInputVariants = cva(
+  "rounded-none bg-transparent text-center shadow-none ring-0 hover:ring-0 focus-visible:ring-0",
+  {
+    variants: {
+      size: {
+        xs: "text-xs",
+        sm: "text-base",
+        md: "text-base",
+        lg: "text-lg",
+      },
+    },
+    defaultVariants: {
+      size: "sm",
     },
   },
-  defaultVariants: {
-    size: "sm",
-  },
-});
+);
 
 type InputNumericPropsType = VariantProps<typeof inputNumericContainerVariants> & {
   min?: number;
@@ -88,7 +105,6 @@ export const InputNumeric = ({
   className,
 }: InputNumericPropsType) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const [isFocused, setIsFocused] = useState(false);
 
   const isControlled = controlledValue !== undefined;
   const value = isControlled ? controlledValue : internalValue;
@@ -135,13 +151,12 @@ export const InputNumeric = ({
   const displayValue = pad ? String(value).padStart(2, "0") : value;
 
   const buttonSize = inputNumericButtonSizeMap[size ?? "sm"];
+  const { MinusIcon, PlusIcon } = inputNumericIconMap[size ?? "sm"];
 
   return (
     <div className={cn("w-full max-w-xs", className)}>
       <div className="relative">
-        <div
-          className={cn(inputNumericContainerVariants({ size }), isFocused && "border-ring ring-[3px] ring-ring/50")}
-        >
+        <div className={inputNumericContainerVariants({ size })}>
           <Button
             variant="ghost"
             size={buttonSize}
@@ -156,8 +171,6 @@ export const InputNumeric = ({
             inputMode="numeric"
             value={displayValue}
             onChange={handleChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
             className={cn("h-auto", inputNumericInputVariants({ size }))}
           />
           <Button
