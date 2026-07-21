@@ -1,12 +1,12 @@
 import type * as React from "react";
 import { useContext } from "react";
 import { Button } from "@/components/button/Button";
-import { ChevronRightIcon } from "@/icons/outline/arrows/sm/ChevronRightIcon";
 import { cn } from "@/utils/cn";
-import { linkIconSizeVariants, PaginationContext } from "./paginationContext";
+import { chevronIconMap, chevronIconSizeVariants, linkIconSizeVariants, PaginationContext } from "./paginationContext";
 
 export const PaginationNext = ({ className, ...props }: React.ComponentProps<"a">) => {
   const size = useContext(PaginationContext);
+  const { ChevronRightIcon } = chevronIconMap[size];
 
   return (
     <Button
@@ -17,7 +17,7 @@ export const PaginationNext = ({ className, ...props }: React.ComponentProps<"a"
       nativeButton={false}
       render={
         <a data-slot="pagination-next" {...props}>
-          <ChevronRightIcon data-icon="inline-end" className="size-5" />
+          <ChevronRightIcon data-icon="inline-end" className={chevronIconSizeVariants[size]} />
         </a>
       }
     />
