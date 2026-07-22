@@ -1,7 +1,7 @@
 import { type DragEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/button/Button";
 import { Muted, Small } from "@/components/typography";
-import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
+import { CloudUploadIcon } from "@/icons/outline/arrows/sm/CloudUploadIcon";
 import { FilePdfIcon } from "@/icons/outline/design-development/sm/FilePdfIcon";
 import { PlusIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
@@ -413,9 +413,9 @@ const FileUpload = ({
     <div className={cn("relative mx-auto w-full", className)}>
       <div
         className={cn(
-          "group relative w-full overflow-hidden rounded-xl bg-white border border-dashed border-border-alt/50 p-2 transition-all duration-200",
-          status === "dragging" ? "border-border-alt" : "hover:border-border-alt",
-          error && "border-danger-500/50",
+          "group relative w-full overflow-hidden rounded-xl bg-white border border-dashed border-border p-2 transition-all duration-200",
+          status === "dragging" ? "border-ring-active" : "hover:border-ring-active",
+          error && "border-destructive",
         )}
       >
         <div className={cn("relative", height, status === "dragging" && "opacity-20")}>
@@ -428,7 +428,7 @@ const FileUpload = ({
               onDrop={handleDrop}
             >
               <div className="size-11 rounded bg-muted/60 group-hover:bg-muted/90 flex items-center justify-center transition-colors duration-200">
-                <UploadIcon className="size-5 text-muted-foreground" />
+                <CloudUploadIcon className="size-5 text-primary" />
               </div>
 
               <div className="text-center space-y-0.5">

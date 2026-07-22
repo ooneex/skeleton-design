@@ -1,7 +1,7 @@
 import { type DragEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/button/Button";
 import { ImageZoom } from "@/components/image/ImageZoom";
-import { UploadIcon } from "@/icons/outline/arrows/sm/UploadIcon";
+import { ImagePlusIcon } from "@/icons/outline/photography-video/sm/ImagePlusIcon";
 import { TrashIcon } from "@/icons/outline/ui-layout/sm/TrashIcon";
 import { cn } from "@/utils/cn";
 import { formatBytes, type MaxFileSizeType, parseFileSize } from "./fileSize";
@@ -113,9 +113,9 @@ export const ImageUploader = ({
         ))}
         <div
           className={cn(
-            "group relative size-16 shrink-0 cursor-pointer overflow-hidden rounded border border-dashed border-border-alt/50 transition-all duration-200",
-            isDragging ? "border-border-alt bg-muted/40" : "hover:border-border-alt hover:bg-muted/20",
-            error && "border-danger-500/50",
+            "group relative size-16 shrink-0 cursor-pointer overflow-hidden rounded border border-dashed border-border transition-all duration-200",
+            isDragging ? "border-ring-active bg-muted/40" : "hover:border-ring-active hover:bg-muted/20",
+            error && "border-destructive",
           )}
           onClick={() => fileInputRef.current?.click()}
           onDragLeave={handleDragLeave}
@@ -123,7 +123,7 @@ export const ImageUploader = ({
           onDrop={handleDrop}
         >
           <div className={cn("flex size-full items-center justify-center", isDragging && "opacity-30")}>
-            <UploadIcon className="size-5 text-muted-foreground transition-colors duration-200 group-hover:text-foreground/60" />
+            <ImagePlusIcon className="size-5 text-primary transition-colors duration-200 group-hover:text-primary/70" />
           </div>
           <input
             ref={fileInputRef}
