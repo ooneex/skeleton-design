@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from "@/icons/outline/arrows/sm/ArrowLeftIcon";
+import { ArrowTriangleLineLeftIcon } from "@/icons/fill/arrows/sm/ArrowTriangleLineLeftIcon";
 import { Button } from "./Button";
 
 type ButtonBackPropsType = Omit<React.ComponentProps<typeof Button>, "variant">;
@@ -6,7 +6,7 @@ type ButtonBackPropsType = Omit<React.ComponentProps<typeof Button>, "variant">;
 export const ButtonBack = ({ children, ...props }: ButtonBackPropsType) => {
   return (
     <Button variant="outline" {...props}>
-      <ArrowLeftIcon />
+      <ArrowTriangleLineLeftIcon />
       {children ?? "Back"}
     </Button>
   );
