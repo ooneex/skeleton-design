@@ -17,7 +17,7 @@ export const ComboboxItem = ({ className, children, ...props }: ComboboxPrimitiv
       <ComboboxPrimitive.ItemIndicator
         render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />}
       >
-        <CheckIcon className="size-4 pointer-events-none" />
+        <CheckIcon className="text-primary pointer-events-none" />
       </ComboboxPrimitive.ItemIndicator>
     </ComboboxPrimitive.Item>
   );

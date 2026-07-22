@@ -1,4 +1,5 @@
 import { useDebouncedValue } from "@tanstack/react-pacer";
+import { cva, type VariantProps } from "class-variance-authority";
 import { type ReactNode, useMemo, useState } from "react";
 import { Button } from "@/components/button/Button";
 import { Combobox } from "@/components/combobox/Combobox";
@@ -18,7 +19,35 @@ import { TagIcon } from "@/icons/outline/shopping/sm/TagIcon";
 import { PlusIcon as AddIcon } from "@/icons/outline/ui-layout/sm/PlusIcon";
 import { cn } from "@/utils/cn";
 
-export type TagPickerPropsType = {
+const tagPickerChipsVariants = cva("flex-wrap items-center gap-1.5", {
+  variants: {
+    size: {
+      xs: "min-h-6 px-2 py-0.5 text-xs",
+      sm: "min-h-8 px-2.5 py-1 text-sm",
+      md: "min-h-9 px-2.5 py-1 text-base",
+      lg: "min-h-10 px-3 py-1.5 text-base",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
+const tagPickerIconVariants = cva("shrink-0", {
+  variants: {
+    size: {
+      xs: "size-3",
+      sm: "size-3.5",
+      md: "size-4",
+      lg: "size-4.5",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
+export type TagPickerPropsType = VariantProps<typeof tagPickerChipsVariants> & {
   /** Initially selected tags. */
   value?: string[];
   /** Tags offered as suggestions. */
@@ -65,6 +94,7 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
     className,
     contentClassName,
     confirmLabel = "Done",
+    size = "sm",
   }) => {
     const [selected, setSelected] = useState<string[]>(value);
     const [inputValue, setInputValue] = useState("");
@@ -117,7 +147,7 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
           inputValue={inputValue}
           onInputValueChange={setInputValue}
         >
-          <ComboboxChips ref={anchorRef} className={cn("min-h-8 px-2 py-1 text-sm", className)}>
+          <ComboboxChips ref={anchorRef} className={cn(tagPickerChipsVariants({ size }), className)}>
             <ComboboxValue>
               {(values) => (
                 <>
@@ -132,7 +162,12 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
                 </>
               )}
             </ComboboxValue>
-            <TagIcon className={cn("size-4", isFocused || inputValue ? "text-foreground" : "text-muted-foreground")} />
+            <TagIcon
+              className={cn(
+                tagPickerIconVariants({ size }),
+                isFocused || inputValue ? "text-foreground" : "text-muted-foreground",
+              )}
+            />
           </ComboboxChips>
           {(isPending || filteredTags.length > 0 || showCreateOption) && (
             <ComboboxContent anchor={anchorRef} className={contentClassName}>
@@ -142,7 +177,7 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
                   className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-accent rounded mx-1 mt-1"
                   onClick={handleCreateTag}
                 >
-                  <AddIcon className="size-3" />
+                  <AddIcon className={tagPickerIconVariants({ size })} />
                   <span className="text-sm">
                     Create "<span className="text-sm font-medium">{inputValue.trim()}</span>"
                   </span>
@@ -168,6 +203,8 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
   { dismissValue: null, className: "max-w-md" },
 );
 TagPicker.displayName = "TagPicker";
+
+export { tagPickerChipsVariants, tagPickerIconVariants };
 
 /** Await a tag selection. Resolves the chosen tags, or `null` on dismiss. */
 export const pickTags = (props: TagPickerPropsType = {}) => TagPicker.call(props);

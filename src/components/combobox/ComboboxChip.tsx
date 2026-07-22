@@ -24,7 +24,7 @@ export const ComboboxChip = ({ className, children, showRemove = true, ...props 
           className="-ml-1 opacity-50 hover:opacity-100"
           data-slot="combobox-chip-remove"
         >
-          <XmarkIcon className="size-4 pointer-events-none" />
+          <XmarkIcon className="size-3 text-primary pointer-events-none" />
         </ComboboxPrimitive.ChipRemove>
       )}
     </ComboboxPrimitive.Chip>
