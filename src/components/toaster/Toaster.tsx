@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { createCallable } from "react-call";
 import { Button } from "@/components/button/Button";
 import { SpinnerLoaderIcon } from "@/icons/outline/loaders/sm/SpinnerLoaderIcon";
@@ -8,7 +8,6 @@ import { CircleXmarkIcon } from "@/icons/outline/ui-layout/sm/CircleXmarkIcon";
 import { TriangleWarningIcon } from "@/icons/outline/ui-layout/sm/TriangleWarningIcon";
 import { XmarkIcon } from "@/icons/outline/ui-layout/sm/XmarkIcon";
 import { cn } from "@/utils/cn";
-import "./toaster.css";
 
 const TOAST_DURATION = 4000;
 /** Keep the toast mounted briefly so its exit animation can play. */
@@ -66,12 +65,20 @@ type ToastPropsType = {
  */
 const Toast = createCallable<ToastPropsType, void>(({ call, state, title, description, duration = TOAST_DURATION }) => {
   const styles = stateStyles[state];
+  const [depleted, setDepleted] = useState(false);
 
   useEffect(() => {
     if (state === "loading") return;
     const timer = setTimeout(() => call.end(), duration);
     return () => clearTimeout(timer);
   }, [state, duration, call.end]);
+
+  useEffect(() => {
+    if (state === "loading") return;
+    // Start the shrink transition on the next frame so it animates from 100% to 0%.
+    const frame = requestAnimationFrame(() => setDepleted(true));
+    return () => cancelAnimationFrame(frame);
+  }, [state]);
 
   return (
     <div
@@ -107,8 +114,8 @@ const Toast = createCallable<ToastPropsType, void>(({ call, state, title, descri
         {state !== "loading" && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-light/4">
             <div
-              className={cn("h-full", styles.badge)}
-              style={{ animation: `toast-progress ${duration}ms linear forwards` }}
+              className={cn("h-full transition-[width] ease-linear", depleted ? "w-0" : "w-full", styles.badge)}
+              style={{ transitionDuration: `${duration}ms` }}
             />
           </div>
         )}
