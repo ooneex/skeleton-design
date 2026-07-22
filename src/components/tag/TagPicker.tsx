@@ -33,7 +33,7 @@ const tagPickerChipsVariants = cva("flex-wrap items-center gap-1.5", {
   },
 });
 
-const tagPickerIconVariants = cva("shrink-0", {
+const tagPickerIconVariants = cva("text-foreground pointer-events-none shrink-0", {
   variants: {
     size: {
       xs: "size-3",
@@ -99,7 +99,6 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
     const [selected, setSelected] = useState<string[]>(value);
     const [inputValue, setInputValue] = useState("");
     const [debouncedInputValue] = useDebouncedValue(inputValue, { wait: 300 });
-    const [isFocused, setIsFocused] = useState(false);
     const [customTags, setCustomTags] = useState<string[]>([]);
     const anchorRef = useComboboxAnchor();
 
@@ -154,20 +153,11 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
                   {values.map((tag: string) => (
                     <ComboboxChip key={tag}>{tag}</ComboboxChip>
                   ))}
-                  <ComboboxChipsInput
-                    placeholder={placeholder}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                  />
+                  <ComboboxChipsInput placeholder={placeholder} />
                 </>
               )}
             </ComboboxValue>
-            <TagIcon
-              className={cn(
-                tagPickerIconVariants({ size }),
-                isFocused || inputValue ? "text-foreground" : "text-muted-foreground",
-              )}
-            />
+            <TagIcon className={cn(tagPickerIconVariants({ size }))} />
           </ComboboxChips>
           {(isPending || filteredTags.length > 0 || showCreateOption) && (
             <ComboboxContent anchor={anchorRef} className={contentClassName}>
@@ -177,7 +167,7 @@ export const TagPicker = createDialog<TagPickerPropsType, string[] | null>(
                   className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-accent rounded mx-1 mt-1"
                   onClick={handleCreateTag}
                 >
-                  <AddIcon className={tagPickerIconVariants({ size })} />
+                  <AddIcon className={cn(tagPickerIconVariants({ size }))} />
                   <span className="text-sm">
                     Create "<span className="text-sm font-medium">{inputValue.trim()}</span>"
                   </span>
